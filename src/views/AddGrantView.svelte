@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { GrantStatus, NewGrant } from "../types";
+    import { convertCurrency } from "../components/format";
 
     let name = $state("");
     let funder = $state("");
@@ -25,26 +26,20 @@
         onSubmit: (grant: NewGrant) => void;
     } = $props();
 
-    function moneyToCents(value: number | undefined): number | undefined {
-        if (value === undefined) {
-            return undefined;
-        }
-
-        if (!Number.isFinite(value) || value < 0) {
-            return undefined;
-        }
-
-        return Math.round(value * 100);
-    }
-
     function closeDatePicker(event: Event) {
         const input = event.currentTarget as HTMLInputElement;
         setTimeout(() => input.blur(), 0);
     }
 
     function submit() {
-        const requested = moneyToCents(amountRequested);
-        const received = moneyToCents(amountReceived);
+        const requested =
+            amountRequested === undefined
+                ? undefined
+                : convertCurrency(amountRequested, true);
+        const received =
+            amountReceived === undefined
+                ? undefined
+                : convertCurrency(amountReceived, true);
 
         if (amountRequested !== undefined && requested === undefined) {
             alert("Please enter a valid requested amount.");
