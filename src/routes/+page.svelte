@@ -1,10 +1,16 @@
 <script lang="ts">
   import "../app.css";
-  import { addGrant } from "../components/api";
+  import { onMount } from "svelte";
+  import { addGrant, getGrants } from "../components/api";
 
   let { children } = $props();
 
+  onMount(async () => {
+    grants = await getGrants();
+  });
+
   import type { Grant, NewGrant, Manuscript, View } from "../types";
+  
   import DashboardView from "../views/DashboardView.svelte";
   import GrantsView from "../views/GrantsView.svelte";
   import ManuscriptsView from "../views/ManuscriptsView.svelte";

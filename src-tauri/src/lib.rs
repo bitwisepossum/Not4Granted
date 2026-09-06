@@ -9,11 +9,17 @@ fn add_grant(grant: NewGrant) -> Result<Grant, String> {
         .map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+fn get_grants() -> Result<Vec<Grant>, String> {
+    db::get_grants_from_database()
+        .map_err(|e| e.to_string())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![add_grant])
+        .invoke_handler(tauri::generate_handler![add_grant, get_grants])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
