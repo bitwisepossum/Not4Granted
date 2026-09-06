@@ -1,4 +1,5 @@
 mod db;
+mod models;
 
 use db::{Grant, NewGrant, Manuscript, NewManuscript};
 
