@@ -9,6 +9,10 @@ export async function getGrants(): Promise<Grant[]> {
     return await invoke<Grant[]>("get_grants");
 }
 
+export async function addManuscript(manuscript: any): Promise<any> {
+    return await invoke<any>("add_manuscript", { manuscript });
+}
+
 export async function getManuscripts(): Promise<any[]> {
     return await invoke<any[]>("get_manuscripts");
 }

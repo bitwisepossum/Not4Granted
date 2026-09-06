@@ -242,6 +242,57 @@ pub fn get_grants_from_database() -> Result<Vec<Grant>> {
     Ok(grants)
 }
 
+pub fn add_manuscript_to_database(new_manuscript: NewManuscript) -> Result<Manuscript> {
+    let conn = open_database()?;
+
+    conn.execute(
+        r#"
+        INSERT INTO manuscript (
+            title,
+            short_name,
+            journal,
+            status,
+            next_action,
+            submitted_at,
+            decision_at,
+            published_at,
+            doi,
+            notes
+        )
+        VALUES (
+            ?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10
+        )
+        "#,
+        params![
+            &new_manuscript.title,
+            &new_manuscript.short_name,
+            &new_manuscript.journal,
+            new_manuscript.status.as_str(),
+            &new_manuscript.next_action,
+            &new_manuscript.submitted_at,
+            &new_manuscript.decision_at,
+            &new_manuscript.published_at,
+            &new_manuscript.doi,
+            &new_manuscript.notes,
+        ],
+    )?;
+
+    let id = conn.last_insert_rowid();
+
+    Ok(Manuscript {
+        id: id,
+        title: new_manuscript.title,
+        short_name: new_manuscript.short_name,
+        journal: new_manuscript.journal,
+        status: new_manuscript.status,
+        next_action: new_manuscript.next_action,
+        submitted_at: new_manuscript.submitted_at,
+        decision_at: new_manuscript.decision_at,
+        published_at: new_manuscript.published_at,
+        doi: new_manuscript.doi,
+        notes: new_manuscript.notes,
+    })
+}
 
 pub fn get_manuscripts_from_database() -> Result<Vec<Manuscript>> {
     let conn = open_database()?;

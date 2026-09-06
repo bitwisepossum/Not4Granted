@@ -1,6 +1,6 @@
 mod db;
 
-use db::{Grant, NewGrant, Manuscript};
+use db::{Grant, NewGrant, Manuscript, NewManuscript};
 
 /**
  * Grant-related Tauri commands
@@ -22,6 +22,12 @@ fn get_grants() -> Result<Vec<Grant>, String> {
  * Manuscript-related Tauri commands
  */
 #[tauri::command]
+fn add_manuscript(manuscript: NewManuscript) -> Result<Manuscript, String> {
+    db::add_manuscript_to_database(manuscript)
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
 fn get_manuscripts() -> Result<Vec<Manuscript>, String> {
     db::get_manuscripts_from_database()
         .map_err(|e| e.to_string())
@@ -34,7 +40,7 @@ fn get_manuscripts() -> Result<Vec<Manuscript>, String> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![add_grant, get_grants, get_manuscripts])
+        .invoke_handler(tauri::generate_handler![add_grant, get_grants, add_manuscript, get_manuscripts])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

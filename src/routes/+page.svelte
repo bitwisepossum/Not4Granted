@@ -1,7 +1,13 @@
 <script lang="ts">
   import "../app.css";
   import { onMount } from "svelte";
-  import { addGrant, getGrants, getManuscripts } from "../components/api";
+  import { addGrant, getGrants, addManuscript, getManuscripts } from "../components/api";
+  import type { Grant, NewGrant, Manuscript, View } from "../types";
+  import DashboardView from "../views/DashboardView.svelte";
+  import GrantsView from "../views/GrantsView.svelte";
+  import ManuscriptsView from "../views/ManuscriptsView.svelte";
+  import AddGrantView from "../views/AddGrantView.svelte";
+  import AddManuscriptView from "../views/AddManuscriptView.svelte";
 
   let { children } = $props();
 
@@ -10,24 +16,25 @@
     manuscripts = await getManuscripts();
   });
 
-  import type { Grant, NewGrant, Manuscript, View } from "../types";
-  
-  import DashboardView from "../views/DashboardView.svelte";
-  import GrantsView from "../views/GrantsView.svelte";
-  import ManuscriptsView from "../views/ManuscriptsView.svelte";
-  import AddGrantView from "../views/AddGrantView.svelte";
-  import AddManuscriptView from "../views/AddManuscriptView.svelte";
-
   let activeView = $state<View>("dashboard");
 
   let grants = $state<Grant[]>([]);
   let manuscripts = $state<Manuscript[]>([]);
 
+  // Handle submission of a new grant
   async function handleGrantSubmit(grant: NewGrant) {
     const savedGrant = await addGrant(grant);
 
     grants = [...grants, savedGrant];
     activeView = "grants";
+  }
+
+  // Handle submission of a new manuscript
+  async function handleManuscriptSubmit(manuscript: NewManuscript) {
+    const savedManuscript = await addManuscript(manuscript);
+
+    manuscripts = [...manuscripts, savedManuscript];
+    activeView = "manuscripts";
   }
 </script>
 
@@ -81,7 +88,10 @@
     {:else if activeView === "manuscripts"}
       <ManuscriptsView {manuscripts} onNavigate={(view) => activeView = view} />
     {:else if activeView === "add-manuscript"}
-
+      <AddManuscriptView
+        onCancel={() => activeView = "manuscripts"}
+        onSubmit={handleManuscriptSubmit}
+      />
     {:else}
       <p>Unknown view: {activeView}</p>
     {/if}
