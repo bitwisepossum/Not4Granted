@@ -3,25 +3,6 @@ use serde::{Deserialize, Serialize};
 
 const DB_FILE: &str = "db.sqlite3";
 
-#[derive(Debug, Deserialize)]
-pub struct NewGrant {
-    pub name: String,
-    pub funder: String,
-    pub deadline: String,
-    pub amount: String,
-    pub status: GrantStatus,
-}
-
-#[derive(Debug, Serialize)]
-pub struct Grant {
-    pub id: i64,
-    pub name: String,
-    pub funder: String,
-    pub deadline: String,
-    pub amount: String,
-    pub status: GrantStatus,
-}
-
 #[derive(Debug, Serialize, Deserialize)]
 pub enum GrantStatus {
     Planning,
@@ -41,22 +22,89 @@ impl GrantStatus {
     }
 }
 
-#[derive(Debug)]
-struct Manuscript {
-    id: i32,
-    title: String,
-    short_name: String,
-    journal: String,
-    status: ManuscriptStatus,
+#[derive(Debug, Serialize, Deserialize)]
+pub enum ManuscriptStatus {
+    Idea,
+    Drafting,
+    Submitted,
+    Revision,
+    Accepted,
+    Published,
+    Rejected,
 }
 
-#[derive(Debug)]
-enum ManuscriptStatus {
-    Draft,
-    Submitted,
-    Accepted,
-    Rejected,
-    Published,
+impl ManuscriptStatus {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Self::Idea => "Idea",
+            Self::Drafting => "Drafting",
+            Self::Submitted => "Submitted",
+            Self::Revision => "Revision",
+            Self::Accepted => "Accepted",
+            Self::Published => "Published",
+            Self::Rejected => "Rejected",
+        }
+    }
+}
+
+#[derive(Debug, Deserialize)]
+pub struct NewGrant {
+    pub name: String,
+    pub funder: String,
+    pub call_name: Option<String>,
+    pub status: GrantStatus,
+    pub amount_requested: Option<i64>,
+    pub amount_received: Option<i64>,
+    pub currency: String,
+    pub deadline: Option<String>,
+    pub submitted_at: Option<String>,
+    pub decision_at: Option<String>,
+    pub notes: Option<String>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct Grant {
+    pub id: i64,
+    pub name: String,
+    pub funder: String,
+    pub call_name: Option<String>,
+    pub status: GrantStatus,
+    pub amount_requested: Option<i64>,
+    pub amount_received: Option<i64>,
+    pub currency: String,
+    pub deadline: Option<String>,
+    pub submitted_at: Option<String>,
+    pub decision_at: Option<String>,
+    pub notes: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct NewManuscript {
+    pub title: String,
+    pub short_name: Option<String>,
+    pub journal: Option<String>,
+    pub status: ManuscriptStatus,
+    pub next_action: Option<String>,
+    pub submitted_at: Option<String>,
+    pub decision_at: Option<String>,
+    pub published_at: Option<String>,
+    pub doi: Option<String>,
+    pub notes: Option<String>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct Manuscript {
+    pub id: i64,
+    pub title: String,
+    pub short_name: Option<String>,
+    pub journal: Option<String>,
+    pub status: ManuscriptStatus,
+    pub next_action: Option<String>,
+    pub submitted_at: Option<String>,
+    pub decision_at: Option<String>,
+    pub published_at: Option<String>,
+    pub doi: Option<String>,
+    pub notes: Option<String>,
 }
 
 pub fn open_database() -> Result<Connection> {
@@ -88,13 +136,37 @@ pub fn add_grant_to_database(new_grant: NewGrant) -> Result<Grant> {
     let conn = open_database()?;
 
     conn.execute(
-        "INSERT INTO grant (name, funder, deadline, amount_requested, status) VALUES (?1, ?2, ?3, ?4, ?5)",
+        r#"
+        INSERT INTO grant (
+            name,
+            funder,
+            call_name,
+            status,
+            amount_requested,
+            amount_received,
+            currency,
+            deadline,
+            submitted_at,
+            decision_at,
+            notes
+        )
+        VALUES (
+            ?1, ?2, ?3, ?4, ?5, ?6,
+            ?7, ?8, ?9, ?10, ?11
+        )
+        "#,
         params![
-            new_grant.name,
-            new_grant.funder,
-            new_grant.deadline,
-            new_grant.amount,
-            format!("{:?}", new_grant.status),
+            &new_grant.name,
+            &new_grant.funder,
+            &new_grant.call_name,
+            new_grant.status.as_str(),
+            new_grant.amount_requested,
+            new_grant.amount_received,
+            &new_grant.currency,
+            &new_grant.deadline,
+            &new_grant.submitted_at,
+            &new_grant.decision_at,
+            &new_grant.notes,
         ],
     )?;
 
@@ -104,43 +176,83 @@ pub fn add_grant_to_database(new_grant: NewGrant) -> Result<Grant> {
         id,
         name: new_grant.name,
         funder: new_grant.funder,
-        deadline: new_grant.deadline,
-        amount: new_grant.amount,
+        call_name: new_grant.call_name,
         status: new_grant.status,
+        amount_requested: new_grant.amount_requested,
+        amount_received: new_grant.amount_received,
+        currency: new_grant.currency,
+        deadline: new_grant.deadline,
+        submitted_at: new_grant.submitted_at,
+        decision_at: new_grant.decision_at,
+        notes: new_grant.notes,
     })
 }
 
-fn create_schema (conn: &Connection) -> Result<()> {
+fn create_schema(conn: &Connection) -> Result<()> {
     conn.execute_batch(
         r#"
+        PRAGMA foreign_keys = ON;
 
         CREATE TABLE grant (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+
             name TEXT NOT NULL,
-            funder TEXT,
+            funder TEXT NOT NULL,
             call_name TEXT,
-            status TEXT NOT NULL DEFAULT 'draft',
+
+            status TEXT NOT NULL DEFAULT 'Planning'
+                CHECK (
+                    status IN (
+                        'Planning',
+                        'Submitted',
+                        'Accepted',
+                        'Rejected'
+                    )
+                ),
+
             amount_requested INTEGER,
             amount_received INTEGER,
+            currency TEXT NOT NULL DEFAULT 'EUR',
+
             deadline TEXT,
             submitted_at TEXT,
             decision_at TEXT,
+
             notes TEXT,
+
             created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
             updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
         );
 
         CREATE TABLE manuscript (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+
             title TEXT NOT NULL,
             short_name TEXT,
             journal TEXT,
-            status TEXT NOT NULL DEFAULT 'draft',
+
+            status TEXT NOT NULL DEFAULT 'Idea'
+                CHECK (
+                    status IN (
+                        'Idea',
+                        'Drafting',
+                        'Submitted',
+                        'Revision',
+                        'Accepted',
+                        'Published',
+                        'Rejected'
+                    )
+                ),
+
+            next_action TEXT,
+
             submitted_at TEXT,
             decision_at TEXT,
             published_at TEXT,
+
             doi TEXT,
             notes TEXT,
+
             created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
             updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
         );
@@ -160,13 +272,13 @@ fn create_schema (conn: &Connection) -> Result<()> {
                 ON DELETE CASCADE
         );
 
-        CREATE INDEX IF NOT EXISTS idx_grant_status
+        CREATE INDEX idx_grant_status
             ON grant(status);
 
-        CREATE INDEX IF NOT EXISTS idx_grant_deadline
+        CREATE INDEX idx_grant_deadline
             ON grant(deadline);
 
-        CREATE INDEX IF NOT EXISTS idx_manuscript_status
+        CREATE INDEX idx_manuscript_status
             ON manuscript(status);
 
         PRAGMA user_version = 1;
