@@ -1,39 +1,138 @@
 <script lang="ts">
+  type GrantStatus = "Planning" | "Submitted" | "Accepted" | "Rejected";
+  type ManuscriptStatus = "Idea" | "Drafting" | "Submitted" | "Revision" | "Accepted";
+  type View = "dashboard" | "grants" | "manuscripts" | "add-grant" | "add-manuscript";
+
   type Grant = {
     id: number;
     name: string;
     funder: string;
     deadline: string;
     amount: string;
-    status: "Planning" | "Submitted" | "Awarded" | "Rejected";
+    status: GrantStatus;
   };
 
   type Manuscript = {
     id: number;
     title: string;
     journal: string;
-    status: "Drafting" | "Submitted" | "Revision" | "Accepted";
+    status: ManuscriptStatus;
     nextAction: string;
   };
 
-  let activeView = $state<"dashboard" | "grants" | "manuscripts">("dashboard");
+  let activeView = $state<View>("dashboard");
 
-  
   const grants: Grant[] = [
     {
       id: 1,
-      name: "Doctoral research grant",
-      funder: "Example Foundation",
-      deadline: "2026-10-15",
-      amount: "€24,000",
+      name: "Urban Pollinator Microgrant",
+      funder: "Northbridge Research Trust",
+      deadline: "2026-09-28",
+      amount: "€8,500",
       status: "Planning"
     },
     {
       id: 2,
-      name: "Conference travel grant",
-      funder: "Research Society",
-      deadline: "2026-09-30",
-      amount: "€1,500",
+      name: "Open Tools Seed Funding",
+      funder: "Example Science Foundation",
+      deadline: "2026-10-12",
+      amount: "€15,000",
+      status: "Submitted"
+    },
+    {
+      id: 3,
+      name: "Early Career Mobility Grant",
+      funder: "Baltic Academic Council",
+      deadline: "2026-11-05",
+      amount: "€3,200",
+      status: "Submitted"
+    },
+    {
+      id: 4,
+      name: "Community Data Pilot",
+      funder: "Civic Knowledge Fund",
+      deadline: "2026-05-14",
+      amount: "€21,000",
+      status: "Accepted"
+    },
+    {
+      id: 5,
+      name: "Small Methods Development Grant",
+      funder: "Helix Research Society",
+      deadline: "2026-03-31",
+      amount: "€12,000",
+      status: "Rejected"
+    },
+    {
+      id: 6,
+      name: "Research Software Support Award",
+      funder: "Fictional Open Research Fund",
+      deadline: "2025-12-15",
+      amount: "€9,500",
+      status: "Rejected"
+    },
+    {
+      id: 7,
+      name: "Interdisciplinary Workshop Fund",
+      funder: "Example University Network",
+      deadline: "2026-01-20",
+      amount: "€4,000",
+      status: "Rejected"
+    },
+    {
+      id: 8,
+      name: "Prototype Evaluation Grant",
+      funder: "North Coast Innovation Fund",
+      deadline: "2026-12-01",
+      amount: "€18,000",
+      status: "Planning"
+    },
+    {
+      id: 9,
+      name: "Conference Participation Award",
+      funder: "International Methods Association",
+      deadline: "2026-08-30",
+      amount: "€1,800",
+      status: "Rejected"
+    },
+    {
+      id: 10,
+      name: "Exploratory Research Award",
+      funder: "Mock Funding Council",
+      deadline: "2026-02-18",
+      amount: "€25,000",
+      status: "Rejected"
+    },
+    {
+      id: 11,
+      name: "Open Scholarship Infrastructure Grant",
+      funder: "Fictional Research Infrastructure Fund",
+      deadline: "2026-04-22",
+      amount: "€32,000",
+      status: "Rejected"
+    },
+    {
+      id: 12,
+      name: "Research Exchange Travel Award",
+      funder: "Northern Academic Exchange",
+      deadline: "2026-06-10",
+      amount: "€2,700",
+      status: "Rejected"
+    },
+    {
+      id: 13,
+      name: "Small Dataset Reuse Award",
+      funder: "Example Data Science Trust",
+      deadline: "2026-07-07",
+      amount: "€6,000",
+      status: "Rejected"
+    },
+    {
+      id: 14,
+      name: "Methods Training Support Grant",
+      funder: "Demo Academic Development Fund",
+      deadline: "2026-11-30",
+      amount: "€5,500",
       status: "Submitted"
     }
   ];
@@ -41,21 +140,64 @@
   const manuscripts: Manuscript[] = [
     {
       id: 1,
-      title: "Minority stress in healthcare",
-      journal: "BMC Nursing",
+      title: "A Small Study of Very Serious Spreadsheet Problems",
+      journal: "Journal of Demonstrational Research",
       status: "Drafting",
-      nextAction: "Finish results section"
+      nextAction: "Finish methods draft"
     },
     {
       id: 2,
-      title: "Integrative review",
-      journal: "Advances in Nursing Science",
+      title: "Local-First Research Tools in Small Academic Teams",
+      journal: "Open Methods Quarterly",
+      status: "Submitted",
+      nextAction: "Wait for editor decision"
+    },
+    {
+      id: 3,
+      title: "Why Researchers Keep Inventing Their Own Trackers",
+      journal: "Academic Workflow Review",
+      status: "Revision",
+      nextAction: "Address reviewer 2"
+    },
+    {
+      id: 4,
+      title: "Metadata Practices in Fictional Field Studies",
+      journal: "Data Practice Notes",
       status: "Accepted",
       nextAction: "Check proofs"
+    },
+    {
+      id: 5,
+      title: "A Pilot Taxonomy of Deadline-Induced Panic",
+      journal: "Journal of Entirely Plausible Studies",
+      status: "Idea",
+      nextAction: "Write outline"
     }
   ];
 
-  const statusClass = (status: string) => status.toLowerCase().replace(" ", "-");
+  const appliedGrants = grants.filter((grant) => grant.status !== "Planning");
+  const acceptedGrants = grants.filter((grant) => grant.status === "Accepted");
+  const rejectedGrants = grants.filter((grant) => grant.status === "Rejected");
+  const decidedGrants = grants.filter(
+    (grant) => grant.status === "Accepted" || grant.status === "Rejected"
+  );
+  const inProgressGrants = grants.filter(
+    (grant) => grant.status === "Planning" || grant.status === "Submitted"
+  );
+
+  const grantStats = [
+    { label: "Applied", value: appliedGrants.length },
+    { label: "Accepted", value: acceptedGrants.length },
+    { label: "Rejected", value: rejectedGrants.length },
+    { label: "In progress", value: inProgressGrants.length }
+  ];
+
+  const maxGrantStat = Math.max(...grantStats.map((stat) => stat.value), 1);
+  const successRate = decidedGrants.length === 0
+    ? 0
+    : Math.round((acceptedGrants.length / decidedGrants.length) * 100);
+
+  const statusClass = (status: string) => status.toLowerCase().replaceAll(" ", "-");
 </script>
 
 <svelte:head>
@@ -84,46 +226,95 @@
       </button>
     </nav>
 
-    <div class="sidebar-footer">Local database</div>
+    <div class="sidebar-footer">Demo data · local database target</div>
   </aside>
 
   <main>
     <header>
       <div>
         <h1>{activeView === "dashboard" ? "Dashboard" : activeView === "grants" ? "Grants" : "Manuscripts"}</h1>
-        <p>Funding applications and publication work in one mildly less chaotic place.</p>
+        <p>Demonstrational data only. No dissertation, funder, journal or manuscript here is meant to represent real project data.</p>
       </div>
-      <button class="primary">+ Add item</button>
+      <button onclick={() => activeView = "add-grant"}>+ Add Grant</button>
+      <button onclick={() => activeView = "add-manuscript"}>+ Add Manuscript</button>
     </header>
 
     {#if activeView === "dashboard"}
       <section class="stats">
         <article>
-          <span>Active grants</span>
-          <strong>{grants.length}</strong>
-        </article>
-        <article>
-          <span>Submitted</span>
-          <strong>{grants.filter((grant) => grant.status === "Submitted").length}</strong>
-        </article>
-        <article>
-          <span>Manuscripts</span>
-          <strong>{manuscripts.length}</strong>
+          <span>Applied</span>
+          <strong>{appliedGrants.length}</strong>
+          <small>submitted or decided</small>
         </article>
         <article>
           <span>Accepted</span>
-          <strong>{manuscripts.filter((manuscript) => manuscript.status === "Accepted").length}</strong>
+          <strong>{acceptedGrants.length}</strong>
+          <small>{successRate}% success rate</small>
         </article>
+        <article>
+          <span>Rejected</span>
+          <strong>{rejectedGrants.length}</strong>
+          <small>{rejectedGrants.length} of {decidedGrants.length} decisions</small>
+        </article>
+        <article>
+          <span>In progress</span>
+          <strong>{inProgressGrants.length}</strong>
+          <small>planning or submitted</small>
+        </article>
+      </section>
+
+      <section class="grid dashboard-grid">
+        <div class="panel chart-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Grant outcomes</h2>
+              <p>Current demonstrational grant portfolio</p>
+            </div>
+          </div>
+
+          <div class="bar-chart" aria-label="Grant outcome statistics">
+            {#each grantStats as stat}
+              <div class="bar-row">
+                <span>{stat.label}</span>
+                <div class="bar-track">
+                  <div class="bar-fill {statusClass(stat.label)}" style={`width: ${(stat.value / maxGrantStat) * 100}%`}></div>
+                </div>
+                <strong>{stat.value}</strong>
+              </div>
+            {/each}
+          </div>
+        </div>
+
+        <div class="panel success-panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Decision outcomes</h2>
+              <p>Accepted applications among decided applications</p>
+            </div>
+          </div>
+
+          <div class="donut" style={`--value: ${successRate * 3.6}deg`}>
+            <div>
+              <strong>{successRate}%</strong>
+              <span>accepted</span>
+            </div>
+          </div>
+
+          <div class="decision-breakdown">
+            <span><strong>{acceptedGrants.length}</strong> accepted</span>
+            <span><strong>{rejectedGrants.length}</strong> rejected</span>
+          </div>
+        </div>
       </section>
 
       <section class="grid">
         <div class="panel">
           <div class="panel-heading">
-            <h2>Upcoming grants</h2>
+            <h2>Active grant work</h2>
             <button class="link-button" onclick={() => activeView = "grants"}>View all</button>
           </div>
 
-          {#each grants as grant}
+          {#each inProgressGrants as grant}
             <button class="list-row">
               <div>
                 <strong>{grant.name}</strong>
@@ -143,7 +334,7 @@
             <button class="link-button" onclick={() => activeView = "manuscripts"}>View all</button>
           </div>
 
-          {#each manuscripts as manuscript}
+          {#each manuscripts.slice(0, 4) as manuscript}
             <button class="list-row">
               <div>
                 <strong>{manuscript.title}</strong>
@@ -157,7 +348,10 @@
     {:else if activeView === "grants"}
       <section class="panel table-panel">
         <div class="panel-heading">
-          <h2>Grant applications</h2>
+          <div>
+            <h2>Grant applications</h2>
+            <p>Fictional records for frontend and database development</p>
+          </div>
           <input placeholder="Search grants..." />
         </div>
 
@@ -180,10 +374,27 @@
           {/each}
         </div>
       </section>
+    {:else if activeView === "add-grant"}
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>Add Grant</h2>
+        </div>
+        <p>Form to add a new grant would go here.</p>
+      </section>
+    {:else if activeView === "add-manuscript"}
+      <section class="panel">
+        <div class="panel-heading">
+          <h2>Add Manuscript</h2>
+        </div>
+        <p>Form to add a new manuscript would go here.</p>
+      </section>
     {:else}
       <section class="panel table-panel">
         <div class="panel-heading">
-          <h2>Manuscripts</h2>
+          <div>
+            <h2>Manuscripts</h2>
+            <p>Entirely fictional manuscript records</p>
+          </div>
           <input placeholder="Search manuscripts..." />
         </div>
 
@@ -215,7 +426,7 @@
 
   :global(body) {
     margin: 0;
-    font-family: Inter, system-ui, sans-serif;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     color: #20242a;
     background: #f5f6f8;
   }
@@ -258,8 +469,8 @@
     border-radius: 8px;
     font-size: 12px;
     font-weight: 800;
-    background: #d8dee8;
     color: #20242a;
+    background: #d8dee8;
   }
 
   .brand strong,
@@ -269,13 +480,13 @@
 
   .brand span {
     margin-top: 2px;
-    color: #979faa;
+    color: #98a1ad;
     font-size: 12px;
   }
 
   nav {
     display: grid;
-    gap: 4px;
+    gap: 5px;
   }
 
   nav button {
@@ -283,35 +494,35 @@
     border: 0;
     border-radius: 7px;
     text-align: left;
+    color: #b9c0ca;
     background: transparent;
-    color: #b9c0c9;
     cursor: pointer;
   }
 
   nav button:hover,
   nav button.active {
-    color: #fff;
+    color: white;
     background: #30363e;
   }
 
   .sidebar-footer {
     margin-top: auto;
-    padding: 10px 8px 0;
-    color: #737c87;
-    font-size: 12px;
+    padding: 12px 8px 2px;
+    color: #7e8792;
+    font-size: 11px;
   }
 
   main {
-    padding: 32px;
-    overflow: auto;
+    min-width: 0;
+    padding: 30px;
   }
 
   header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 28px;
+    gap: 24px;
+    align-items: flex-start;
+    margin-bottom: 26px;
   }
 
   h1,
@@ -321,65 +532,81 @@
   }
 
   h1 {
-    font-size: 26px;
+    font-size: 28px;
   }
 
   h2 {
     font-size: 16px;
   }
 
-  header p {
+  header p,
+  .panel-heading p {
     margin-top: 5px;
-    color: #737b86;
-    font-size: 14px;
+    color: #747d89;
+    font-size: 13px;
   }
 
   .primary {
     padding: 9px 14px;
     border: 0;
     border-radius: 7px;
+    font-weight: 650;
     color: white;
-    background: #303842;
+    background: #313b49;
     cursor: pointer;
-  }
-
-  .primary:hover {
-    background: #1f252c;
   }
 
   .stats {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 14px;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
   }
 
   .stats article,
   .panel {
-    border: 1px solid #e0e3e7;
+    border: 1px solid #dde1e6;
     border-radius: 10px;
     background: white;
   }
 
   .stats article {
-    padding: 18px;
+    padding: 17px;
+  }
+
+  .stats span,
+  .stats small,
+  .stats strong {
+    display: block;
   }
 
   .stats span {
-    display: block;
-    margin-bottom: 6px;
-    color: #727a84;
+    color: #68717d;
     font-size: 12px;
+    font-weight: 650;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
 
   .stats strong {
-    font-size: 24px;
+    margin: 6px 0 2px;
+    font-size: 27px;
+  }
+
+  .stats small {
+    color: #9299a3;
+    font-size: 11px;
   }
 
   .grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.7fr);
   }
 
   .panel {
@@ -388,44 +615,31 @@
 
   .panel-heading {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 18px;
+    align-items: center;
     padding: 16px 18px;
-    border-bottom: 1px solid #eceef1;
-  }
-
-  .panel-heading input {
-    width: 220px;
-    padding: 7px 10px;
-    border: 1px solid #d7dbe0;
-    border-radius: 6px;
-    outline: none;
-  }
-
-  .panel-heading input:focus {
-    border-color: #8d98a5;
+    border-bottom: 1px solid #e8ebef;
   }
 
   .link-button {
     border: 0;
+    color: #5b6571;
     background: transparent;
-    color: #596574;
-    font-size: 12px;
     cursor: pointer;
   }
 
   .list-row {
     display: flex;
     width: 100%;
-    align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: 20px;
+    align-items: center;
     padding: 14px 18px;
     border: 0;
-    border-bottom: 1px solid #f0f1f3;
-    background: white;
+    border-bottom: 1px solid #edf0f2;
     text-align: left;
+    background: white;
     cursor: pointer;
   }
 
@@ -435,7 +649,7 @@
 
   .list-row:hover,
   .table-row:not(.table-header):hover {
-    background: #f8f9fa;
+    background: #fafbfc;
   }
 
   .list-row strong,
@@ -448,103 +662,226 @@
   }
 
   .list-row div > span {
-    margin-top: 3px;
-    color: #7d858f;
+    margin-top: 4px;
+    color: #7d8590;
     font-size: 12px;
   }
 
   .row-meta {
+    min-width: 125px;
     text-align: right;
   }
 
-  .row-meta > span:first-child {
-    margin-bottom: 4px;
-  }
-
-  .status {
+  .row-meta .status {
     display: inline-block;
-    width: fit-content;
-    padding: 3px 7px;
+    margin-top: 5px;
+  }
+
+  .chart-panel,
+  .success-panel {
+    min-height: 280px;
+  }
+
+  .bar-chart {
+    display: grid;
+    gap: 17px;
+    padding: 24px 20px 26px;
+  }
+
+  .bar-row {
+    display: grid;
+    grid-template-columns: 80px minmax(0, 1fr) 28px;
+    gap: 12px;
+    align-items: center;
+    font-size: 12px;
+  }
+
+  .bar-row > span {
+    color: #636d78;
+  }
+
+  .bar-row > strong {
+    text-align: right;
+    font-size: 12px;
+  }
+
+  .bar-track {
+    height: 12px;
+    overflow: hidden;
     border-radius: 999px;
-    color: #58616b;
     background: #edf0f3;
+  }
+
+  .bar-fill {
+    height: 100%;
+    min-width: 4px;
+    border-radius: inherit;
+    background: #697584;
+  }
+
+  .bar-fill.accepted {
+    background: #5c8067;
+  }
+
+  .bar-fill.rejected {
+    background: #8b6363;
+  }
+
+  .bar-fill.in-progress {
+    background: #7a718e;
+  }
+
+  .success-panel {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .donut {
+    --value: 0deg;
+    display: grid;
+    width: 150px;
+    height: 150px;
+    place-items: center;
+    align-self: center;
+    margin: 24px 0 16px;
+    border-radius: 50%;
+    background: conic-gradient(#5c8067 var(--value), #e8ecef 0deg);
+  }
+
+  .donut::before {
+    content: "";
+    grid-area: 1 / 1;
+    width: 108px;
+    height: 108px;
+    border-radius: 50%;
+    background: white;
+  }
+
+  .donut > div {
+    z-index: 1;
+    grid-area: 1 / 1;
+    text-align: center;
+  }
+
+  .donut strong,
+  .donut span {
+    display: block;
+  }
+
+  .donut strong {
+    font-size: 25px;
+  }
+
+  .donut span {
+    margin-top: 2px;
+    color: #7a838e;
     font-size: 11px;
-    font-weight: 600;
   }
 
-  .status.submitted,
-  .status.revision {
-    color: #795b14;
-    background: #fff2c9;
+  .decision-breakdown {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    padding: 0 18px 22px;
+    color: #747d89;
+    font-size: 11px;
   }
 
-  .status.awarded,
-  .status.accepted {
-    color: #27613e;
-    background: #dff3e7;
-  }
-
-  .status.rejected {
-    color: #843b3b;
-    background: #f7dfdf;
+  .decision-breakdown strong {
+    color: #30363e;
   }
 
   .table-panel {
-    overflow-x: auto;
+    width: 100%;
+  }
+
+  .panel-heading input {
+    width: 220px;
+    padding: 8px 10px;
+    border: 1px solid #d9dee4;
+    border-radius: 7px;
+    outline: none;
   }
 
   .table {
-    min-width: 760px;
+    overflow-x: auto;
   }
 
   .table-row {
     display: grid;
+    grid-template-columns: minmax(220px, 2fr) minmax(170px, 1.2fr) 115px 100px 110px;
     width: 100%;
-    grid-template-columns: 1.5fr 1fr 120px 100px 100px;
+    min-width: 820px;
+    gap: 14px;
     align-items: center;
-    gap: 16px;
-    padding: 12px 18px;
+    padding: 13px 18px;
     border: 0;
-    border-bottom: 1px solid #eceef1;
-    background: white;
+    border-bottom: 1px solid #edf0f2;
     text-align: left;
+    background: white;
   }
 
   button.table-row {
     cursor: pointer;
   }
 
-  .table-row:last-child {
-    border-bottom: 0;
-  }
-
   .table-header {
-    color: #7c848e;
-    background: #fafbfc;
+    color: #858d97;
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: #fafbfc;
+  }
+
+  .table-row:not(.table-header) {
+    font-size: 12px;
   }
 
   .manuscript-table .table-row {
-    grid-template-columns: 1.5fr 1fr 100px 1.2fr;
+    grid-template-columns: minmax(280px, 2fr) minmax(190px, 1.2fr) 110px minmax(180px, 1.2fr);
   }
 
-  .table-row strong,
-  .table-row span {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 13px;
+  .status {
+    width: fit-content;
+    padding: 4px 7px;
+    border-radius: 999px;
+    color: #5f6874;
+    font-size: 10px;
+    font-weight: 700;
+    background: #eceff2;
   }
 
-  @media (max-width: 900px) {
+  .status.accepted {
+    color: #42634d;
+    background: #e5eee8;
+  }
+
+  .status.rejected {
+    color: #714d4d;
+    background: #f1e6e6;
+  }
+
+  .status.submitted,
+  .status.revision {
+    color: #685f42;
+    background: #f1eddf;
+  }
+
+  .status.planning,
+  .status.drafting,
+  .status.idea {
+    color: #565f70;
+    background: #e8ebf0;
+  }
+
+  @media (max-width: 950px) {
     .stats {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(2, 1fr);
     }
 
-    .grid {
+    .grid,
+    .dashboard-grid {
       grid-template-columns: 1fr;
     }
   }
