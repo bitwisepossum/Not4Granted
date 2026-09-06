@@ -2,7 +2,7 @@
   import "../app.css";
   import { onMount } from "svelte";
   import { addGrant, getGrants, addManuscript, getManuscripts } from "../components/api";
-  import type { Grant, NewGrant, Manuscript, View } from "../types";
+  import type { Grant, NewGrant, GrantStatus, Manuscript, NewManuscript, ManuscriptStatus, View } from "../types";
   import DashboardView from "../views/DashboardView.svelte";
   import GrantsView from "../views/GrantsView.svelte";
   import ManuscriptsView from "../views/ManuscriptsView.svelte";
@@ -35,6 +35,10 @@
 
     manuscripts = [...manuscripts, savedManuscript];
     activeView = "manuscripts";
+  }
+
+  async function handleStatusChange(id: number, status: GrantStatus) {
+
   }
 </script>
 

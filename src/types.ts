@@ -18,7 +18,9 @@ export type View =
     | "grants"
     | "manuscripts"
     | "add-grant"
-    | "add-manuscript";
+    | "add-manuscript"
+    | "edit-grant"
+    | "edit-manuscript";
 
 export interface Grant {
     id: number;

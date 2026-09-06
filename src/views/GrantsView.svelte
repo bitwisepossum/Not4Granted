@@ -3,13 +3,30 @@
     import { convertCurrency } from "../components/format";
     import type { Grant, GrantStatus } from "../types";
 
+    let expandedGrantId = $state<number | undefined>(undefined);
+    let selectedStatus = $state<GrantStatus>("Planning");
+
     let {
         grants,
-        onNavigate
+        onNavigate,
+        onStatusChange
     }: {
         grants: Grant[];
-        onNavigate: (view: "dashboard" | "grants" | "manuscripts" | "add-grant" | "add-manuscript") => void;
+        onNavigate: (view: View) => void;
+        onStatusChange: (
+            id: number,
+            status: GrantStatus
+        ) => void;
     } = $props();
+
+    function toggleGrant(id: number, status: GrantStatus) {
+        if (expandedGrantId === id) {
+            expandedGrantId = undefined;
+        } else {
+            expandedGrantId = id;
+            selectedStatus = status;
+        }
+    }
 
     console.log("GrantsView grants:", grants);
 </script>
@@ -50,7 +67,7 @@
 
                 <tbody>
                     {#each grants as grant}
-                        <tr>
+                        <tr onclick={() => toggleGrant(grant.id, grant.status)}>
                             <td class="main-cell">{grant.name}</td>
                             <td>{grant.funder}</td>
                             <td>{grant.deadline}</td>
@@ -58,6 +75,21 @@
                             <td>{grant.amountReceived !== undefined ? convertCurrency(grant.amountReceived) : "-"} EUR</td>
                             <td>{grant.status}</td>
                         </tr>
+
+                        {#if expandedGrantId === grant.id}
+                            {#key grant.id}
+                                <tr class="expanded-row">
+                                    <td colspan="6">
+                                        <select bind:value={selectedStatus}>
+                                            <option value="Planning">Planning</option>
+                                            <option value="Submitted">Submitted</option>
+                                            <option value="Accepted">Accepted</option>
+                                            <option value="Rejected">Rejected</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            {/key}
+                        {/if}
                     {/each}
                 </tbody>
             </table>
