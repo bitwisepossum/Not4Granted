@@ -1,6 +1,6 @@
 <script lang="ts">
     import "../app.css";
-    import type { Grant, GrantStatus } from "../types";
+    import type { GrantStatus, NewGrant } from "../types";
 
     let name: string = $state<string>("");
     let funder: string = $state<string>("");
@@ -8,25 +8,26 @@
     let amount: string = $state<string>("");
     let status = $state<GrantStatus>("Planning");
 
+    console.log("AddGrantView: initial state", { name, funder, deadline, amount, status });
+
     let { 
         onCancel,
         onSubmit
     }: {
         onCancel: () => void;
-        onSubmit: (grant: Grant) => void;
+        onSubmit: (grant: NewGrant) => void;
     } = $props();
 
     function submit() {
-        const newGrant: Grant = {
-            id: Date.now(),
-            name,
-            funder,
+        const grant: NewGrant = {
+            name: name.trim(),
+            funder: funder.trim(),
             deadline,
             amount,
             status
         };
 
-        onSubmit(newGrant);
+        onSubmit(grant);
     }
 
 

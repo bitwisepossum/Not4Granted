@@ -11,6 +11,8 @@ export interface Grant {
     status: GrantStatus;
 };
 
+export type NewGrant = Omit<Grant, "id">;
+
 export interface Manuscript {
     id: number;
     title: string;
@@ -18,3 +20,5 @@ export interface Manuscript {
     status: ManuscriptStatus;
     nextAction: string;
 };
+
+export type NewManuscript = Omit<Manuscript, "id">;

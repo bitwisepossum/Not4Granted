@@ -1,21 +1,44 @@
 use rusqlite::{params, Connection, Result};
+use serde::{Deserialize, Serialize};
 
 const DB_FILE: &str = "db.sqlite3";
 
-
-#[derive(Debug)]
-struct Grant {
-    id: i64,
-    name: String,
-    status: GrantStatus,
-    amount_requested: Option<i64>,
+#[derive(Debug, Deserialize)]
+pub struct NewGrant {
+    pub name: String,
+    pub funder: String,
+    pub deadline: String,
+    pub amount: String,
+    pub status: GrantStatus,
 }
-#[derive(Debug)]
-enum GrantStatus {
-    Draft,
+
+#[derive(Debug, Serialize)]
+pub struct Grant {
+    pub id: i64,
+    pub name: String,
+    pub funder: String,
+    pub deadline: String,
+    pub amount: String,
+    pub status: GrantStatus,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum GrantStatus {
+    Planning,
     Submitted,
-    Approved,
+    Accepted,
     Rejected,
+}
+
+impl GrantStatus {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Self::Planning => "Planning",
+            Self::Submitted => "Submitted",
+            Self::Accepted => "Accepted",
+            Self::Rejected => "Rejected",
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -59,6 +82,32 @@ pub fn open_database() -> Result<Connection> {
     }
 
     Ok(conn)
+}
+
+pub fn add_grant_to_database(new_grant: NewGrant) -> Result<Grant> {
+    let conn = open_database()?;
+
+    conn.execute(
+        "INSERT INTO grant (name, funder, deadline, amount_requested, status) VALUES (?1, ?2, ?3, ?4, ?5)",
+        params![
+            new_grant.name,
+            new_grant.funder,
+            new_grant.deadline,
+            new_grant.amount,
+            format!("{:?}", new_grant.status),
+        ],
+    )?;
+
+    let id = conn.last_insert_rowid();
+
+    Ok(Grant {
+        id,
+        name: new_grant.name,
+        funder: new_grant.funder,
+        deadline: new_grant.deadline,
+        amount: new_grant.amount,
+        status: new_grant.status,
+    })
 }
 
 fn create_schema (conn: &Connection) -> Result<()> {

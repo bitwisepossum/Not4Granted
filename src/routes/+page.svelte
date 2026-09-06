@@ -1,19 +1,19 @@
 <script lang="ts">
   import "../app.css";
+  import { addGrant } from "../components/api";
 
   let { children } = $props();
 
-  import type { Grant, Manuscript, View } from "../types";
+  import type { Grant, NewGrant, Manuscript, View } from "../types";
   import DashboardView from "../views/DashboardView.svelte";
   import GrantsView from "../views/GrantsView.svelte";
   import ManuscriptsView from "../views/ManuscriptsView.svelte";
   import AddGrantView from "../views/AddGrantView.svelte";
   import AddManuscriptView from "../views/AddManuscriptView.svelte";
 
-
   let activeView = $state<View>("dashboard");
 
-  const grants: Grant[] = [
+  let grants = $state<Grant[]>([
     {
       id: 1,
       name: "Urban Pollinator Microgrant",
@@ -126,9 +126,9 @@
       amount: "€5,500",
       status: "Submitted"
     }
-  ];
+  ]);
 
-  const manuscripts: Manuscript[] = [
+  let manuscripts = $state<Manuscript[]>([
     {
       id: 1,
       title: "A Small Study of Very Serious Spreadsheet Problems",
@@ -164,31 +164,14 @@
       status: "Idea",
       nextAction: "Write outline"
     }
-  ];
+  ]);
 
-  const appliedGrants = grants.filter((grant) => grant.status !== "Planning");
-  const acceptedGrants = grants.filter((grant) => grant.status === "Accepted");
-  const rejectedGrants = grants.filter((grant) => grant.status === "Rejected");
-  const decidedGrants = grants.filter(
-    (grant) => grant.status === "Accepted" || grant.status === "Rejected"
-  );
-  const inProgressGrants = grants.filter(
-    (grant) => grant.status === "Planning" || grant.status === "Submitted"
-  );
+  async function handleGrantSubmit(grant: NewGrant) {
+    const savedGrant = await addGrant(grant);
 
-  const grantStats = [
-    { label: "Applied", value: appliedGrants.length },
-    { label: "Accepted", value: acceptedGrants.length },
-    { label: "Rejected", value: rejectedGrants.length },
-    { label: "In progress", value: inProgressGrants.length }
-  ];
-
-  const maxGrantStat = Math.max(...grantStats.map((stat) => stat.value), 1);
-  const successRate = decidedGrants.length === 0
-    ? 0
-    : Math.round((acceptedGrants.length / decidedGrants.length) * 100);
-
-  const statusClass = (status: string) => status.toLowerCase().replaceAll(" ", "-");
+    grants = [...grants, savedGrant];
+    activeView = "grants";
+  }
 </script>
 
 <svelte:head>
@@ -217,14 +200,13 @@
       </button>
     </nav>
 
-    <div class="sidebar-footer">Demo data · local database target</div>
+    <div class="sidebar-footer">local database target</div>
   </aside>
 
   <main>
     <header>
       <div>
         <h1>{activeView === "dashboard" ? "Dashboard" : activeView === "grants" ? "Grants" : "Manuscripts"}</h1>
-        <p>Demonstrational data only. No dissertation, funder, journal or manuscript here is meant to represent real project data.</p>
       </div>
       <button onclick={() => activeView = "add-grant"}>+ Add Grant</button>
       <button onclick={() => activeView = "add-manuscript"}>+ Add Manuscript</button>
@@ -235,38 +217,22 @@
     {:else if activeView === "grants"}
       <GrantsView {grants} onNavigate={(view) => activeView = view} />
     {:else if activeView === "add-grant"}
-      <AddGrantView {grants} onNavigate={(view) => activeView = view} />
+      <AddGrantView
+        onCancel={() => activeView = "grants"}
+        onSubmit={handleGrantSubmit}
+      />
     {:else if activeView === "manuscripts"}
       <ManuscriptsView {manuscripts} onNavigate={(view) => activeView = view} />
     {:else if activeView === "add-manuscript"}
-      <AddManuscriptView {manuscripts} onNavigate={(view) => activeView = view} />
+      <AddManuscriptView
+        onCancel={() => activeView = "manuscripts"}
+        onSubmit={(manuscript) => {
+          manuscripts = [...manuscripts, manuscript];
+          activeView = "manuscripts";
+        }}
+      />
     {:else}
-      <section class="panel table-panel">
-        <div class="panel-heading">
-          <div>
-            <h2>Manuscripts</h2>
-            <p>Entirely fictional manuscript records</p>
-          </div>
-          <input placeholder="Search manuscripts..." />
-        </div>
-
-        <div class="table manuscript-table">
-          <div class="table-row table-header">
-            <span>Title</span>
-            <span>Journal</span>
-            <span>Status</span>
-            <span>Next action</span>
-          </div>
-          {#each manuscripts as manuscript}
-            <button class="table-row">
-              <strong>{manuscript.title}</strong>
-              <span>{manuscript.journal}</span>
-              <span class="status {statusClass(manuscript.status)}">{manuscript.status}</span>
-              <span>{manuscript.nextAction}</span>
-            </button>
-          {/each}
-        </div>
-      </section>
+      <p>Unknown view: {activeView}</p>
     {/if}
   </main>
 </div>
