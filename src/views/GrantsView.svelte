@@ -1,5 +1,6 @@
 <script lang="ts">
     import "../app.css";
+    import { convertCurrency } from "../components/format";
     import type { Grant, GrantStatus } from "../types";
 
     let {
@@ -9,6 +10,8 @@
         grants: Grant[];
         onNavigate: (view: "dashboard" | "grants" | "manuscripts" | "add-grant" | "add-manuscript") => void;
     } = $props();
+
+    console.log("GrantsView grants:", grants);
 </script>
 
 <section class="view">
@@ -39,7 +42,8 @@
                         <th>Name</th>
                         <th>Funder</th>
                         <th>Deadline</th>
-                        <th>Amount</th>
+                        <th>Amount requested</th>
+                        <th>Amount received</th>
                         <th>Status</th>
                     </tr>
                 </thead>
@@ -50,12 +54,9 @@
                             <td class="main-cell">{grant.name}</td>
                             <td>{grant.funder}</td>
                             <td>{grant.deadline}</td>
-                            <td>{grant.amount}</td>
-                            <td>
-                                <span class="status">
-                                    {grant.status}
-                                </span>
-                            </td>
+                            <td>{grant.amountRequested !== undefined ? convertCurrency(grant.amountRequested) : "-"} EUR</td>
+                            <td>{grant.amountReceived !== undefined ? convertCurrency(grant.amountReceived) : "-"} EUR</td>
+                            <td>{grant.status}</td>
                         </tr>
                     {/each}
                 </tbody>

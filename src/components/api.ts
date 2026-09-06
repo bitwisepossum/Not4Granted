@@ -8,3 +8,7 @@ export async function addGrant(grant: NewGrant): Promise<Grant> {
 export async function getGrants(): Promise<Grant[]> {
     return await invoke<Grant[]>("get_grants");
 }
+
+export async function getManuscripts(): Promise<any[]> {
+    return await invoke<any[]>("get_manuscripts");
+}

@@ -63,6 +63,7 @@ pub struct NewGrant {
 }
 
 #[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Grant {
     pub id: i64,
     pub name: String,
@@ -93,6 +94,7 @@ pub struct NewManuscript {
 }
 
 #[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Manuscript {
     pub id: i64,
     pub title: String,
@@ -210,6 +212,8 @@ pub fn get_grants_from_database() -> Result<Vec<Grant>> {
         "#,
     )?;
 
+    // Map the rows to Grant structs
+    // Use query_map to iterate over the rows and map them to Grant structs
     let grants_iter = stmt.query_map([], |row| {
         Ok(Grant {
             id: row.get(0)?,
@@ -236,6 +240,58 @@ pub fn get_grants_from_database() -> Result<Vec<Grant>> {
     let grants: Vec<Grant> = grants_iter.collect::<Result<Vec<_>, _>>()?;
 
     Ok(grants)
+}
+
+
+pub fn get_manuscripts_from_database() -> Result<Vec<Manuscript>> {
+    let conn = open_database()?;
+
+    let mut stmt = conn.prepare(
+        r#"
+        SELECT
+            id,
+            title,
+            short_name,
+            journal,
+            status,
+            next_action,
+            submitted_at,
+            decision_at,
+            published_at,
+            doi,
+            notes
+        FROM manuscript
+        "#,
+    )?;
+
+    let manuscripts_iter = stmt.query_map([], |row| {
+        Ok(Manuscript {
+            id: row.get(0)?,
+            title: row.get(1)?,
+            short_name: row.get(2)?,
+            journal: row.get(3)?,
+            status: match row.get::<_, String>(4)?.as_str() {
+                "Idea" => ManuscriptStatus::Idea,
+                "Drafting" => ManuscriptStatus::Drafting,
+                "Submitted" => ManuscriptStatus::Submitted,
+                "Revision" => ManuscriptStatus::Revision,
+                "Accepted" => ManuscriptStatus::Accepted,
+                "Published" => ManuscriptStatus::Published,
+                "Rejected" => ManuscriptStatus::Rejected,
+                _ => panic!("Invalid manuscript status"),
+            },
+            next_action: row.get(5)?,
+            submitted_at: row.get(6)?,
+            decision_at: row.get(7)?,
+            published_at: row.get(8)?,
+            doi: row.get(9)?,
+            notes: row.get(10)?,
+        })
+    })?;
+
+    let manuscripts: Vec<Manuscript> = manuscripts_iter.collect::<Result<Vec<_>, _>>()?;
+
+    Ok(manuscripts)
 }
 
 fn create_schema(conn: &Connection) -> Result<()> {
