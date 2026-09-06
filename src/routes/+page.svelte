@@ -1,24 +1,11 @@
 <script lang="ts">
-  type GrantStatus = "Planning" | "Submitted" | "Accepted" | "Rejected";
-  type ManuscriptStatus = "Idea" | "Drafting" | "Submitted" | "Revision" | "Accepted";
-  type View = "dashboard" | "grants" | "manuscripts" | "add-grant" | "add-manuscript";
+  import type { Grant, Manuscript, View } from "../types";
+  import DashboardView from "../views/DashboardView.svelte";
+  import GrantsView from "../views/GrantsView.svelte";
+  import ManuscriptsView from "../views/ManuscriptsView.svelte";
+  import AddGrantView from "../views/AddGrantView.svelte";
+  import AddManuscriptView from "../views/AddManuscriptView.svelte";
 
-  type Grant = {
-    id: number;
-    name: string;
-    funder: string;
-    deadline: string;
-    amount: string;
-    status: GrantStatus;
-  };
-
-  type Manuscript = {
-    id: number;
-    title: string;
-    journal: string;
-    status: ManuscriptStatus;
-    nextAction: string;
-  };
 
   let activeView = $state<View>("dashboard");
 
@@ -240,154 +227,15 @@
     </header>
 
     {#if activeView === "dashboard"}
-      <section class="stats">
-        <article>
-          <span>Applied</span>
-          <strong>{appliedGrants.length}</strong>
-          <small>submitted or decided</small>
-        </article>
-        <article>
-          <span>Accepted</span>
-          <strong>{acceptedGrants.length}</strong>
-          <small>{successRate}% success rate</small>
-        </article>
-        <article>
-          <span>Rejected</span>
-          <strong>{rejectedGrants.length}</strong>
-          <small>{rejectedGrants.length} of {decidedGrants.length} decisions</small>
-        </article>
-        <article>
-          <span>In progress</span>
-          <strong>{inProgressGrants.length}</strong>
-          <small>planning or submitted</small>
-        </article>
-      </section>
-
-      <section class="grid dashboard-grid">
-        <div class="panel chart-panel">
-          <div class="panel-heading">
-            <div>
-              <h2>Grant outcomes</h2>
-              <p>Current demonstrational grant portfolio</p>
-            </div>
-          </div>
-
-          <div class="bar-chart" aria-label="Grant outcome statistics">
-            {#each grantStats as stat}
-              <div class="bar-row">
-                <span>{stat.label}</span>
-                <div class="bar-track">
-                  <div class="bar-fill {statusClass(stat.label)}" style={`width: ${(stat.value / maxGrantStat) * 100}%`}></div>
-                </div>
-                <strong>{stat.value}</strong>
-              </div>
-            {/each}
-          </div>
-        </div>
-
-        <div class="panel success-panel">
-          <div class="panel-heading">
-            <div>
-              <h2>Decision outcomes</h2>
-              <p>Accepted applications among decided applications</p>
-            </div>
-          </div>
-
-          <div class="donut" style={`--value: ${successRate * 3.6}deg`}>
-            <div>
-              <strong>{successRate}%</strong>
-              <span>accepted</span>
-            </div>
-          </div>
-
-          <div class="decision-breakdown">
-            <span><strong>{acceptedGrants.length}</strong> accepted</span>
-            <span><strong>{rejectedGrants.length}</strong> rejected</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="grid">
-        <div class="panel">
-          <div class="panel-heading">
-            <h2>Active grant work</h2>
-            <button class="link-button" onclick={() => activeView = "grants"}>View all</button>
-          </div>
-
-          {#each inProgressGrants as grant}
-            <button class="list-row">
-              <div>
-                <strong>{grant.name}</strong>
-                <span>{grant.funder}</span>
-              </div>
-              <div class="row-meta">
-                <span>{grant.deadline}</span>
-                <span class="status {statusClass(grant.status)}">{grant.status}</span>
-              </div>
-            </button>
-          {/each}
-        </div>
-
-        <div class="panel">
-          <div class="panel-heading">
-            <h2>Manuscript work</h2>
-            <button class="link-button" onclick={() => activeView = "manuscripts"}>View all</button>
-          </div>
-
-          {#each manuscripts.slice(0, 4) as manuscript}
-            <button class="list-row">
-              <div>
-                <strong>{manuscript.title}</strong>
-                <span>{manuscript.nextAction}</span>
-              </div>
-              <span class="status {statusClass(manuscript.status)}">{manuscript.status}</span>
-            </button>
-          {/each}
-        </div>
-      </section>
+      <DashboardView {grants} {manuscripts} onNavigate={(view) => activeView = view} />
     {:else if activeView === "grants"}
-      <section class="panel table-panel">
-        <div class="panel-heading">
-          <div>
-            <h2>Grant applications</h2>
-            <p>Fictional records for frontend and database development</p>
-          </div>
-          <input placeholder="Search grants..." />
-        </div>
-
-        <div class="table">
-          <div class="table-row table-header">
-            <span>Name</span>
-            <span>Funder</span>
-            <span>Deadline</span>
-            <span>Amount</span>
-            <span>Status</span>
-          </div>
-          {#each grants as grant}
-            <button class="table-row">
-              <strong>{grant.name}</strong>
-              <span>{grant.funder}</span>
-              <span>{grant.deadline}</span>
-              <span>{grant.amount}</span>
-              <span class="status {statusClass(grant.status)}">{grant.status}</span>
-            </button>
-          {/each}
-        </div>
-      </section>
+      <GrantsView {grants} onNavigate={(view) => activeView = view} />
     {:else if activeView === "add-grant"}
-      <section class="panel">
-        <div class="panel-heading">
-          <h2>Add Grant</h2>
-        </div>
-        <p>Form to add a new grant would go here.</p>
-      </section>
+      <AddGrantView {grants} onNavigate={(view) => activeView = view} />
+    {:else if activeView === "manuscripts"}
+      <ManuscriptsView {manuscripts} />
     {:else if activeView === "add-manuscript"}
-      <section class="panel">
-        <div class="panel-heading">
-          <h2>Add Manuscript</h2>
-        </div>
-        <p>Form to add a new manuscript would go here.</p>
-      </section>
+      <AddManuscriptView {manuscripts} onNavigate={(view) => activeView = view} />
     {:else}
       <section class="panel table-panel">
         <div class="panel-heading">
