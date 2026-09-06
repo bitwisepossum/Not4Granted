@@ -1,11 +1,12 @@
 <script lang="ts">
-    import type { Manuscript } from "../types";
+    import "../app.css";
+    import type { Grant, GrantStatus } from "../types";
 
     let {
-        manuscripts,
+        grants,
         onNavigate
     }: {
-        manuscripts: Manuscript[];
+        grants: Grant[];
         onNavigate: (view: "dashboard" | "grants" | "manuscripts" | "add-grant" | "add-manuscript") => void;
     } = $props();
 </script>
@@ -64,42 +65,6 @@
 </section>
 
 <style>
-    .view {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-
-    .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .page-header h1 {
-        margin: 0;
-    }
-
-    .page-header p {
-        margin: 0.25rem 0 0;
-        opacity: 0.65;
-    }
-
-    button {
-        padding: 0.65rem 1rem;
-        border: 1px solid #444;
-        border-radius: 0.45rem;
-        background: #222;
-        color: inherit;
-        font: inherit;
-        cursor: pointer;
-    }
-
-    button.primary {
-        font-weight: 600;
-    }
-
     .table-wrapper {
         overflow-x: auto;
         border: 1px solid #333;
@@ -118,37 +83,7 @@
         border-bottom: 1px solid #333;
     }
 
-    th {
-        font-size: 0.85rem;
-        opacity: 0.7;
-    }
-
-    tr:last-child td {
-        border-bottom: none;
-    }
-
     .main-cell {
         font-weight: 600;
-    }
-
-    .status {
-        font-size: 0.9rem;
-        font-weight: 600;
-    }
-
-    .empty-state {
-        padding: 2rem;
-        border: 1px dashed #444;
-        border-radius: 0.6rem;
-        text-align: center;
-    }
-
-    .empty-state h2 {
-        margin-top: 0;
-    }
-
-    .empty-state p {
-        margin-bottom: 0;
-        opacity: 0.7;
     }
 </style>

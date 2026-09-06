@@ -1,4 +1,5 @@
 <script lang="ts">
+    import "../app.css";
     import type { Grant, GrantStatus } from "../types";
 
     let name: string = $state<string>("");
@@ -70,6 +71,10 @@
                     id="grant-deadline"
                     type="date"
                     bind:value={deadline}
+                    onchange={(event) => {
+                        const input = event.currentTarget as HTMLInputElement;
+                        setTimeout(() => input.blur(), 0);
+                    }}
                 />
             </div>
 
@@ -117,73 +122,9 @@
 </section>
 
 <style>
-    .view {
-        max-width: 720px;
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-
-    header h1 {
-        margin: 0;
-    }
-
-    header p {
-        margin: 0.25rem 0 0;
-        opacity: 0.65;
-    }
-
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
     .form-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
-    }
-
-    .field {
-        display: flex;
-        flex-direction: column;
-        gap: 0.4rem;
-    }
-
-    label {
-        font-size: 0.9rem;
-        font-weight: 600;
-    }
-
-    input,
-    select {
-        padding: 0.7rem;
-        border: 1px solid #444;
-        border-radius: 0.4rem;
-        background: #181818;
-        color: inherit;
-        font: inherit;
-    }
-
-    .actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 0.75rem;
-        margin-top: 1rem;
-    }
-
-    button {
-        padding: 0.65rem 1rem;
-        border: 1px solid #444;
-        border-radius: 0.45rem;
-        background: #222;
-        color: inherit;
-        font: inherit;
-        cursor: pointer;
-    }
-
-    button.primary {
-        font-weight: 600;
     }
 </style>
