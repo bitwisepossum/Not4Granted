@@ -18,11 +18,11 @@
     let isLoading = $state(true);
     let error = $state<string | undefined>(undefined);
 
-    let grantId = $derived(page.params.id);
+    let routeId = $derived(page.params.id);
 
     onMount(async () => {
         try {
-            const id = Number(grantId);
+            const id = Number(routeId);
             if (!Number.isInteger(id)) {
                 throw new Error("Invalid grant ID");
             }
@@ -31,29 +31,27 @@
             draft = $state.snapshot(grant);
             console.log("Fetched grant:", grant);
         } catch (err) {
-            error = `Failed to load grant: ${err}`;
+            error = `Failed to load grant ${routeId}: ${err}`;
         } finally {
             isLoading = false;
         }
     })
 
-    console.log("Grant ID from route:", grantId);
+    console.log("Grant ID from route:", routeId);
     console.log("Loaded grant:", grant);
     console.log("Draft grant:", draft);
-
-    const routeId = $derived(page.params.id);
 
     function beginEdit() {
         if (!grant) return;
 
-        draft = structuredClone(grant);
+        draft = $state.snapshot(grant);
         isEditing = true;
     }
 
     function cancelEdit() {
         if (!grant) return;
 
-        draft = structuredClone(grant);
+        draft = $state.snapshot(grant);
         isEditing = false;
     }
 

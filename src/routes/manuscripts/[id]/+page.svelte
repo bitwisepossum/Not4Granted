@@ -1,8 +1,10 @@
 <script lang="ts">
     import { page } from "$app/state";
     import "../../../styles/item.css";
-
     import type { Manuscript, ManuscriptStatus } from "../../../types";
+    import { onMount } from "svelte";
+    import { getManuscriptById } from "../../../components/api";
+
 
     let manuscript = $state<Manuscript | undefined>(undefined);
     let draft = $state<Manuscript | undefined>(undefined);
@@ -10,23 +12,40 @@
     let isLoading = $state(true);
     let error = $state<string | undefined>(undefined);
 
-    /*
-     * TODO: ROUTE + LOAD LOGIC
-     */
-
     const routeId = $derived(page.params.id);
+
+    onMount(async () => {
+        try {
+            const id = Number(routeId);
+            if (!Number.isInteger(id)) {
+                throw new Error("Invalid manuscript ID");
+            }
+
+            manuscript = await getManuscriptById(id);
+            draft = $state.snapshot(manuscript);
+            console.log("Fetched manuscript:", manuscript);
+        } catch (err) {
+            error = `Failed to load manuscript ${routeId}: ${err}`;
+        } finally {
+            isLoading = false;
+        }
+    })
+
+    console.log("Manuscript ID from route:", routeId);
+    console.log("Loaded manuscript:", manuscript);
+    console.log("Draft manuscript:", draft);
 
     function beginEdit() {
         if (!manuscript) return;
 
-        draft = structuredClone(manuscript);
+        draft = $state.snapshot(manuscript);
         isEditing = true;
     }
 
     function cancelEdit() {
         if (!manuscript) return;
 
-        draft = structuredClone(manuscript);
+        draft = $state.snapshot(manuscript);
         isEditing = false;
     }
 
@@ -152,6 +171,15 @@
                             <div class="item-value">{display(manuscript.journal)}</div>
                         {/if}
                     </div>
+
+                    <div class="item-field full">
+                        <span class="item-label">DOI</span>
+                        {#if isEditing}
+                            <input class="item-input" bind:value={draft.doi} />
+                        {:else}
+                            <div class="item-value">{display(manuscript.doi)}</div>
+                        {/if}
+                    </div>
                 </div>
             </section>
 
@@ -167,15 +195,6 @@
                             <input class="item-input" bind:value={draft.nextAction} />
                         {:else}
                             <div class="item-value">{display(manuscript.nextAction)}</div>
-                        {/if}
-                    </div>
-
-                    <div class="item-field full">
-                        <span class="item-label">DOI</span>
-                        {#if isEditing}
-                            <input class="item-input" bind:value={draft.doi} />
-                        {:else}
-                            <div class="item-value">{display(manuscript.doi)}</div>
                         {/if}
                     </div>
                 </div>

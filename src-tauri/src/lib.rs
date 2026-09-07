@@ -40,6 +40,12 @@ fn get_manuscripts() -> Result<Vec<Manuscript>, String> {
         .map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+fn get_manuscript_by_id(manuscript_id: i64) -> Result<Manuscript, String> {
+    db::get_manuscript_by_id_from_database(manuscript_id)
+        .map_err(|e| e.to_string())
+}
+
 /**
  * Runs the Tauri application.
  */
@@ -47,7 +53,14 @@ fn get_manuscripts() -> Result<Vec<Manuscript>, String> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![add_grant, get_grants, get_grant_by_id, add_manuscript, get_manuscripts])
+        .invoke_handler(tauri::generate_handler![
+            add_grant, 
+            get_grants, 
+            get_grant_by_id, 
+            add_manuscript, 
+            get_manuscripts,
+            get_manuscript_by_id
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

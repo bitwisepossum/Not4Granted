@@ -28,5 +28,5 @@ export async function getManuscripts(): Promise<Manuscript[]> {
 }
 
 export async function getManuscriptById(id: number): Promise<Manuscript | undefined> {
-    return await invoke<Manuscript | undefined>("get_manuscript_by_id", { id });
+    return await invoke<Manuscript | undefined>("get_manuscript_by_id", { manuscriptId: id });
 }

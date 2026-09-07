@@ -288,6 +288,56 @@ pub fn get_manuscripts_from_database() -> Result<Vec<Manuscript>> {
     Ok(manuscripts)
 }
 
+pub fn get_manuscript_by_id_from_database(manuscript_id: i64) -> Result<Manuscript> {
+    let conn = open_database()?;
+
+    let mut stmt = conn.prepare(
+        r#"
+        SELECT
+            id,
+            title,
+            short_name,
+            journal,
+            status,
+            next_action,
+            submitted_at,
+            decision_at,
+            published_at,
+            doi,
+            notes
+        FROM manuscript
+        WHERE id = ?1
+        "#,
+    )?;
+
+    let manuscript_row = stmt.query_row(params![manuscript_id], |row| {
+        Ok(Manuscript {
+            id: row.get(0)?,
+            title: row.get(1)?,
+            short_name: row.get(2)?,
+            journal: row.get(3)?,
+            status: match row.get::<_, String>(4)?.as_str() {
+                "Idea" => ManuscriptStatus::Idea,
+                "Drafting" => ManuscriptStatus::Drafting,
+                "Submitted" => ManuscriptStatus::Submitted,
+                "Revision" => ManuscriptStatus::Revision,
+                "Accepted" => ManuscriptStatus::Accepted,
+                "Published" => ManuscriptStatus::Published,
+                "Rejected" => ManuscriptStatus::Rejected,
+                _ => panic!("Invalid manuscript status"),
+            },
+            next_action: row.get(5)?,
+            submitted_at: row.get(6)?,
+            decision_at: row.get(7)?,
+            published_at: row.get(8)?,
+            doi: row.get(9)?,
+            notes: row.get(10)?,
+        })
+    })?;
+
+    Ok(manuscript_row)
+}
+
 fn create_schema(conn: &Connection) -> Result<()> {
     conn.execute_batch(
         r#"
