@@ -2,12 +2,10 @@
     import "../app.css";
     import type { Manuscript } from "../types";
 
-    let {
-        manuscripts,
-        onNavigate
+   let {
+        manuscripts
     }: {
         manuscripts: Manuscript[];
-        onNavigate: (view: "dashboard" | "grants" | "manuscripts" | "add-grant" | "add-manuscript") => void;
     } = $props();
 </script>
 
@@ -18,12 +16,7 @@
             <p>Publication progress and next actions</p>
         </div>
 
-        <button
-            class="primary"
-            onclick={() => onNavigate("add-manuscript")}
-        >
-            Add manuscript
-        </button>
+        <a class="primary" href="/manuscripts/add">Add manuscript</a>
     </header>
 
     {#if manuscripts.length === 0}
