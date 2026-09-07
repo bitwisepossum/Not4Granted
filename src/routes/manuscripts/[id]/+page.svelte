@@ -84,7 +84,7 @@
         <header class="item-toolbar">
             <div class="item-heading">
                 <h1>{manuscript.title}</h1>
-                <p>{manuscript.journal ?? "No journal selected"}</p>
+                <h2>{manuscript.journal ?? "No journal selected"}</h2>
             </div>
 
             <div class="item-actions">

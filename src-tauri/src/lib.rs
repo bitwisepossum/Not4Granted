@@ -19,6 +19,12 @@ fn get_grants() -> Result<Vec<Grant>, String> {
         .map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+fn get_grant_by_id(grant_id: i64) -> Result<Grant, String> {
+    db::get_grant_by_id_from_database(grant_id)
+        .map_err(|e| e.to_string())
+}
+
 /**
  * Manuscript-related Tauri commands
  */
@@ -41,7 +47,7 @@ fn get_manuscripts() -> Result<Vec<Manuscript>, String> {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![add_grant, get_grants, add_manuscript, get_manuscripts])
+        .invoke_handler(tauri::generate_handler![add_grant, get_grants, get_grant_by_id, add_manuscript, get_manuscripts])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

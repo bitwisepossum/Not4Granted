@@ -136,6 +136,55 @@ pub fn get_grants_from_database() -> Result<Vec<Grant>> {
     Ok(grants)
 }
 
+pub fn get_grant_by_id_from_database(grant_id: i64) -> Result<Grant> {
+    let conn = open_database()?;
+
+    let mut stmt = conn.prepare(
+        r#"
+        SELECT
+            id,
+            name,
+            funder,
+            call_name,
+            status,
+            amount_requested,
+            amount_received,
+            currency,
+            deadline,
+            submitted_at,
+            decision_at,
+            notes
+        FROM grant
+        WHERE id = ?1
+        "#,
+    )?;
+
+    let grant_row = stmt.query_row(params![grant_id], |row| {
+        Ok(Grant {
+            id: row.get(0)?,
+            name: row.get(1)?,
+            funder: row.get(2)?,
+            call_name: row.get(3)?,
+            status: match row.get::<_, String>(4)?.as_str() {
+                "Planning" => GrantStatus::Planning,
+                "Submitted" => GrantStatus::Submitted,
+                "Accepted" => GrantStatus::Accepted,
+                "Rejected" => GrantStatus::Rejected,
+                _ => panic!("Invalid grant status"),
+            },
+            amount_requested: row.get(5)?,
+            amount_received: row.get(6)?,
+            currency: row.get(7)?,
+            deadline: row.get(8)?,
+            submitted_at: row.get(9)?,
+            decision_at: row.get(10)?,
+            notes: row.get(11)?,
+        })
+    })?;
+
+    Ok(grant_row)
+}
+
 pub fn add_manuscript_to_database(new_manuscript: NewManuscript) -> Result<Manuscript> {
     let conn = open_database()?;
 

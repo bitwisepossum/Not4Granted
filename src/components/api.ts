@@ -13,7 +13,7 @@ export async function getGrants(): Promise<Grant[]> {
 }
 
 export async function getGrantById(id: number): Promise<Grant | undefined> {
-    return await invoke<Grant | undefined>("get_grant_by_id", { id });
+    return await invoke<Grant | undefined>("get_grant_by_id", { grantId:id });
 }
 
 /*

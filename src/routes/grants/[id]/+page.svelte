@@ -23,19 +23,15 @@
     onMount(async () => {
         try {
             const id = Number(grantId);
-            if (isNaN(id)) {
-                throw new Error(`Invalid grant ID: ${grantId}`);
+            if (!Number.isInteger(id)) {
+                throw new Error("Invalid grant ID");
             }
 
-            const loadedGrant = await getGrantById(id);
-            if (!loadedGrant) {
-                throw new Error(`Grant not found for ID: ${id}`);
-            }
-
-            grant = loadedGrant;
-            draft = structuredClone(loadedGrant);
+            grant = await getGrantById(id);
+            draft = $state.snapshot(grant);
+            console.log("Fetched grant:", grant);
         } catch (err) {
-            error = err instanceof Error ? err.message : String(err);
+            error = `Failed to load grant: ${err}`;
         } finally {
             isLoading = false;
         }
@@ -115,7 +111,7 @@
         <header class="item-toolbar">
             <div class="item-heading">
                 <h1>{grant.name}</h1>
-                <p>{grant.funder}</p>
+                <h2>{grant.funder}</h2>
             </div>
 
             <div class="item-actions">
