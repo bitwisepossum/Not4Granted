@@ -1,5 +1,6 @@
 <script lang="ts">
     import "../app.css";
+    import { page } from "$app/state"
 
     let { children } = $props();
 </script>
@@ -16,15 +17,27 @@
         </div>
 
         <nav>
-            <a class="nav-link" href="/">
+            <a
+                class:active={page.url.pathname === "/"}
+                class="nav-link"
+                href="/"
+            >
                 Dashboard
             </a>
 
-            <a class="nav-link" href="/grants">
+            <a
+                class:active={page.url.pathname.startsWith("/grants")}
+                class="nav-link"
+                href="/grants"
+            >
                 Grants
             </a>
 
-            <a class="nav-link" href="/manuscripts">
+            <a
+                class:active={page.url.pathname.startsWith("/manuscripts")}
+                class="nav-link"
+                href="/manuscripts"
+            >
                 Manuscripts
             </a>
         </nav>

@@ -609,12 +609,11 @@ button.table-row {
   }
 }
 
-.button-link {
+a.button-link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    min-height: 2.5rem;
     padding: 0.6rem 0.9rem;
 
     border: 1px solid var(--border);
@@ -623,9 +622,8 @@ button.table-row {
     background: var(--surface-raised);
     color: var(--text);
 
-    font: inherit;
-    font-weight: 600;
     text-decoration: none;
+    font-weight: 600;
 
     cursor: pointer;
 
@@ -635,30 +633,30 @@ button.table-row {
         transform 120ms ease;
 }
 
-.button-link:hover {
+a.button-link:hover {
     background: var(--surface-hover);
     border-color: var(--border-strong);
 }
 
-.button-link:active {
+a.button-link:active {
     transform: translateY(1px);
 }
 
-.button-link:focus-visible {
+a.button-link:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
 }
 
-.nav-link {
+.sidebar .nav-link {
     display: flex;
     align-items: center;
-
     width: 100%;
     padding: 0.65rem 0.8rem;
 
     border-radius: 0.55rem;
 
     color: var(--text-muted);
+    background: transparent;
     text-decoration: none;
     font-weight: 500;
 
@@ -667,7 +665,20 @@ button.table-row {
         color 120ms ease;
 }
 
-.nav-link:hover {
+.sidebar .nav-link:hover {
     background: var(--surface-hover);
     color: var(--text);
+    background-color: #313b49;
+}
+
+.sidebar .nav-link.active {
+    background: var(--surface-hover);
+    color: var(--text);
+    font-weight: 600;
+    background-color:#4f5864;
+}
+
+.sidebar .nav-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
