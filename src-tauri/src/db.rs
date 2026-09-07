@@ -3,6 +3,11 @@ use crate::models::{GrantStatus, ManuscriptStatus, NewGrant, Grant, NewManuscrip
 
 const DB_FILE: &str = "db.sqlite3";
 
+/**
+ * General database functions
+ * open_database: Opens the database and creates the schema if it doesn't exist
+ * create_schema: Creates the database schema
+ */
 pub fn open_database() -> Result<Connection> {
     let conn = Connection::open(DB_FILE)?;
     
@@ -28,6 +33,112 @@ pub fn open_database() -> Result<Connection> {
     Ok(conn)
 }
 
+fn create_schema(conn: &Connection) -> Result<()> {
+    conn.execute_batch(
+        r#"
+        PRAGMA foreign_keys = ON;
+
+        CREATE TABLE grant (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            name TEXT NOT NULL,
+            funder TEXT NOT NULL,
+            call_name TEXT,
+
+            status TEXT NOT NULL DEFAULT 'Planning'
+                CHECK (
+                    status IN (
+                        'Planning',
+                        'Submitted',
+                        'Accepted',
+                        'Rejected'
+                    )
+                ),
+
+            amount_requested INTEGER,
+            amount_received INTEGER,
+            currency TEXT NOT NULL DEFAULT 'EUR',
+
+            deadline TEXT,
+            submitted_at TEXT,
+            decision_at TEXT,
+
+            notes TEXT,
+
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+
+        CREATE TABLE manuscript (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+            title TEXT NOT NULL,
+            short_name TEXT,
+            journal TEXT,
+
+            status TEXT NOT NULL DEFAULT 'Idea'
+                CHECK (
+                    status IN (
+                        'Idea',
+                        'Drafting',
+                        'Submitted',
+                        'Revision',
+                        'Accepted',
+                        'Published',
+                        'Rejected'
+                    )
+                ),
+
+            next_action TEXT,
+
+            submitted_at TEXT,
+            decision_at TEXT,
+            published_at TEXT,
+
+            doi TEXT,
+            notes TEXT,
+
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+
+        CREATE TABLE grant_manuscript (
+            grant_id INTEGER NOT NULL,
+            manuscript_id INTEGER NOT NULL,
+
+            PRIMARY KEY (grant_id, manuscript_id),
+
+            FOREIGN KEY (grant_id)
+                REFERENCES grant(id)
+                ON DELETE CASCADE,
+
+            FOREIGN KEY (manuscript_id)
+                REFERENCES manuscript(id)
+                ON DELETE CASCADE
+        );
+
+        CREATE INDEX idx_grant_status
+            ON grant(status);
+
+        CREATE INDEX idx_grant_deadline
+            ON grant(deadline);
+
+        CREATE INDEX idx_manuscript_status
+            ON manuscript(status);
+
+        PRAGMA user_version = 1;
+        "#,
+    )?;
+
+    Ok(())
+}
+
+/**
+ * Grant functions
+ * add_grant_to_database: Adds a new grant to the database
+ * get_grants_from_database: Retrieves all grants from the database
+ * get_grant_by_id_from_database: Retrieves a grant by its ID from the database
+ */
 pub fn add_grant_to_database(new_grant: NewGrant) -> Result<Grant> {
     let conn = open_database()?;
 
@@ -185,6 +296,12 @@ pub fn get_grant_by_id_from_database(grant_id: i64) -> Result<Grant> {
     Ok(grant_row)
 }
 
+/**
+ * Manuscript functions
+ * add_manuscript_to_database: Adds a new manuscript to the database
+ * get_manuscripts_from_database: Retrieves all manuscripts from the database
+ * get_manuscript_by_id_from_database: Retrieves a manuscript by its ID from the database
+ */
 pub fn add_manuscript_to_database(new_manuscript: NewManuscript) -> Result<Manuscript> {
     let conn = open_database()?;
 
@@ -336,104 +453,4 @@ pub fn get_manuscript_by_id_from_database(manuscript_id: i64) -> Result<Manuscri
     })?;
 
     Ok(manuscript_row)
-}
-
-fn create_schema(conn: &Connection) -> Result<()> {
-    conn.execute_batch(
-        r#"
-        PRAGMA foreign_keys = ON;
-
-        CREATE TABLE grant (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-            name TEXT NOT NULL,
-            funder TEXT NOT NULL,
-            call_name TEXT,
-
-            status TEXT NOT NULL DEFAULT 'Planning'
-                CHECK (
-                    status IN (
-                        'Planning',
-                        'Submitted',
-                        'Accepted',
-                        'Rejected'
-                    )
-                ),
-
-            amount_requested INTEGER,
-            amount_received INTEGER,
-            currency TEXT NOT NULL DEFAULT 'EUR',
-
-            deadline TEXT,
-            submitted_at TEXT,
-            decision_at TEXT,
-
-            notes TEXT,
-
-            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-        );
-
-        CREATE TABLE manuscript (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-
-            title TEXT NOT NULL,
-            short_name TEXT,
-            journal TEXT,
-
-            status TEXT NOT NULL DEFAULT 'Idea'
-                CHECK (
-                    status IN (
-                        'Idea',
-                        'Drafting',
-                        'Submitted',
-                        'Revision',
-                        'Accepted',
-                        'Published',
-                        'Rejected'
-                    )
-                ),
-
-            next_action TEXT,
-
-            submitted_at TEXT,
-            decision_at TEXT,
-            published_at TEXT,
-
-            doi TEXT,
-            notes TEXT,
-
-            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
-        );
-
-        CREATE TABLE grant_manuscript (
-            grant_id INTEGER NOT NULL,
-            manuscript_id INTEGER NOT NULL,
-
-            PRIMARY KEY (grant_id, manuscript_id),
-
-            FOREIGN KEY (grant_id)
-                REFERENCES grant(id)
-                ON DELETE CASCADE,
-
-            FOREIGN KEY (manuscript_id)
-                REFERENCES manuscript(id)
-                ON DELETE CASCADE
-        );
-
-        CREATE INDEX idx_grant_status
-            ON grant(status);
-
-        CREATE INDEX idx_grant_deadline
-            ON grant(deadline);
-
-        CREATE INDEX idx_manuscript_status
-            ON manuscript(status);
-
-        PRAGMA user_version = 1;
-        "#,
-    )?;
-
-    Ok(())
 }
