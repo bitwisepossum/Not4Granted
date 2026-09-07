@@ -91,7 +91,8 @@
                             <tr class="expanded-row">
                                 <td colspan="7">
                                     <div class="data-details">
-                                        <label>
+                                        <!-- TODO: Add status selection -->
+                                        <!--<label>
                                             <span>Status</span>
 
                                             <select bind:value={selectedStatus}>
@@ -100,7 +101,7 @@
                                                 <option value="Accepted">Accepted</option>
                                                 <option value="Rejected">Rejected</option>
                                             </select>
-                                        </label>
+                                        </label>-->
 
                                         <a
                                             class="button-link"

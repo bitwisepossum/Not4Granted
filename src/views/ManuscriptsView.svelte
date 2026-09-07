@@ -72,12 +72,13 @@
 
                     {#if expandedManuscriptId === manuscript.id}
                         <div class="data-details">
-                            <div>
+                            <!-- TODO: Add status selection -->
+                            <!---<div>
                                 <span>Next action</span>
                                 <strong>
                                     {manuscript.nextAction ?? "None"}
                                 </strong>
-                            </div>
+                            </div>-->
 
                             <a
                                 class="button-link"
