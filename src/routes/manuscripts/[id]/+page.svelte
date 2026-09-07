@@ -32,10 +32,6 @@
         }
     })
 
-    console.log("Manuscript ID from route:", routeId);
-    console.log("Loaded manuscript:", manuscript);
-    console.log("Draft manuscript:", draft);
-
     function beginEdit() {
         if (!manuscript) return;
 

@@ -31,10 +31,6 @@
         }
     })
 
-    console.log("Grant ID from route:", routeId);
-    console.log("Loaded grant:", grant);
-    console.log("Draft grant:", draft);
-
     function beginEdit() {
         if (!grant) return;
 
