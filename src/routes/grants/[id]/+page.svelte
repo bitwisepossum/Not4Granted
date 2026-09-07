@@ -79,16 +79,6 @@
 </svelte:head>
 
 <section class="item-page">
-    <nav class="item-breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">Dashboard</a>
-        <span aria-hidden="true">/</span>
-        <a href="/grants">Grants</a>
-        <span aria-hidden="true">/</span>
-        <span class="item-breadcrumb-current">
-            {grant?.name ?? `Grant ${routeId}`}
-        </span>
-    </nav>
-
     {#if isLoading}
         <div class="item-placeholder">
             <p class="item-dev-note">

@@ -73,16 +73,6 @@
 </svelte:head>
 
 <section class="item-page">
-    <nav class="item-breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">Dashboard</a>
-        <span aria-hidden="true">/</span>
-        <a href="/manuscripts">Manuscripts</a>
-        <span aria-hidden="true">/</span>
-        <span class="item-breadcrumb-current">
-            {manuscript?.shortName ?? manuscript?.title ?? `Manuscript ${routeId}`}
-        </span>
-    </nav>
-
     {#if isLoading}
         <div class="item-placeholder">
             <p class="item-dev-note">
