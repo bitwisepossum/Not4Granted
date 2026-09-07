@@ -1,17 +1,25 @@
+export const grantStatuses = [
+    "Planning",
+    "Submitted",
+    "Accepted",
+    "Rejected"
+] as const;
+
 export type GrantStatus =
-    | "Planning"
-    | "Submitted"
-    | "Accepted"
-    | "Rejected";
+    typeof grantStatuses[number];
+
+export const manuscriptStatuses = [
+    "Idea",
+    "Drafting",
+    "Submitted",
+    "Revision",
+    "Accepted",
+    "Published",
+    "Rejected"
+] as const;
 
 export type ManuscriptStatus =
-    | "Idea"
-    | "Drafting"
-    | "Submitted"
-    | "Revision"
-    | "Accepted"
-    | "Published"
-    | "Rejected";
+    typeof manuscriptStatuses[number];
 
 export type View =
     | "dashboard"
