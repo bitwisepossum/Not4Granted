@@ -1,5 +1,10 @@
 <script lang="ts">
     import "../../styles/app.css";
+    import { getVersion } from "@tauri-apps/api/app";
+    import { openUrl } from "@tauri-apps/plugin-opener";
+    import { onMount } from "svelte";
+
+    let version = $state("");
 
     const technologies = [
         {
@@ -15,6 +20,14 @@
             logo: "/vite.svg"
         }
     ];
+
+    onMount(async () => {
+        version = await getVersion();
+    });
+
+    async function openGitHub() {
+        await openUrl("https://github.com/bitwisepossum/not4granted");
+    }
 </script>
 
 <section class="about">
@@ -24,7 +37,15 @@
 
     <div class="about-card">
         <section class="intro">
-            <h2>Not4Granted</h2>
+            <div class="title-row">
+                <h2>Not4Granted</h2>
+
+                {#if version}
+                    <span class="version">
+                        v{version}
+                    </span>
+                {/if}
+            </div>
 
             <p>
                 Not4Granted tracks grant applications, funding decisions,
@@ -50,9 +71,30 @@
             </div>
         </section>
 
+        <section class="about-section">
+            <h3>Source code</h3>
+
+            <button
+                class="github-link"
+                type="button"
+                onclick={openGitHub}
+            >
+                GitHub repository
+            </button>
+        </section>
+
         <footer class="license">
             Licensed under the
-            <strong>European Union Public Licence 1.2</strong>.
+            <button
+                class="license-link"
+                type="button"
+                onclick={() =>
+                    openUrl(
+                        "https://interoperable-europe.ec.europa.eu/collection/eupl/eupl-text-eupl-12"
+                    )}
+            >
+                European Union Public Licence 1.2
+            </button>.
         </footer>
     </div>
 </section>
@@ -77,12 +119,23 @@
         background: white;
     }
 
+    .title-row {
+        display: flex;
+        align-items: baseline;
+        gap: 0.75rem;
+    }
+
     .intro h2 {
-        margin: 0 0 0.5rem;
+        margin: 0;
+    }
+
+    .version {
+        font-size: 0.85rem;
+        color: #777;
     }
 
     .intro p {
-        margin: 0;
+        margin: 0.5rem 0 0;
         max-width: 620px;
         line-height: 1.5;
     }
@@ -116,6 +169,16 @@
 
     .tech span {
         font-weight: 600;
+    }
+
+    .github-link {
+        padding: 0;
+        border: 0;
+        background: none;
+        color: inherit;
+        font: inherit;
+        text-decoration: underline;
+        cursor: pointer;
     }
 
     .license {
