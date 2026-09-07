@@ -1,8 +1,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import GrantsView from "../views/GrantsView.svelte";
-    import { getGrants } from "../components/api";
-    import type { Grant, GrantStatus, View } from "../types";
+    import GrantsView from "../../views/GrantsView.svelte";
+    import { getGrants } from "../../components/api";
+    import type { Grant, GrantStatus, View } from "../../types";
 
     let grants = $state<Grant[]>([]);
 

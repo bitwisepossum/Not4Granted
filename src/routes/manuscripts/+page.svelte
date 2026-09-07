@@ -1,8 +1,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import ManuscriptsView from "../views/ManuscriptsView.svelte";
-    import { getManuscripts } from "../components/api";
-    import type { Manuscript, ManuscriptStatus } from "../types";
+    import ManuscriptsView from "../../views/ManuscriptsView.svelte";
+    import { getManuscripts } from "../../components/api";
+    import type { Manuscript, ManuscriptStatus } from "../../types";
 
     let manuscripts = $state<Manuscript[]>([]);
 

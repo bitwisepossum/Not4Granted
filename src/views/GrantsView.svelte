@@ -29,7 +29,7 @@
             <p>Grant applications and funding decisions</p>
         </div>
 
-        <a class="primary" href="/grants/add">Add grant</a>
+        <a class="button-link" href="/grants/new">Add grant</a>
     </header>
 
     {#if grants.length === 0}

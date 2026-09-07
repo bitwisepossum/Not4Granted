@@ -126,7 +126,7 @@
         {/each}
     {/if}
 
-    <a href="/manuscripts">
+    <a class="button-link" href="/manuscripts">
         View all manuscripts
     </a>
 </section>

@@ -1,9 +1,8 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import AddGrantForm from "../../views/AddGrantForm.svelte";
-    import { addGrant } from "../../components/api";
-    import type { NewGrant, GrantStatus } from "../../types";
+    import { addGrant } from "../../../components/api";
     import AddGrantView from "../../../views/AddGrantView.svelte";
+    import type { NewGrant, GrantStatus } from "../../../types";
 
     async function handleSubmit(grant: NewGrant) {
         await addGrant(grant);

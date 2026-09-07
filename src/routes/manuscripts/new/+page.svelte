@@ -1,8 +1,8 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import AddManuscriptView from "../../views/AddManuscriptView.svelte";
-    import { addManuscript } from "../../components/api";
-    import type { NewManuscript, ManuscriptStatus } from "../../types";
+    import AddManuscriptView from "../../../views/AddManuscriptView.svelte";
+    import { addManuscript } from "../../../components/api";
+    import type { NewManuscript, ManuscriptStatus } from "../../../types";
 
     async function handleSubmit(manuscript: NewManuscript) {
         await addManuscript(manuscript);

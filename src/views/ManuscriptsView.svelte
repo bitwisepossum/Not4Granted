@@ -16,7 +16,7 @@
             <p>Publication progress and next actions</p>
         </div>
 
-        <a class="primary" href="/manuscripts/add">Add manuscript</a>
+        <a class="primary" href="/manuscripts/new">Add manuscript</a>
     </header>
 
     {#if manuscripts.length === 0}

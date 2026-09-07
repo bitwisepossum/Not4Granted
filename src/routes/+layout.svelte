@@ -16,15 +16,15 @@
         </div>
 
         <nav>
-            <a href="/">
+            <a class="nav-link" href="/">
                 Dashboard
             </a>
 
-            <a href="/grants">
+            <a class="nav-link" href="/grants">
                 Grants
             </a>
 
-            <a href="/manuscripts">
+            <a class="nav-link" href="/manuscripts">
                 Manuscripts
             </a>
         </nav>
