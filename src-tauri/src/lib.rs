@@ -1,7 +1,7 @@
 mod db;
 mod models;
 
-use db::{Grant, NewGrant, Manuscript, NewManuscript};
+use models::{Grant, NewGrant, Manuscript, NewManuscript};
 
 /**
  * Grant-related Tauri commands
