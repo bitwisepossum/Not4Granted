@@ -1,16 +1,19 @@
 <script lang="ts">
     import { page } from "$app/state";
+    import { goto } from "$app/navigation";
     import "../../../styles/item.css";
     import type { Grant, GrantStatus } from "../../../types";
     import { grantStatuses } from "../../../types";
     import { onMount } from "svelte";
-    import { getGrantById, updateGrant } from "../../../components/api";
+    import { getGrantById, updateGrant, deleteGrant } from "../../../components/api";
 
     let grant = $state<Grant | undefined>(undefined);
     let draft = $state<Grant | undefined>(undefined);
     let isEditing = $state(false);
     let isLoading = $state(true);
     let error = $state<string | undefined>(undefined);
+    let showDeleteConfirm = $state(false);
+    let isDeleting = $state(false);
 
     let routeId = $derived(page.params.id);
 
@@ -45,7 +48,7 @@
         isEditing = false;
     }
 
-    async function saveGrant() {
+    async function handleSave() {
         if (!draft) return;
 
         const id = Number(routeId);
@@ -58,10 +61,24 @@
         isEditing = false;
     }
 
-    async function deleteGrant() {
-        /*
-         * TODO: DELETE LOGIC
-         */
+    async function handleDelete() {
+        if (!draft) return;
+
+        const id = Number(routeId);
+        if (!Number.isInteger(id)) {
+            throw new Error("Invalid grant ID");
+        }
+
+        if (!await getGrantById(id)) {
+            error = `Grant ${routeId} not found.`;
+            return;
+        } else {
+            await deleteGrant(id);
+            grant = undefined;
+            draft = undefined;
+            isEditing = false;
+            await goto("/grants");
+        }
     }
 
     function display(value: string | number | undefined) {
@@ -102,16 +119,54 @@
                     <button class="item-action" type="button" onclick={cancelEdit}>
                         Cancel
                     </button>
-                    <button class="item-action primary" type="button" onclick={saveGrant}>
+                    <button class="item-action primary" type="button" onclick={handleSave}>
                         Save
                     </button>
                 {:else}
                     <button class="item-action primary" type="button" onclick={beginEdit}>
                         Edit
                     </button>
-                    <button class="item-action danger" type="button" onclick={deleteGrant}>
+                    <button
+                        class="item-action danger"
+                        onclick={() => showDeleteConfirm = true}
+                    >
                         Delete
                     </button>
+                    {#if showDeleteConfirm}
+                        <div class="confirm-backdrop">
+                            <div
+                                class="confirm-dialog"
+                                role="dialog"
+                                aria-modal="true"
+                                aria-labelledby="delete-title"
+                            >
+                                <h2 id="delete-title">Delete grant?</h2>
+
+                                <p>
+                                    This action cannot be undone.
+                                </p>
+
+                                <div class="confirm-actions">
+                                    <button
+                                        type="button"
+                                        onclick={() => showDeleteConfirm = false}
+                                        disabled={isDeleting}
+                                    >
+                                        Cancel
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="danger"
+                                        onclick={handleDelete}
+                                        disabled={isDeleting}
+                                    >
+                                        {isDeleting ? "Deleting…" : "Delete"}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {/if}
                 {/if}
             </div>
         </header>
