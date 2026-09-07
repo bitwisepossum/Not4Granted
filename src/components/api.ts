@@ -13,11 +13,15 @@ export async function getGrants(): Promise<Grant[]> {
 }
 
 export async function getGrantById(id: number): Promise<Grant | undefined> {
-    return await invoke<Grant | undefined>("get_grant_by_id", { grantId:id });
+    return await invoke<Grant | undefined>("get_grant_by_id", { grantId: id });
 }
 
 export async function updateGrant(grant: Grant): Promise<void> {
     return await invoke<void>("update_grant", { grant });
+}
+
+export async function deleteGrant(id: number): Promise<void> {
+    return await invoke<void>("delete_grant", { grantId: id });
 }
 
 /*
@@ -37,4 +41,8 @@ export async function getManuscriptById(id: number): Promise<Manuscript | undefi
 
 export async function updateManuscript(manuscript: Manuscript): Promise<void> {
     return await invoke<void>("update_manuscript", { manuscript });
+}
+
+export async function deleteManuscript(id: number): Promise<void> {
+    return await invoke<void>("delete_manuscript", { manuscriptId: id });
 }

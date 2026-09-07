@@ -336,6 +336,20 @@ pub fn update_grant_in_database(grant: Grant) -> Result<()> {
     Ok(())
 }
 
+pub fn delete_grant_from_database(grant_id: i64) -> Result<()> {
+    let conn = open_database()?;
+
+    conn.execute(
+        r#"
+        DELETE FROM grant
+        WHERE id = ?1
+        "#,
+        params![grant_id],
+    )?;
+
+    Ok(())
+}
+
 /**
  * Manuscript functions
  * add_manuscript_to_database: Adds a new manuscript to the database
@@ -528,6 +542,20 @@ pub fn update_manuscript_in_database(manuscript: Manuscript) -> Result<()> {
             &manuscript.notes,
             manuscript.id
         ],
+    )?;
+
+    Ok(())
+}
+
+pub fn delete_manuscript_from_database(manuscript_id: i64) -> Result<()> {
+    let conn = open_database()?;
+
+    conn.execute(
+        r#"
+        DELETE FROM manuscript
+        WHERE id = ?1
+        "#,
+        params![manuscript_id],
     )?;
 
     Ok(())

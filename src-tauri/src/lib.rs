@@ -31,6 +31,12 @@ fn update_grant(grant: Grant) -> Result<(), String> {
         .map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+fn delete_grant(grant_id: i64) -> Result<(), String> {
+    db::delete_grant_from_database(grant_id)
+        .map_err(|e| e.to_string())
+}
+
 /**
  * Manuscript-related Tauri commands
  */
@@ -58,6 +64,12 @@ fn update_manuscript(manuscript: Manuscript) -> Result<(), String> {
         .map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+fn delete_manuscript(manuscript_id: i64) -> Result<(), String> {
+    db::delete_manuscript_from_database(manuscript_id)
+        .map_err(|e| e.to_string())
+}
+
 /**
  * Runs the Tauri application.
  */
@@ -70,9 +82,11 @@ pub fn run() {
             get_grants, 
             get_grant_by_id, 
             update_grant,
+            delete_grant,
             add_manuscript, 
             get_manuscripts,
             get_manuscript_by_id,
+            delete_manuscript,
             update_manuscript
         ])
         .run(tauri::generate_context!())
