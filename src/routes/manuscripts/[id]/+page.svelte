@@ -199,7 +199,8 @@
                     <div class="item-field">
                         <span class="item-label">Submitted</span>
                         {#if isEditing}
-                            <input class="item-input" type="date" bind:value={draft.submittedAt} />
+                            <input 
+                            class="item-input" type="date" bind:value={draft.submittedAt} />
                         {:else}
                             <div class="item-value">{display(manuscript.submittedAt)}</div>
                         {/if}

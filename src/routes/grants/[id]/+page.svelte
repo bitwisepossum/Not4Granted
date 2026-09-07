@@ -219,7 +219,14 @@
                     <div class="item-field">
                         <span class="item-label">Deadline</span>
                         {#if isEditing}
-                            <input class="item-input" type="date" bind:value={draft.deadline} />
+                            <input class="item-input" 
+                                type="date" 
+                                bind:value={draft.deadline}
+                                onchange={(event) => {
+                                    const input = event.currentTarget as HTMLInputElement;
+                                    setTimeout(() => input.blur(), 0);
+                                }} 
+                            />
                         {:else}
                             <div class="item-value">{display(grant.deadline)}</div>
                         {/if}
@@ -228,7 +235,12 @@
                     <div class="item-field">
                         <span class="item-label">Submitted</span>
                         {#if isEditing}
-                            <input class="item-input" type="date" bind:value={draft.submittedAt} />
+                            <input class="item-input" type="date" 
+                                bind:value={draft.submittedAt} onchange={(event) => {
+                                const input = event.currentTarget as HTMLInputElement;
+                                setTimeout(() => input.blur(), 0);
+                                }} 
+                            />
                         {:else}
                             <div class="item-value">{display(grant.submittedAt)}</div>
                         {/if}
@@ -237,7 +249,14 @@
                     <div class="item-field">
                         <span class="item-label">Decision</span>
                         {#if isEditing}
-                            <input class="item-input" type="date" bind:value={draft.decisionAt} />
+                            <input class="item-input" 
+                                type="date" 
+                                bind:value={draft.decisionAt} 
+                                onchange={(event) => {
+                                    const input = event.currentTarget as HTMLInputElement;
+                                    setTimeout(() => input.blur(), 0);
+                                }} 
+                            />
                         {:else}
                             <div class="item-value">{display(grant.decisionAt)}</div>
                         {/if}
