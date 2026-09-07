@@ -2,15 +2,9 @@
     import { page } from "$app/state";
     import "../../../styles/item.css";
     import type { Grant, GrantStatus } from "../../../types";
+    import { grantStatuses } from "../../../types";
     import { onMount } from "svelte";
     import { getGrantById, updateGrant } from "../../../components/api";
-
-    const statuses: GrantStatus[] = [
-        "Planning",
-        "Submitted",
-        "Accepted",
-        "Rejected"
-    ];
 
     let grant = $state<Grant | undefined>(undefined);
     let draft = $state<Grant | undefined>(undefined);
@@ -146,7 +140,7 @@
                         <span class="item-label">Status</span>
                         {#if isEditing}
                             <select class="item-select" bind:value={draft.status}>
-                                {#each statuses as status}
+                                {#each grantStatuses as status}
                                     <option value={status}>{status}</option>
                                 {/each}
                             </select>
@@ -227,6 +221,9 @@
                                     setTimeout(() => input.blur(), 0);
                                 }} 
                             />
+                            <button class="item-action" type="button" onclick={() => draft.deadline = undefined}>
+                                Clear
+                            </button>
                         {:else}
                             <div class="item-value">{display(grant.deadline)}</div>
                         {/if}
@@ -241,6 +238,9 @@
                                 setTimeout(() => input.blur(), 0);
                                 }} 
                             />
+                            <button class="item-action" type="button" onclick={() => draft.deadline = undefined}>
+                                Clear
+                            </button>
                         {:else}
                             <div class="item-value">{display(grant.submittedAt)}</div>
                         {/if}
@@ -257,6 +257,9 @@
                                     setTimeout(() => input.blur(), 0);
                                 }} 
                             />
+                            <button class="item-action" type="button" onclick={() => draft.deadline = undefined}>
+                                Clear
+                            </button>
                         {:else}
                             <div class="item-value">{display(grant.decisionAt)}</div>
                         {/if}

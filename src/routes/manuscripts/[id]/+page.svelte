@@ -1,9 +1,10 @@
 <script lang="ts">
     import { page } from "$app/state";
     import "../../../styles/item.css";
-    import type { Manuscript, ManuscriptStatus } from "../../../types";
+    import type { Manuscript } from "../../../types";
+    import { manuscriptStatuses } from "../../../types";
     import { onMount } from "svelte";
-    import { getManuscriptById } from "../../../components/api";
+    import { getManuscriptById, updateManuscript } from "../../../components/api";
 
 
     let manuscript = $state<Manuscript | undefined>(undefined);
@@ -52,9 +53,15 @@
     async function saveManuscript() {
         if (!draft) return;
 
-        /*
-         * TODO: SAVE LOGIC
-         */
+        const id = Number(routeId);
+        if (!Number.isInteger(id)) {
+            error = "Invalid manuscript ID";
+            return;
+        }
+
+        await updateManuscript(draft);
+        manuscript = await getManuscriptById(id);
+        isEditing = false;
     }
 
     async function deleteManuscript() {
@@ -144,7 +151,7 @@
                         <span class="item-label">Status</span>
                         {#if isEditing}
                             <select class="item-select" bind:value={draft.status}>
-                                {#each statuses as status}
+                                {#each manuscriptStatuses as status}
                                     <option value={status}>{status}</option>
                                 {/each}
                             </select>
