@@ -1,15 +1,13 @@
 <script lang="ts">
     import "../app.css";
-    import type { Grant, Manuscript, View } from "../types";
+    import type { Grant, Manuscript } from "../types";
 
-    let {
+    let  {
         grants,
-        manuscripts,
-        onNavigate
+        manuscripts
     }: {
         grants: Grant[];
         manuscripts: Manuscript[];
-        onNavigate: (view: View) => void;
     } = $props();
 
     let appliedGrants = $derived(
@@ -105,9 +103,9 @@
         {/each}
     {/if}
 
-    <button onclick={() => onNavigate("grants")}>
+    <a href="/grants">
         View all grants
-    </button>
+    </a>
 </section>
 
 <hr />
@@ -128,7 +126,7 @@
         {/each}
     {/if}
 
-    <button onclick={() => onNavigate("manuscripts")}>
+    <a href="/manuscripts">
         View all manuscripts
-    </button>
+    </a>
 </section>

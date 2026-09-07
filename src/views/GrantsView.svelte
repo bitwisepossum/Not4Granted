@@ -3,21 +3,14 @@
     import { convertCurrency } from "../components/format";
     import type { Grant, GrantStatus } from "../types";
 
-    let expandedGrantId = $state<number | undefined>(undefined);
-    let selectedStatus = $state<GrantStatus>("Planning");
-
     let {
-        grants,
-        onNavigate,
-        onStatusChange
+        grants
     }: {
         grants: Grant[];
-        onNavigate: (view: View) => void;
-        onStatusChange: (
-            id: number,
-            status: GrantStatus
-        ) => void;
     } = $props();
+
+    let expandedGrantId = $state<number | undefined>(undefined);
+    let selectedStatus = $state<GrantStatus>("Planning");
 
     function toggleGrant(id: number, status: GrantStatus) {
         if (expandedGrantId === id) {
@@ -27,8 +20,6 @@
             selectedStatus = status;
         }
     }
-
-    console.log("GrantsView grants:", grants);
 </script>
 
 <section class="view">
@@ -38,12 +29,7 @@
             <p>Grant applications and funding decisions</p>
         </div>
 
-        <button
-            class="primary"
-            onclick={() => onNavigate("add-grant")}
-        >
-            Add grant
-        </button>
+        <a class="primary" href="/grants/add">Add grant</a>
     </header>
 
     {#if grants.length === 0}

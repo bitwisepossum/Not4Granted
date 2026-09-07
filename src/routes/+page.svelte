@@ -1,25 +1,19 @@
 <script lang="ts">
-  import "../app.css";
   import { onMount } from "svelte";
-  import { addGrant, getGrants, addManuscript, getManuscripts } from "../components/api";
-  import type { Grant, NewGrant, GrantStatus, Manuscript, NewManuscript, ManuscriptStatus, View } from "../types";
+  import "../app.css";
   import DashboardView from "../views/DashboardView.svelte";
-  import GrantsView from "../views/GrantsView.svelte";
-  import ManuscriptsView from "../views/ManuscriptsView.svelte";
-  import AddGrantView from "../views/AddGrantView.svelte";
-  import AddManuscriptView from "../views/AddManuscriptView.svelte";
+  import { getGrants, getManuscripts } from "../components/api";
+  import type { Grant, Manuscript } from "../types";
 
-  let { children } = $props();
+  let grants = $state<Grant[]>([]);
+  let manuscripts = $state<Manuscript[]>([]);
 
   onMount(async () => {
     grants = await getGrants();
     manuscripts = await getManuscripts();
   });
 
-  let activeView = $state<View>("dashboard");
-
-  let grants = $state<Grant[]>([]);
-  let manuscripts = $state<Manuscript[]>([]);
+  /*
 
   // Handle submission of a new grant
   async function handleGrantSubmit(grant: NewGrant) {
@@ -38,7 +32,7 @@
   }
 
   async function handleStatusChange(id: number, status: GrantStatus) {
-
+*/
   }
 </script>
 
