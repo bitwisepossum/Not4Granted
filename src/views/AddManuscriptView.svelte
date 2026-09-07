@@ -1,5 +1,5 @@
 <script lang="ts">
-    import "../app.css";
+    import "../styles/app.css";
     import type { ManuscriptStatus, NewManuscript } from "../types";
 
     let title = $state("");

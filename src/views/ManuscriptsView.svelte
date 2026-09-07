@@ -1,5 +1,6 @@
 <script lang="ts">
-    import "../app.css";
+    import "../styles/app.css";
+    import "../styles/data-view.css";
     import type { Manuscript, ManuscriptStatus } from "../types";
 
     let {
@@ -38,20 +39,30 @@
             <p>Add the first manuscript to start tracking it.</p>
         </div>
     {:else}
-        <div class="cards">
+        <div class="data-list">
             {#each manuscripts as manuscript}
                 <article class="item">
                     <button
-                        class="item-summary"
-                        onclick={() => toggleManuscript(manuscript.id, manuscript.status)}
+                        class="item-summary data-interactive"
+                        class:expanded={expandedManuscriptId === manuscript.id}
+                        onclick={() =>
+                            toggleManuscript(
+                                manuscript.id,
+                                manuscript.status
+                            )}
                     >
                         <span class="disclosure">
                             {expandedManuscriptId === manuscript.id ? "⌄" : "›"}
                         </span>
 
-                        <div class="item-main">
-                            <strong>{manuscript.title}</strong>
-                            <span>{manuscript.journal ?? "No journal selected"}</span>
+                        <div>
+                            <strong class="data-main">
+                                {manuscript.title}
+                            </strong>
+
+                            <span class="data-secondary">
+                                {manuscript.journal ?? "No journal selected"}
+                            </span>
                         </div>
 
                         <span class="status">
@@ -60,7 +71,7 @@
                     </button>
 
                     {#if expandedManuscriptId === manuscript.id}
-                        <div class="item-details">
+                        <div class="data-details">
                             <div>
                                 <span>Next action</span>
                                 <strong>
@@ -83,69 +94,28 @@
 </section>
 
 <style>
-    .items {
-        display: grid;
-        gap: 0.6rem;
-    }
+.item + .item {
+    border-top: 1px solid #333;
+}
 
-    .item {
-        overflow: hidden;
+.item-summary {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
 
-        border: 1px solid #333;
-        border-radius: 0.6rem;
-    }
+    width: 100%;
+    padding: 0.9rem 1rem;
 
-    .item-summary {
-        display: grid;
-        grid-template-columns: 1.5rem 1fr auto;
-        align-items: center;
-        gap: 0.75rem;
+    border: 0;
+    background: transparent;
+    color: inherit;
 
-        width: 100%;
-        padding: 0.9rem 1rem;
+    text-align: left;
+}
 
-        border: 0;
-
-        background: transparent;
-        color: inherit;
-
-        text-align: left;
-        cursor: pointer;
-    }
-
-    .item-summary:hover {
-        background: rgba(255, 255, 255, 0.035);
-    }
-
-    .item-main {
-        display: grid;
-        gap: 0.2rem;
-    }
-
-    .item-main > span {
-        color: #aaa;
-        font-size: 0.9rem;
-    }
-
-    .item-details {
-        display: flex;
-        align-items: end;
-        justify-content: space-between;
-        gap: 1rem;
-
-        padding: 1rem 1rem 1rem 3.25rem;
-
-        background: rgba(255, 255, 255, 0.02);
-        border-top: 1px solid #333;
-    }
-
-    .item-details > div {
-        display: grid;
-        gap: 0.3rem;
-    }
-
-    .item-details span {
-        color: #aaa;
-        font-size: 0.8rem;
-    }
+.item-summary > div {
+    display: grid;
+    gap: 0.2rem;
+}
 </style>

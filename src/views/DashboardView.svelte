@@ -1,5 +1,5 @@
 <script lang="ts">
-    import "../app.css";
+    import "../styles/app.css";
     import type { Grant, Manuscript } from "../types";
 
     let  {

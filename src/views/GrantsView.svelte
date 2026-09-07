@@ -1,5 +1,6 @@
 <script lang="ts">
-    import "../app.css";
+    import "../styles/app.css";
+    import "../styles/data-view.css";
     import { convertCurrency } from "../components/format";
     import type { Grant, GrantStatus } from "../types";
 
@@ -38,7 +39,7 @@
             <p>Add the first grant application to start tracking it.</p>
         </div>
     {:else}
-        <div class="table-wrapper">
+        <div class="data-table table-wrapper">
             <table>
                 <thead>
                     <tr>
@@ -54,30 +55,34 @@
 
                 <tbody>
                     {#each grants as grant}
-                        <tr class:expanded={expandedGrantId === grant.id} onclick={() => toggleGrant(grant.id, grant.status)}>
+                         <tr
+                            class="data-interactive"
+                            class:expanded={expandedGrantId === grant.id}
+                            onclick={() => toggleGrant(grant.id, grant.status)}
+                        >
                             <td class="disclosure-cell">
                                 <span class="disclosure">
                                     {expandedGrantId === grant.id ? "⌄" : "›"}
                                 </span>
                             </td>
 
-                            <td class="main-cell">{grant.name}</td>
-                            <td>{grant.funder}</td>
-                            <td>{grant.deadline ?? "—"}</td>
+                            <td class="data-main">{grant.name}</td>
+                            <td class="data-main">{grant.funder}</td>
+                            <td class="data-main">{grant.deadline ?? "—"}</td>
 
-                            <td>
+                            <td class="data-main">
                                 {grant.amountRequested !== undefined
                                     ? `${convertCurrency(grant.amountRequested)} EUR`
                                     : "—"}
                             </td>
 
-                            <td>
+                            <td class="data-main">
                                 {grant.amountReceived !== undefined
                                     ? `${convertCurrency(grant.amountReceived)} EUR`
                                     : "—"}
                             </td>
 
-                            <td>
+                            <td class="data-main">
                                 <span class="status">{grant.status}</span>
                             </td>
                         </tr>
@@ -85,7 +90,7 @@
                         {#if expandedGrantId === grant.id}
                             <tr class="expanded-row">
                                 <td colspan="7">
-                                    <div class="quick-actions">
+                                    <div class="data-details">
                                         <label>
                                             <span>Status</span>
 
@@ -116,37 +121,19 @@
 
 <style>
     .table-wrapper {
-        overflow-x: auto;
-        border: 1px solid #333;
-        border-radius: 0.6rem;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    th,
-    td {
-        padding: 0.85rem 1rem;
-        text-align: left;
-        border-bottom: 1px solid #333;
-    }
-
-    .main-cell {
-        font-weight: 600;
-    }
-
-    tbody > tr:not(.expanded-row) {
-    cursor: pointer;
+    overflow-x: auto;
 }
 
-tbody > tr:not(.expanded-row):hover {
-    background: rgba(255, 255, 255, 0.035);
+table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-tbody > tr.expanded {
-    background: rgba(255, 255, 255, 0.05);
+th,
+td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #333;
 }
 
 .disclosure-column,
@@ -155,50 +142,7 @@ tbody > tr.expanded {
     padding-right: 0;
 }
 
-.disclosure {
-    display: inline-block;
-    width: 1rem;
-
-    color: #aaa;
-    font-size: 1.1rem;
-    line-height: 1;
-
-    transition: color 120ms ease;
-}
-
-tbody > tr:hover .disclosure {
-    color: #060606;
-    font-weight: 800;
-}
-
-tbody > tr.expanded .disclosure {
-    color: #060606;
-    font-weight: 800;
-}
-
 .expanded-row td {
     padding: 0;
-}
-
-.quick-actions {
-    display: flex;
-    align-items: end;
-    gap: 1rem;
-
-    padding: 1rem 1.25rem 1rem 3rem;
-
-    background: rgba(255, 255, 255, 0.02);
-    border-bottom: 1px solid #333;
-}
-
-.quick-actions label {
-    display: grid;
-    gap: 0.35rem;
-}
-
-.quick-actions label > span {
-    color: #aaa;
-    font-size: 0.8rem;
-    font-weight: 600;
 }
 </style>

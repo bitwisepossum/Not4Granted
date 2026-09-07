@@ -1,0 +1,67 @@
+.data-list,
+.data-table {
+    overflow: hidden;
+}
+
+.disclosure {
+    display: inline-block;
+    width: 1rem;
+
+    color: #aaa;
+    font-size: 1.1rem;
+    line-height: 1;
+
+    transition: color 120ms ease;
+}
+
+.data-interactive {
+    cursor: pointer;
+}
+
+.data-interactive:hover {
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.data-interactive:hover .disclosure,
+.data-interactive.expanded .disclosure {
+    color: #060606;
+    font-weight: 800;
+}
+
+.data-interactive.expanded {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.data-main {
+    font-weight: 600;
+}
+
+.data-secondary {
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+.data-details {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+
+    padding: 1rem 1.25rem 1rem 3rem;
+
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid #333;
+}
+
+.data-details label,
+.data-details-field {
+    display: grid;
+    gap: 0.35rem;
+}
+
+.data-details label > span,
+.data-details-field > span {
+    color: #aaa;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
