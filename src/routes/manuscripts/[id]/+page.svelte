@@ -1,10 +1,11 @@
 <script lang="ts">
     import { page } from "$app/state";
+    import { goto } from "$app/navigation";
     import "../../../styles/item.css";
     import type { Manuscript } from "../../../types";
     import { manuscriptStatuses } from "../../../types";
     import { onMount } from "svelte";
-    import { getManuscriptById, updateManuscript } from "../../../components/api";
+    import { getManuscriptById, updateManuscript, deleteManuscript } from "../../../components/api";
 
 
     let manuscript = $state<Manuscript | undefined>(undefined);
@@ -12,6 +13,8 @@
     let isEditing = $state(false);
     let isLoading = $state(true);
     let error = $state<string | undefined>(undefined);
+    let showDeleteConfirm = $state(false);
+    let isDeleting = $state(false);
 
     const routeId = $derived(page.params.id);
 
@@ -46,7 +49,7 @@
         isEditing = false;
     }
 
-    async function saveManuscript() {
+    async function handleSave() {
         if (!draft) return;
 
         const id = Number(routeId);
@@ -60,10 +63,27 @@
         isEditing = false;
     }
 
-    async function deleteManuscript() {
-        /*
-         * TODO: DELETE LOGIC
-         */
+    async function handleDelete() {
+        if (!manuscript) return;
+
+        const id = Number(routeId);
+        if (!Number.isInteger(id)) {
+            error = "Invalid manuscript ID";
+            return;
+        }
+
+        if (!await getManuscriptById(id)) {
+            error = "Manuscript not found";
+            return;
+        } else {
+            await deleteManuscript(id);
+            manuscript = undefined;
+            draft = undefined;
+            isEditing = false;
+            isDeleting = false;
+            showDeleteConfirm = false;
+            await goto("/manuscripts");
+        }
     }
 
     function display(value: string | number | undefined) {
@@ -104,16 +124,51 @@
                     <button class="item-action" type="button" onclick={cancelEdit}>
                         Cancel
                     </button>
-                    <button class="item-action primary" type="button" onclick={saveManuscript}>
+                    <button class="item-action primary" type="button" onclick={handleSave}>
                         Save
                     </button>
                 {:else}
                     <button class="item-action primary" type="button" onclick={beginEdit}>
                         Edit
                     </button>
-                    <button class="item-action danger" type="button" onclick={deleteManuscript}>
+                    <button class="item-action danger" type="button" onclick={() => showDeleteConfirm = true}>
                         Delete
                     </button>
+                    {#if showDeleteConfirm}
+                        <div class="confirm-backdrop">
+                            <div
+                                class="confirm-dialog"
+                                role="dialog"
+                                aria-modal="true"
+                                aria-labelledby="delete-title"
+                            >
+                                <h2 id="delete-title">Delete grant?</h2>
+
+                                <p>
+                                    This action cannot be undone.
+                                </p>
+
+                                <div class="confirm-actions">
+                                    <button
+                                        type="button"
+                                        onclick={() => showDeleteConfirm = false}
+                                        disabled={isDeleting}
+                                    >
+                                        Cancel
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="danger"
+                                        onclick={handleDelete}
+                                        disabled={isDeleting}
+                                    >
+                                        {isDeleting ? "Deleting…" : "Delete"}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {/if}
                 {/if}
             </div>
         </header>

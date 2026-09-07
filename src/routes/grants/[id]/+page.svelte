@@ -77,6 +77,8 @@
             grant = undefined;
             draft = undefined;
             isEditing = false;
+            isDeleting = false;
+            showDeleteConfirm = false;
             await goto("/grants");
         }
     }
