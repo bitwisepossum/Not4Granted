@@ -99,7 +99,7 @@
     {#if isLoading}
         <div class="item-placeholder">
             <p class="item-dev-note">
-                TODO: load Manuscript #{routeId} from the Tauri backend using page.params.id.
+                Trying to load manuscript {routeId}…
             </p>
         </div>
     {:else if error}

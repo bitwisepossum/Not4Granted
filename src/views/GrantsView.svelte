@@ -21,6 +21,10 @@
             selectedStatus = status;
         }
     }
+
+    function statusClass(status: string): string {
+        return status.toLowerCase();
+    }
 </script>
 
 <section class="view">
@@ -83,7 +87,7 @@
                             </td>
 
                             <td class="data-main">
-                                <span class="status">{grant.status}</span>
+                                <span class={`status ${statusClass(grant.status)}`}>{grant.status}</span>
                             </td>
                         </tr>
 

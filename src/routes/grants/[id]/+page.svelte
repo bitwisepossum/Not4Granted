@@ -96,7 +96,7 @@
     {#if isLoading}
         <div class="item-placeholder">
             <p class="item-dev-note">
-                TODO: load Grant #{routeId} from the Tauri backend using page.params.id.
+                Trying to load grant {routeId}…
             </p>
         </div>
     {:else if error}
