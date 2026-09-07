@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import "../styles/ap.css";
+    import "../styles/app.css";
 
     const labels: Record<string, string> = {
         grants: "Grants",

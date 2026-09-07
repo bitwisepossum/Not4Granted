@@ -296,6 +296,46 @@ pub fn get_grant_by_id_from_database(grant_id: i64) -> Result<Grant> {
     Ok(grant_row)
 }
 
+pub fn update_grant_in_database(grant: Grant) -> Result<()> {
+    let conn = open_database()?;
+
+    conn.execute(
+        r#"
+        UPDATE grant
+        SET
+            name = ?1,
+            funder = ?2,
+            call_name = ?3,
+            status = ?4,
+            amount_requested = ?5,
+            amount_received = ?6,
+            currency = ?7,
+            deadline = ?8,
+            submitted_at = ?9,
+            decision_at = ?10,
+            notes = ?11,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?12
+        "#,
+        params![
+            &grant.name,
+            &grant.funder,
+            &grant.call_name,
+            grant.status.as_str(),
+            grant.amount_requested,
+            grant.amount_received,
+            &grant.currency,
+            &grant.deadline,
+            &grant.submitted_at,
+            &grant.decision_at,
+            &grant.notes,
+            grant.id
+        ],
+    )?;
+
+    Ok(())
+}
+
 /**
  * Manuscript functions
  * add_manuscript_to_database: Adds a new manuscript to the database
@@ -453,4 +493,42 @@ pub fn get_manuscript_by_id_from_database(manuscript_id: i64) -> Result<Manuscri
     })?;
 
     Ok(manuscript_row)
+}
+
+pub fn update_manuscript_in_database(manuscript: Manuscript) -> Result<()> {
+    let conn = open_database()?;
+
+    conn.execute(
+        r#"
+        UPDATE manuscript
+        SET
+            title = ?1,
+            short_name = ?2,
+            journal = ?3,
+            status = ?4,
+            next_action = ?5,
+            submitted_at = ?6,
+            decision_at = ?7,
+            published_at = ?8,
+            doi = ?9,
+            notes = ?10,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?11
+        "#,
+        params![
+            &manuscript.title,
+            &manuscript.short_name,
+            &manuscript.journal,
+            manuscript.status.as_str(),
+            &manuscript.next_action,
+            &manuscript.submitted_at,
+            &manuscript.decision_at,
+            &manuscript.published_at,
+            &manuscript.doi,
+            &manuscript.notes,
+            manuscript.id
+        ],
+    )?;
+
+    Ok(())
 }

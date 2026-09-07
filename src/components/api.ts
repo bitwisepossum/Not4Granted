@@ -16,6 +16,10 @@ export async function getGrantById(id: number): Promise<Grant | undefined> {
     return await invoke<Grant | undefined>("get_grant_by_id", { grantId:id });
 }
 
+export async function updateGrant(grant: Grant): Promise<void> {
+    return await invoke<void>("update_grant", { grant });
+}
+
 /*
     * API functions for Manuscripts.
 */
@@ -29,4 +33,8 @@ export async function getManuscripts(): Promise<Manuscript[]> {
 
 export async function getManuscriptById(id: number): Promise<Manuscript | undefined> {
     return await invoke<Manuscript | undefined>("get_manuscript_by_id", { manuscriptId: id });
+}
+
+export async function updateManuscript(manuscript: Manuscript): Promise<void> {
+    return await invoke<void>("update_manuscript", { manuscript });
 }

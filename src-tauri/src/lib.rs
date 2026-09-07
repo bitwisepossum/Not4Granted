@@ -25,6 +25,12 @@ fn get_grant_by_id(grant_id: i64) -> Result<Grant, String> {
         .map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+fn update_grant(grant: Grant) -> Result<(), String> {
+    db::update_grant_in_database(grant)
+        .map_err(|e| e.to_string())
+}
+
 /**
  * Manuscript-related Tauri commands
  */
@@ -46,6 +52,12 @@ fn get_manuscript_by_id(manuscript_id: i64) -> Result<Manuscript, String> {
         .map_err(|e| e.to_string())
 }
 
+#[tauri::command]
+fn update_manuscript(manuscript: Manuscript) -> Result<(), String> {
+    db::update_manuscript_in_database(manuscript)
+        .map_err(|e| e.to_string())
+}
+
 /**
  * Runs the Tauri application.
  */
@@ -57,9 +69,11 @@ pub fn run() {
             add_grant, 
             get_grants, 
             get_grant_by_id, 
+            update_grant,
             add_manuscript, 
             get_manuscripts,
-            get_manuscript_by_id
+            get_manuscript_by_id,
+            update_manuscript
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -59,7 +59,7 @@ pub struct NewGrant {
     pub notes: Option<String>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Grant {
     pub id: i64,
@@ -90,7 +90,7 @@ pub struct NewManuscript {
     pub notes: Option<String>,
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Manuscript {
     pub id: i64,

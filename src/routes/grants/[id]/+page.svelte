@@ -3,7 +3,7 @@
     import "../../../styles/item.css";
     import type { Grant, GrantStatus } from "../../../types";
     import { onMount } from "svelte";
-    import { getGrantById } from "../../../components/api";
+    import { getGrantById, updateGrant } from "../../../components/api";
 
     const statuses: GrantStatus[] = [
         "Planning",
@@ -58,9 +58,14 @@
     async function saveGrant() {
         if (!draft) return;
 
-        /*
-         * TODO: SAVE LOGIC
-         */
+        const id = Number(routeId);
+        if (!Number.isInteger(id)) {
+            throw new Error("Invalid grant ID");
+        }
+
+        await updateGrant(draft);
+        grant = await getGrantById(id);
+        isEditing = false;
     }
 
     async function deleteGrant() {
