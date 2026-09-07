@@ -1,0 +1,267 @@
+/* ===== Dashboard layout ===== */
+
+.dashboard {
+  display: grid;
+  gap: 16px;
+}
+
+.dashboard .page-header {
+  margin-bottom: 0;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.8fr);
+  gap: 16px;
+}
+
+.dashboard-lists {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
+
+/* ===== Summary statistics ===== */
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.dashboard-stats article {
+  padding: 17px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.dashboard-stats span,
+.dashboard-stats small,
+.dashboard-stats strong {
+  display: block;
+}
+
+.dashboard-stats span {
+  color: #68717d;
+  font-size: 15px;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dashboard-stats strong {
+  margin: 6px 0 2px;
+  font-size: 27px;
+}
+
+.dashboard-stats small {
+  color: var(--text-subtle);
+  font-size: 13px;
+}
+
+
+/* ===== Grant status chart ===== */
+
+.dashboard-chart-panel,
+.dashboard-success-panel {
+  min-height: 280px;
+}
+
+.dashboard-bar-chart {
+  display: grid;
+  gap: 17px;
+  padding: 24px 20px 26px;
+}
+
+.dashboard-bar-row {
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr) 28px;
+  gap: 12px;
+  align-items: center;
+  font-size: 15px;
+}
+
+.dashboard-bar-row > span {
+  color: #636d78;
+}
+
+.dashboard-bar-row > strong {
+  text-align: right;
+  font-size: 15px;
+}
+
+.dashboard-bar-track {
+  height: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #edf0f3;
+}
+
+.dashboard-bar-fill {
+  height: 100%;
+  min-width: 4px;
+  border-radius: inherit;
+  background: #697584;
+}
+
+.dashboard-bar-fill.accepted {
+  background: #5c8067;
+}
+
+.dashboard-bar-fill.rejected {
+  background: #8b6363;
+}
+
+.dashboard-bar-fill.in-progress {
+  background: #7a718e;
+}
+
+
+/* ===== Funding success donut ===== */
+
+.dashboard-success-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-donut {
+  --value: 0deg;
+
+  display: grid;
+  width: 150px;
+  height: 150px;
+  place-items: center;
+  align-self: center;
+  margin: 24px 0 16px;
+  border-radius: 50%;
+  background: conic-gradient(#5c8067 var(--value), #e8ecef 0deg);
+}
+
+.dashboard-donut::before {
+  content: "";
+  grid-area: 1 / 1;
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  background: white;
+}
+
+.dashboard-donut > div {
+  z-index: 1;
+  grid-area: 1 / 1;
+  text-align: center;
+}
+
+.dashboard-donut strong,
+.dashboard-donut span {
+  display: block;
+}
+
+.dashboard-donut strong {
+  font-size: 25px;
+}
+
+.dashboard-donut span {
+  margin-top: 2px;
+  color: #7a838e;
+  font-size: 13px;
+}
+
+.dashboard-decision-breakdown {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  padding: 0 18px 22px;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.dashboard-decision-breakdown strong {
+  color: #30363e;
+}
+
+
+/* ===== Dashboard lists ===== */
+
+.dashboard-list-panel {
+  min-width: 0;
+}
+
+.dashboard-list-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+}
+
+.dashboard-list-primary {
+  min-width: 0;
+}
+
+.dashboard-list-primary strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dashboard-list-meta {
+  min-width: 145px;
+  max-width: 220px;
+  text-align: right;
+}
+
+.dashboard-list-meta > span:first-child {
+  overflow: hidden;
+  color: #7d8590;
+  font-size: 15px;
+  text-overflow: ellipsis;
+}
+
+.dashboard-list-meta .status {
+  display: inline-block;
+  margin-top: 5px;
+}
+
+.dashboard-manuscript-title {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+
+/* ===== Responsive ===== */
+
+@media (max-width: 1100px) {
+  .dashboard-lists {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 950px) {
+  .dashboard-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-list-row {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-list-meta {
+    min-width: 0;
+    max-width: none;
+    text-align: left;
+  }
+}
