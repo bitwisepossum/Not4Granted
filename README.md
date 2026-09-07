@@ -25,8 +25,8 @@ The project is also used as a learning project for Rust, Tauri, Svelte, and SQLi
 - [x] Load grants from SQLite
 - [x] Update grant details
 - [x] Quick update grant status
-- [ ] Delete grants
-- [ ] View full grant details
+- [x] Delete grants
+- [x] View full grant details
 - [ ] Filter and sort grants
 - [ ] Search grants
 
@@ -36,8 +36,8 @@ The project is also used as a learning project for Rust, Tauri, Svelte, and SQLi
 - [x] Load manuscripts from SQLite
 - [x] Update manuscript details
 - [ ] Quick update manuscript status
-- [ ] Delete manuscripts
-- [ ] View full manuscript details
+- [x] Delete manuscripts
+- [x] View full manuscript details
 - [ ] Filter and sort manuscripts
 - [ ] Search manuscripts
 
@@ -52,7 +52,7 @@ The project is also used as a learning project for Rust, Tauri, Svelte, and SQLi
 
 - [x] Show grant status summary
 - [x] Show manuscript status summary
-- [ ] Statistics view
+- [x] Statistics view
 - [ ] Show upcoming grant deadlines
 - [ ] Show manuscript next actions
 
