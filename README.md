@@ -80,4 +80,4 @@ The project is also used as a learning project for Rust, Tauri, Svelte, and SQLi
 
 Licensed under the EUPL-1.2-or-later. 
 
-See [LICENSE](LICENSE) for the full license text.
+See [LICENSE](LICENSE.md) for the full license text.
