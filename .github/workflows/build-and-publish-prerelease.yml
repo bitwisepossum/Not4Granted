@@ -2,6 +2,16 @@ name: Build and publish
 
 on:
   workflow_dispatch:
+    inputs:
+      release_channel:
+        description: Release channel
+        required: true
+        default: alpha
+        type: choice
+        options:
+          - alpha
+          - beta
+          - rc
 
 permissions:
   contents: write
@@ -69,16 +79,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
           # Ad-hoc signing for macOS.
-          # "-" tells codesign/Tauri to use an ad-hoc identity.
+          # "-" tells Tauri to use an ad-hoc signing identity.
           APPLE_SIGNING_IDENTITY: ${{ matrix.macos && '-' || '' }}
 
         with:
-          tagName: v__VERSION__
-          releaseName: "Not4Granted v__VERSION__"
+          tagName: v__VERSION__-${{ inputs.release_channel }}.${{ github.run_number }}
+          releaseName: "Not4Granted v__VERSION__ ${{ inputs.release_channel }}.${{ github.run_number }}"
           releaseBody: |
-            Not4Granted desktop release.
+            Not4Granted testing build.
+
+            Release channel: ${{ inputs.release_channel }}
+            Build: ${{ github.run_number }}
 
             macOS builds use ad-hoc code signing and are not notarized.
           releaseDraft: false
-          prerelease: false
+          prerelease: true
           args: ${{ matrix.args }}
