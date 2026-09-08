@@ -26,10 +26,7 @@
 
   "bundle": {
     "active": true,
-    "targets": [
-      "rpm",
-      "nsis"
-    ],
+    "targets": ["all"],
 
     "shortDescription": "Local grant and manuscript tracker",
     "license": "EUPL-1.2-or-later",
