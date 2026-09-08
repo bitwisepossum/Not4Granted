@@ -24,7 +24,7 @@ The project is also used as a learning project for Rust, Tauri, Svelte, and SQLi
 - [x] Add grants
 - [x] Load grants from SQLite
 - [x] Update grant details
-- [x] Quick update grant status
+- [ ] Quick update grant status
 - [x] Delete grants
 - [x] View full grant details
 - [ ] Filter and sort grants
