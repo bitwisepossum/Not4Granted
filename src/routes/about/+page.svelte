@@ -75,7 +75,7 @@
             <h3>Source code</h3>
 
             <button
-                class="github-link"
+                class="about-link"
                 type="button"
                 onclick={openGitHub}
             >
@@ -84,17 +84,19 @@
         </section>
 
         <footer class="license">
-            Licensed under the
+            <p>Copyright © 2026 <button class="about-link" type="button" onclick={() => openUrl("https://github.com/bitwisepossum")}>Bitwisepossum</button></p>
+            <br />
+            <p>Licensed under the
             <button
-                class="license-link"
+                class="about-link"
                 type="button"
                 onclick={() =>
                     openUrl(
                         "https://interoperable-europe.ec.europa.eu/collection/eupl/eupl-text-eupl-12"
                     )}
             >
-                European Union Public Licence 1.2
-            </button>.
+                European Union Public Licence 1.2 or later (EUPL-1.2-or-later)
+            </button></p>
         </footer>
     </div>
 </section>
@@ -171,7 +173,7 @@
         font-weight: 600;
     }
 
-    .github-link {
+    .about-link {
         padding: 0;
         border: 0;
         background: none;

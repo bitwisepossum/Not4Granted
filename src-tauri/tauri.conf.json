@@ -32,7 +32,7 @@
     ],
 
     "shortDescription": "Local grant and manuscript tracker",
-    "license": "EUPL-1.2",
+    "license": "EUPL-1.2-or-later",
     "licenseFile": "../LICENSE.md",
 
     "icon": [

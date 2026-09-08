@@ -75,3 +75,9 @@ The project is also used as a learning project for Rust, Tauri, Svelte, and SQLi
 ## Recommended IDE Setup
 
 [VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+
+## License
+
+Licensed under the EUPL-1.2-or-later. 
+
+See [LICENSE](LICENSE) for the full license text.
