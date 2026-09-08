@@ -6,6 +6,11 @@ The program is intended as a local, single-user tool for keeping track of grant 
 
 The project is also used as a learning project for Rust, Tauri, Svelte, and SQLite.
 
+## Instructions
+Source dev build can be run with instructions from [Tauri documentation](https://v2.tauri.app/start/prerequisites/). 
+
+All [release binary builds](https://github.com/bitwisepossum/Not4Granted/releases) should at this point be considered experimental. Development and testing are primarily done on Linux system, with occasional testing on Windows platform.
+
 ## Planned features
 
 * Track grant applications and their status
