@@ -66,3 +66,4 @@ debug.log
 TODO.md
 .aider*
 src-tauri/db.sqlite3
+src-tauri/perf.data
