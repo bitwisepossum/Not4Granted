@@ -62,6 +62,7 @@ The project is also used as a learning project for Rust, Tauri, Svelte, and SQLi
 - [ ] Improve error handling and user feedback
 - [ ] Add confirmation for destructive actions
 - [ ] Add settings/preferences
+- [ ] Export functionality
 
 ## Stack
 
