@@ -1,0 +1,84 @@
+name: Build and publish
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-tauri:
+    strategy:
+      fail-fast: false
+
+      matrix:
+        include:
+          - platform: macos-latest
+            args: --target aarch64-apple-darwin
+            macos: true
+
+          - platform: macos-latest
+            args: --target x86_64-apple-darwin
+            macos: true
+
+          - platform: ubuntu-22.04
+            args: ""
+            macos: false
+
+          - platform: windows-latest
+            args: ""
+            macos: false
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: >-
+            ${{ matrix.macos &&
+                'aarch64-apple-darwin,x86_64-apple-darwin'
+                || '' }}
+
+      - name: Install Linux dependencies
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libappindicator3-dev \
+            librsvg2-dev \
+            patchelf \
+            xdg-utils
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build and publish Tauri application
+        uses: tauri-apps/tauri-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          # Ad-hoc signing for macOS.
+          # "-" tells codesign/Tauri to use an ad-hoc identity.
+          APPLE_SIGNING_IDENTITY: ${{ matrix.macos && '-' || '' }}
+
+        with:
+          tagName: v__VERSION__
+          releaseName: "Not4Granted v__VERSION__"
+          releaseBody: |
+            Not4Granted desktop release.
+
+            macOS builds use ad-hoc code signing and are not notarized.
+          releaseDraft: false
+          prerelease: false
+          args: ${{ matrix.args }}
