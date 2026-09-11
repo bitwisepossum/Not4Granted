@@ -8,8 +8,6 @@ mod schema;
 
 use models::{Grant, NewGrant, Manuscript, NewManuscript, GrantQuery};
 
-use crate::{diesel_db::GrantRow, schema::grant};
-
 /**
  * Grant-related Tauri commands
  */
@@ -45,10 +43,23 @@ fn delete_grant(grant_id: i64) -> Result<(), String> {
 }
 
 #[tauri::command]
-fn get_accepted_grants() -> Result<Vec<Grant>, String> {
+fn get_filtered_grants(query: GrantQuery) -> Result<Vec<Grant>, String> {
     let database_url = "db-diesel.sqlite3";
 
-    diesel_db::get_accepted_grants(database_url)
+    diesel_db::get_filtered_grants(
+        database_url,
+        &query,
+    )
+}
+
+#[tauri::command]
+fn get_filtered_grants(query: GrantQuery) -> Result<Vec<Grant>, String> {
+    let database_url = "db-diesel.sqlite3";
+
+    diesel_db::get_filtered_grants(
+        database_url,
+        &query,
+    )
 }
 
 #[tauri::command]
@@ -128,7 +139,7 @@ pub fn run() {
             add_manuscript, 
             get_manuscripts,
             get_manuscript_by_id,
-            get_accepted_grants,
+            get_filtered_grants,
             get_filtered_grants,
             delete_manuscript,
             update_manuscript,

@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
 
     import DashboardView from "../views/DashboardView.svelte";
-    import { getGrants, getManuscripts, getAcceptedGrants, getFilteredGrants } from "../components/api";
+    import { getGrants, getManuscripts, getFilteredGrants, getFilteredGrants } from "../components/api";
 
     import type { Grant, Manuscript, GrantQuery } from "../types";
 

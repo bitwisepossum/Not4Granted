@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import type { Grant, NewGrant, Manuscript, NewManuscript, Settings, GrantQuery } from "../types";
+import type { Grant, NewGrant, Manuscript, NewManuscript, GrantQuery, Settings } from "../types";
 
 /*
     * API functions for Grants.
