@@ -127,9 +127,23 @@ pub enum GrantSort {
 }
 
 #[derive(Debug, Serialize, Default)]
-#[serde(rename_all = "camelCase", default)]
+#[serde(rename_all = "camelCase")]
 pub enum SortDirection {
     #[default]
     Asc,
     Desc,
+}
+
+impl TryFrom<String> for GrantStatus {
+    type Error = String;
+
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        match value.as_str() {
+            "Planning" => Ok(Self::Planning),
+            "Submitted" => Ok(Self::Submitted),
+            "Accepted" => Ok(Self::Accepted),
+            "Rejected" => Ok(Self::Rejected),
+            _ => Err(format!("Invalid grant status: {}", value)),
+        }
+    }
 }
