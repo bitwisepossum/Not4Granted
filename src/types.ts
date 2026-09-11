@@ -71,3 +71,24 @@ export interface Manuscript {
 }
 
 export type NewManuscript = Omit<Manuscript, "id">;
+
+export type GrantSort = "deadline" | "name" | "status" | "funder";
+export type sortDirection = "asc" | "desc";
+
+export interface GrantQuery {
+    statuses?: GrantStatus[];
+    funders?: string[];
+    search?: string;
+    sortBy?: GrantSort;
+    sortDirection?: sortDirection;
+}
+
+export function defaultGrantQuery(): GrantQuery {
+    return {
+        statuses: [],
+        funders: [],
+        search: "",
+        sortBy: "deadline",
+        sortDirection: "asc"
+    };
+}
