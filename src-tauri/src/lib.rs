@@ -1,5 +1,7 @@
 mod db;
 mod models;
+mod diesel_db;
+mod schema;
 mod settings;
 mod diesel_db;
 mod schema;
