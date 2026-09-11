@@ -67,3 +67,4 @@ TODO.md
 .aider*
 src-tauri/db.sqlite3
 src-tauri/perf.data
+src-tauri/db-diesel.sqlite3
