@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
 
     import DashboardView from "../views/DashboardView.svelte";
-    import { getGrants, getManuscripts } from "../components/api";
+    import { getGrants, getManuscripts, getAcceptedGrants } from "../components/api";
 
     import type { Grant, Manuscript } from "../types";
 
@@ -16,10 +16,12 @@
         try {
             grants = await getGrants();
             manuscripts = await getManuscripts();
+            console.log("Grants:", grants); //debug
         } catch (err) {
             error = `Failed to load dashboard: ${err}`;
         } finally {
             isLoading = false;
+            console.log("Manuscripts:", manuscripts); //debug
         }
     });
 </script>

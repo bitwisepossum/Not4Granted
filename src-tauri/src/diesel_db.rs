@@ -42,3 +42,23 @@ impl TryFrom<GrantRow> for Grant {
         })
     }
 }
+
+pub fn establish_connection(database_url: &str) -> Result<SqliteConnection, diesel::ConnectionError> {
+    SqliteConnection::establish(database_url)
+}
+
+pub fn get_accepted_grants(database_url: &str) -> Result<Vec<Grant>, String> {
+    let mut connection = establish_connection(database_url)
+        .map_err(|error| error.to_string())?;
+
+    let rows = grant::table
+        .filter(grant::status.eq("Accepted"))
+        .order(grant::name.asc())
+        .select(GrantRow::as_select())
+        .load::<GrantRow>(&mut connection)
+        .map_err(|e| e.to_string())?;
+
+    rows.into_iter()
+        .map(Grant::try_from)
+        .collect()
+}

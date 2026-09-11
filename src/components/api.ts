@@ -24,6 +24,10 @@ export async function deleteGrant(id: number): Promise<void> {
     return await invoke<void>("delete_grant", { grantId: id });
 }
 
+export async function getAcceptedGrants(): Promise<Grant[]> {
+    return await invoke<Grant[]>("get_accepted_grants");
+}
+
 /*
     * API functions for Manuscripts.
 */
