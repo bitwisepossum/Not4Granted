@@ -106,17 +106,17 @@ pub struct Manuscript {
     pub notes: Option<String>,
 }
 
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Deserialize, Default)]
 #[serde(rename_all = "camelCase", default)]
 pub struct GrantQuery {
-    pub statuses: Option<Vec<GrantStatus>>,
-    pub funders: Option<Vec<String>>,
+    pub statuses: Vec<GrantStatus>,
+    pub funders: Vec<String>,
     pub search: Option<String>,
-    pub sort_by: Option<String>,
-    pub direction: Option<String>,
+    pub sort_by: GrantSort,
+    pub direction: SortDirection,
 }
 
-#[derive(Debug, Serialize, Default)]
+#[derive(Debug, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub enum GrantSort {
     #[default]
@@ -126,8 +126,8 @@ pub enum GrantSort {
     Funder,
 }
 
-#[derive(Debug, Serialize, Default)]
-#[serde(rename_all = "camelCase")]
+#[derive(Debug, Deserialize, Default)]
+#[serde(rename_all = "lowercase")]
 pub enum SortDirection {
     #[default]
     Asc,

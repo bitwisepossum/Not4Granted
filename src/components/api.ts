@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import type { Grant, NewGrant, Manuscript, NewManuscript } from "../types";
+import type { Grant, NewGrant, Manuscript, NewManuscript, GrantQuery } from "../types";
 
 /*
     * API functions for Grants.
@@ -24,8 +24,8 @@ export async function deleteGrant(id: number): Promise<void> {
     return await invoke<void>("delete_grant", { grantId: id });
 }
 
-export async function getAcceptedGrants(): Promise<Grant[]> {
-    return await invoke<Grant[]>("get_accepted_grants");
+export function getFilteredGrants(query: GrantQuery): Promise<Grant[]> {
+    return invoke<Grant[]>("get_filtered_grants", {query});
 }
 
 /*
