@@ -104,7 +104,7 @@ export const LocaleNames = {
     "vi-VN": "Vietnamese (Vietnam)"
 };
 
-export type Locale = keyof typeof localeNames;
+export type Locale = keyof typeof LocaleNames;
 
 export const ThemeName = {
     light: "Light",
