@@ -4,14 +4,9 @@
     import type { Manuscript, ManuscriptStatus } from "../types";
 
     let {
-        manuscripts,
-        onStatusChange
+        manuscripts
     }: {
         manuscripts: Manuscript[];
-        onStatusChange: (
-            id: number,
-            status: ManuscriptStatus
-        ) => void;
     } = $props();
 
     let expandedManuscriptId = $state<number | undefined>(undefined);

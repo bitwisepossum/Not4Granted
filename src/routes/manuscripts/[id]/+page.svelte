@@ -34,7 +34,6 @@
             }
 
             draft = $state.snapshot(manuscript);
-            console.log("Fetched manuscript:", manuscript);
         } catch (err) {
             error = `Failed to load manuscript ${routeId}: ${err}`;
         } finally {
