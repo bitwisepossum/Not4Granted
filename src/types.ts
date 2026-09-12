@@ -72,7 +72,7 @@ export interface Manuscript {
 
 export type NewManuscript = Omit<Manuscript, "id">;
 
-export const localeNames = {
+export const LocaleNames = {
     "en-US": "English (United States)",
     "fi-FI": "Finnish (Finland)",
     "sv-SE": "Swedish (Sweden)",
@@ -106,7 +106,13 @@ export const localeNames = {
 
 export type Locale = keyof typeof localeNames;
 
-export type Theme = "light" | "dark" | "system";
+export const ThemeName = {
+    light: "Light",
+    dark: "Dark",
+    system: "Use system setting"
+} as const;
+
+export type Theme = keyof typeof ThemeName;
 
 export type Settings = {
     locale: Locale;
