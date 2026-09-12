@@ -85,7 +85,7 @@
         <div class="section-heading">
             <div>
                 <h2 id="regional-heading">Language and locale</h2>
-                <p>Control date and time locale and monetary formatting.</p>
+                <p>Control date and time locale and default monetary formatting.</p>
             </div>
         </div>
 
@@ -108,7 +108,7 @@
                     spellcheck="false"
                     placeholder="EUR"
                 />
-                <small>Three-letter currency code, for example EUR.</small>
+                <small>Three-letter ISO 4217 currency code, for example EUR, SEK, JPY or USD.</small>
             </label>
         </div>
 
