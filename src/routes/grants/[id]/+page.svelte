@@ -34,7 +34,6 @@
             grant.amountReceived = grant.amountReceived === undefined ? undefined : convertCurrency(grant.amountReceived, false);
             grant.amountRequested = grant?.amountRequested === undefined ? undefined : convertCurrency(grant.amountRequested, false);
             draft = $state.snapshot(grant);
-            console.log("Fetched grant:", grant);
         } catch (err) {
             error = `Failed to load grant ${routeId}: ${err}`;
         } finally {
