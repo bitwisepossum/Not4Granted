@@ -18,6 +18,8 @@
 
     let notes = $state("");
 
+    type GrantDateFields = "deadline" | "submittedAt" | "decisionAt";
+
     let {
         onCancel,
         onSubmit
@@ -66,6 +68,20 @@
         };
 
         onSubmit(grant);
+    }
+
+    function clearDate(field: GrantDateFields) {
+        switch (field) {
+            case "deadline":
+                deadline = "";
+                break;
+            case "submittedAt":
+                submittedAt = "";
+                break;
+            case "decisionAt":
+                decisionAt = "";
+                break;
+        }
     }
 </script>
 
@@ -174,6 +190,9 @@
                     bind:value={deadline}
                     onchange={closeDatePicker}
                 />
+                <button class="item-action" type="button" onclick={() => clearDate("deadline")}>
+                    Clear
+                </button>
             </div>
 
             <div class="field">
@@ -184,6 +203,9 @@
                     bind:value={submittedAt}
                     onchange={closeDatePicker}
                 />
+                <button class="item-action" type="button" onclick={() => clearDate("submittedAt")}>
+                    Clear
+                </button>
             </div>
         </div>
 
@@ -195,6 +217,9 @@
                 bind:value={decisionAt}
                 onchange={closeDatePicker}
             />
+            <button class="item-action" type="button" onclick={() => clearDate("decisionAt")}>
+                Clear
+            </button>
         </div>
 
         <div class="field">

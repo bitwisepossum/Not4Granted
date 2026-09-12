@@ -17,6 +17,8 @@
 
     let routeId = $derived(page.params.id);
 
+    type GrantDateFields = "deadline" | "submittedAt" | "decisionAt";
+
     onMount(async () => {
         try {
             const id = Number(routeId);
@@ -85,6 +87,11 @@
 
     function display(value: string | number | undefined) {
         return value === undefined || value === "" ? "—" : String(value);
+    }
+
+    function clearDate(field: GrantDateFields) {
+        if (!draft) return;
+        draft[field] = undefined;
     }
 </script>
 
@@ -274,7 +281,7 @@
                                     setTimeout(() => input.blur(), 0);
                                 }} 
                             />
-                            <button class="item-action" type="button" onclick={() => draft.deadline = undefined}>
+                            <button class="item-action" type="button" onclick={() => clearDate("deadline")}>
                                 Clear
                             </button>
                         {:else}
@@ -291,7 +298,7 @@
                                 setTimeout(() => input.blur(), 0);
                                 }} 
                             />
-                            <button class="item-action" type="button" onclick={() => draft.deadline = undefined}>
+                            <button class="item-action" type="button" onclick={() => clearDate("submittedAt")}>
                                 Clear
                             </button>
                         {:else}
@@ -310,7 +317,7 @@
                                     setTimeout(() => input.blur(), 0);
                                 }} 
                             />
-                            <button class="item-action" type="button" onclick={() => draft.deadline = undefined}>
+                            <button class="item-action" type="button" onclick={() => clearDate("decisionAt")}>
                                 Clear
                             </button>
                         {:else}
