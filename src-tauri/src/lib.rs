@@ -1,5 +1,6 @@
 mod db;
 mod models;
+mod settings;
 
 use models::{Grant, NewGrant, Manuscript, NewManuscript};
 
@@ -71,6 +72,24 @@ fn delete_manuscript(manuscript_id: i64) -> Result<(), String> {
 }
 
 /**
+ * Settings-related Tauri commands
+ */
+#[tauri::command]
+fn get_settings(
+    app: tauri::AppHandle,
+) -> Result<settings::Settings, String> {
+    settings::load_settings(&app)
+}
+
+#[tauri::command]
+fn save_settings(
+    app: tauri::AppHandle,
+    settings: settings::Settings,
+) -> Result<settings::Settings, String> {
+    settings::save_settings(&app, settings)
+}
+
+/**
  * Runs the Tauri application.
  */
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -87,7 +106,9 @@ pub fn run() {
             get_manuscripts,
             get_manuscript_by_id,
             delete_manuscript,
-            update_manuscript
+            update_manuscript,
+            get_settings,
+            save_settings
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -6,7 +6,7 @@
     import { grantStatuses } from "../../../types";
     import { onMount } from "svelte";
     import { getGrantById, updateGrant, deleteGrant } from "../../../components/api";
-    import { convertCurrency } from "../../../components/format";
+    import { convertCurrency, formatDate } from "../../../components/format";
 
     let grant = $state<Grant | undefined>(undefined);
     let draft = $state<Grant | undefined>(undefined);
@@ -290,7 +290,7 @@
                                 Clear
                             </button>
                         {:else}
-                            <div class="item-value">{display(grant.deadline)}</div>
+                            <div class="item-value">{display(formatDate(grant.deadline))}</div>
                         {/if}
                     </div>
 
@@ -307,7 +307,7 @@
                                 Clear
                             </button>
                         {:else}
-                            <div class="item-value">{display(grant.submittedAt)}</div>
+                            <div class="item-value">{display(formatDate(grant.submittedAt, "fi-FI"))}</div>
                         {/if}
                     </div>
 

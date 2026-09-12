@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import type { Grant, NewGrant, Manuscript, NewManuscript } from "../types";
+import type { Grant, NewGrant, Manuscript, NewManuscript, Settings } from "../types";
 
 /*
     * API functions for Grants.
@@ -45,4 +45,15 @@ export async function updateManuscript(manuscript: Manuscript): Promise<void> {
 
 export async function deleteManuscript(id: number): Promise<void> {
     return await invoke<void>("delete_manuscript", { manuscriptId: id });
+}
+
+/*
+    * API functions for Settings.
+*/
+export async function getSettings(): Promise<Settings> {
+    return await invoke<Settings>("get_settings");
+}
+
+export function saveSettings(settings: Settings): Promise<Settings> {
+    return invoke<Settings>("save_settings", { settings });
 }
