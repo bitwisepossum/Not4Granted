@@ -3,8 +3,6 @@ mod models;
 mod diesel_db;
 mod schema;
 mod settings;
-mod diesel_db;
-mod schema;
 
 use models::{Grant, NewGrant, Manuscript, NewManuscript, GrantQuery};
 
@@ -40,26 +38,6 @@ fn update_grant(grant: Grant) -> Result<(), String> {
 fn delete_grant(grant_id: i64) -> Result<(), String> {
     db::delete_grant_from_database(grant_id)
         .map_err(|e| e.to_string())
-}
-
-#[tauri::command]
-fn get_filtered_grants(query: GrantQuery) -> Result<Vec<Grant>, String> {
-    let database_url = "db-diesel.sqlite3";
-
-    diesel_db::get_filtered_grants(
-        database_url,
-        &query,
-    )
-}
-
-#[tauri::command]
-fn get_filtered_grants(query: GrantQuery) -> Result<Vec<Grant>, String> {
-    let database_url = "db-diesel.sqlite3";
-
-    diesel_db::get_filtered_grants(
-        database_url,
-        &query,
-    )
 }
 
 #[tauri::command]

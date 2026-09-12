@@ -126,36 +126,8 @@ pub enum GrantSort {
     Funder,
 }
 
-#[derive(Debug, Serialize, Default)]
-#[serde(rename_all = "camelCase", default)]
-pub enum SortDirection {
-    #[default]
-    Asc,
-    Desc,
-}
-
-#[derive(Debug, Deserialize, Default)]
-#[serde(rename_all = "camelCase", default)]
-pub struct GrantQuery {
-    pub statuses: Vec<GrantStatus>,
-    pub funders: Vec<String>,
-    pub search: Option<String>,
-    pub sort_by: GrantSort,
-    pub direction: SortDirection,
-}
-
-#[derive(Debug, Deserialize, Default)]
+#[derive(Debug, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
-pub enum GrantSort {
-    #[default]
-    Deadline,
-    Name,
-    Status,
-    Funder,
-}
-
-#[derive(Debug, Deserialize, Default)]
-#[serde(rename_all = "lowercase")]
 pub enum SortDirection {
     #[default]
     Asc,
