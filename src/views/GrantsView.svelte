@@ -76,13 +76,13 @@
 
                             <td class="data-main">
                                 {grant.amountRequested !== undefined
-                                    ? `${convertCurrency(grant.amountRequested)} EUR`
+                                    ? `${convertCurrency(grant.amountRequested)}`
                                     : "—"}
                             </td>
 
                             <td class="data-main">
                                 {grant.amountReceived !== undefined
-                                    ? `${convertCurrency(grant.amountReceived)} EUR`
+                                    ? `${convertCurrency(grant.amountReceived)}`
                                     : "—"}
                             </td>
 

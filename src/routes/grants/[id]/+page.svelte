@@ -241,7 +241,7 @@
 
                 <div class="item-grid">
                     <div class="item-field">
-                        <span class="item-label">Requested EUR</span>
+                        <span class="item-label">Requested</span>
                         {#if isEditing}
                             <input class="item-input" type="number" bind:value={draft.amountRequested} />
                         {:else}
@@ -250,7 +250,7 @@
                     </div>
 
                     <div class="item-field">
-                        <span class="item-label">Received EUR</span>
+                        <span class="item-label">Received</span>
                         {#if isEditing}
                             <input class="item-input" type="number" bind:value={draft.amountReceived} />
                         {:else}
