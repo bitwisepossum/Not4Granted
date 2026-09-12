@@ -245,16 +245,16 @@
                         {#if isEditing}
                             <input class="item-input" type="number" bind:value={draft.amountRequested} />
                         {:else}
-                            <div class="item-value">{display(grant.amountRequested)}</div>
+                            <div class="item-value">{display(grant.amountRequested)} {grant.currency}</div>
                         {/if}
                     </div>
 
                     <div class="item-field">
-                        <span class="item-label">Received</span>
+                        <span class="item-label">Received {grant.currency}</span>
                         {#if isEditing}
                             <input class="item-input" type="number" bind:value={draft.amountReceived} />
                         {:else}
-                            <div class="item-value">{display(grant.amountReceived)}</div>
+                            <div class="item-value">{display(grant.amountReceived)} {grant.currency}</div>
                         {/if}
                     </div>
 
