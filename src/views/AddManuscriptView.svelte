@@ -15,6 +15,8 @@
     let doi = $state("");
     let notes = $state("");
 
+    type ManuscriptDateFields = "submittedAt" | "decisionAt" | "publishedAt";
+
     let {
         onCancel,
         onSubmit
@@ -43,6 +45,20 @@
         };
 
         onSubmit(manuscript);
+    }
+
+    function clearDate(field: ManuscriptDateFields) {
+        switch (field) {
+            case "submittedAt":
+                submittedAt = "";
+                break;
+            case "decisionAt":
+                decisionAt = "";
+                break;
+            case "publishedAt":
+                publishedAt = "";
+                break;
+        }
     }
 </script>
 
@@ -128,6 +144,9 @@
                     bind:value={submittedAt}
                     onchange={closeDatePicker}
                 />
+                <button class="item-action" type="button" onclick={() => clearDate("submittedAt")}>
+                    Clear
+                </button>
             </div>
 
             <div class="field">
@@ -138,6 +157,9 @@
                     bind:value={decisionAt}
                     onchange={closeDatePicker}
                 />
+                <button class="item-action" type="button" onclick={() => clearDate("decisionAt")}>
+                    Clear
+                </button>
             </div>
         </div>
 
@@ -149,6 +171,9 @@
                 bind:value={publishedAt}
                 onchange={closeDatePicker}
             />
+            <button class="item-action" type="button" onclick={() => clearDate("publishedAt")}>
+                Clear
+            </button>
         </div>
 
         <div class="field">

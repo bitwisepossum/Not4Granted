@@ -18,6 +18,8 @@
 
     const routeId = $derived(page.params.id);
 
+    type ManuscriptDateFields = "submittedAt" | "decisionAt" | "publishedAt";
+
     onMount(async () => {
         try {
             const id = Number(routeId);
@@ -89,6 +91,12 @@
     function display(value: string | number | undefined) {
         return value === undefined || value === "" ? "—" : String(value);
     }
+
+    function clearDate(field: ManuscriptDateFields) {
+        if (!draft) return;
+        draft[field] = undefined;
+    }
+
 </script>
 
 <svelte:head>
@@ -266,6 +274,9 @@
                                     setTimeout(() => input.blur(), 0);
                                 }} 
                             />
+                            <button class="item-action" type="button" onclick={() => clearDate("submittedAt")}>
+                                Clear
+                            </button>
                         {:else}
                             <div class="item-value">{display(manuscript.submittedAt)}</div>
                         {/if}
@@ -282,6 +293,9 @@
                                     setTimeout(() => input.blur(), 0);
                                 }} 
                             />
+                            <button class="item-action" type="button" onclick={() => clearDate("decisionAt")}>
+                                Clear
+                            </button>
                         {:else}
                             <div class="item-value">{display(manuscript.decisionAt)}</div>
                         {/if}
@@ -298,6 +312,9 @@
                                     setTimeout(() => input.blur(), 0);
                                 }} 
                             />
+                            <button class="item-action" type="button" onclick={() => clearDate("publishedAt")}>
+                                Clear
+                            </button>
                         {:else}
                             <div class="item-value">{display(manuscript.publishedAt)}</div>
                         {/if}
