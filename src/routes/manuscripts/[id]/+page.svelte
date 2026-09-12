@@ -28,6 +28,11 @@
             }
 
             manuscript = await getManuscriptById(id);
+
+            if (!manuscript) {
+                throw new Error("Manuscript not found");
+            }
+
             draft = $state.snapshot(manuscript);
             console.log("Fetched manuscript:", manuscript);
         } catch (err) {

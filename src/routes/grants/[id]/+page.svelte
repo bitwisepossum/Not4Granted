@@ -6,6 +6,7 @@
     import { grantStatuses } from "../../../types";
     import { onMount } from "svelte";
     import { getGrantById, updateGrant, deleteGrant } from "../../../components/api";
+    import { convertCurrency } from "../../../components/format";
 
     let grant = $state<Grant | undefined>(undefined);
     let draft = $state<Grant | undefined>(undefined);
@@ -27,6 +28,11 @@
             }
 
             grant = await getGrantById(id);
+            if (!grant) {
+                throw new Error("Grant not found");
+            }
+            grant.amountReceived = grant.amountReceived === undefined ? undefined : convertCurrency(grant.amountReceived, false);
+            grant.amountRequested = grant?.amountRequested === undefined ? undefined : convertCurrency(grant.amountRequested, false);
             draft = $state.snapshot(grant);
             console.log("Fetched grant:", grant);
         } catch (err) {
@@ -236,7 +242,7 @@
 
                 <div class="item-grid">
                     <div class="item-field">
-                        <span class="item-label">Requested</span>
+                        <span class="item-label">Requested EUR</span>
                         {#if isEditing}
                             <input class="item-input" type="number" bind:value={draft.amountRequested} />
                         {:else}
@@ -245,7 +251,7 @@
                     </div>
 
                     <div class="item-field">
-                        <span class="item-label">Received</span>
+                        <span class="item-label">Received EUR</span>
                         {#if isEditing}
                             <input class="item-input" type="number" bind:value={draft.amountReceived} />
                         {:else}
