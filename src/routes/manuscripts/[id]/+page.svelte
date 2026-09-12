@@ -150,7 +150,7 @@
                                 aria-modal="true"
                                 aria-labelledby="delete-title"
                             >
-                                <h2 id="delete-title">Delete grant?</h2>
+                                <h2 id="delete-title">Delete manuscript?</h2>
 
                                 <p>
                                     This action cannot be undone.
