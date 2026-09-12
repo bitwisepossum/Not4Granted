@@ -24,17 +24,6 @@
         }
     }
 
-    function handleStatusChange(
-        manuscriptId: number,
-        event: Event
-    ) {
-        const select = event.currentTarget as HTMLSelectElement;
-        const status = select.value as ManuscriptStatus;
-
-        selectedStatus = status;
-        onStatusChange(manuscriptId, status);
-    }
-
     function statusClass(status: string): string {
         return status.toLowerCase();
     }

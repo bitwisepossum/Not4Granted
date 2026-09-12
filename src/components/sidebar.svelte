@@ -41,6 +41,13 @@
         </nav>
 
         <div class="sidebar-footer">
+            <a 
+                class:active={page.url.pathname.startsWith("/settings")}
+                class="nav-link"
+                href="/settings"
+            >
+                Settings
+            </a>
             <a
                 class:active={page.url.pathname.startsWith("/about")}
                 class="nav-link"
@@ -48,5 +55,4 @@
             >
                 About
             </a>
-            local database target
         </div>
