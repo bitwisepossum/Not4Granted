@@ -158,7 +158,7 @@
                                 <h2 id="delete-title">Delete grant?</h2>
 
                                 <p>
-                                    This action cannot be undone.
+                                    This action cannot be undone. Are you sure you want to delete this grant?
                                 </p>
 
                                 <div class="confirm-actions">

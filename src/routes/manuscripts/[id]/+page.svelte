@@ -101,7 +101,6 @@
         if (!draft) return;
         draft[field] = undefined;
     }
-
 </script>
 
 <svelte:head>
@@ -158,7 +157,7 @@
                                 <h2 id="delete-title">Delete manuscript?</h2>
 
                                 <p>
-                                    This action cannot be undone.
+                                    This action cannot be undone. Are you sure you want to delete this manuscript?
                                 </p>
 
                                 <div class="confirm-actions">
