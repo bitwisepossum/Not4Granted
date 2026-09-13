@@ -78,7 +78,7 @@ export type SortDirection = "asc" | "desc";
 export interface GrantQuery {
     id?: number;
     statuses?: GrantStatus[];
-    funders?: string[];
+    funder?: string;
     search?: string;
     sortBy?: GrantSort;
     sortDirection?: SortDirection;
@@ -91,7 +91,7 @@ export type ManuscriptSort =
 export interface ManuscriptQuery {
     id?: number;
     statuses?: ManuscriptStatus[];
-    journals?: string[];
+    journal?: string;
     search?: string;
     sortBy?: ManuscriptSort;
     sortDirection?: SortDirection;
@@ -100,7 +100,7 @@ export interface ManuscriptQuery {
 export function defaultManuscriptQuery(): ManuscriptQuery {
     return {
         statuses: [],
-        journals: [],
+        journal: "",
         search: "",
         sortBy: "title",
         sortDirection: "asc"
@@ -110,7 +110,7 @@ export function defaultManuscriptQuery(): ManuscriptQuery {
 export function defaultGrantQuery(): GrantQuery {
     return {
         statuses: [],
-        funders: [],
+        funder: "",
         search: "",
         sortBy: "deadline",
         sortDirection: "asc"
