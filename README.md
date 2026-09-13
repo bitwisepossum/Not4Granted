@@ -32,8 +32,7 @@ All [release binary builds](https://github.com/bitwisepossum/Not4Granted/release
 - [ ] Quick update grant status
 - [x] Delete grants
 - [x] View full grant details
-- [ ] Filter and sort grants
-- [ ] Search grants
+- [x] Search, filter and sort grants
 
 ### Manuscripts
 
@@ -43,8 +42,7 @@ All [release binary builds](https://github.com/bitwisepossum/Not4Granted/release
 - [ ] Quick update manuscript status
 - [x] Delete manuscripts
 - [x] View full manuscript details
-- [ ] Filter and sort manuscripts
-- [ ] Search manuscripts
+- [x] Search, filter and sort manuscripts
 
 ### Grant–manuscript relationships
 
@@ -86,3 +84,7 @@ All [release binary builds](https://github.com/bitwisepossum/Not4Granted/release
 Licensed under the EUPL-1.2-or-later. 
 
 See [LICENSE](LICENSE.md) for the full license text.
+
+## Declaration of AI use
+
+AI-assisted IDEs (VS Code and RustRover) were used during development for inline code completion, generation of frontend HTML and CSS, debugging and drafting commit messages. The flesh automaton, i.e. the human author, has produced the majority of this questionable slop.
