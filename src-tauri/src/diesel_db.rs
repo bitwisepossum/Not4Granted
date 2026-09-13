@@ -25,8 +25,6 @@ impl TryFrom<GrantRow> for Grant {
     type Error = String;
 
     fn try_from(row: GrantRow) -> Result<Self, Self::Error> {
-        type Error = String;
-
         Ok(Grant {
             id: row.id.ok_or("Missing id")? as i64,
             name: row.name,
