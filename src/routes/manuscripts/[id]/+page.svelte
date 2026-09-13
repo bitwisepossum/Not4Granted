@@ -6,7 +6,7 @@
     import { manuscriptStatuses } from "../../../types";
     import { onMount } from "svelte";
     import { getManuscriptById, updateManuscript, deleteManuscript } from "../../../components/api";
-
+    import { formatDate } from "../../../components/format";
     import { settingsState } from "../../../state/settings.svelte";
 
     let manuscript = $state<Manuscript | undefined>(undefined);
@@ -16,8 +16,6 @@
     let error = $state<string | undefined>(undefined);
     let showDeleteConfirm = $state(false);
     let isDeleting = $state(false);
-
-    console.log("Settings state:", settingsState.current.currency, settingsState.current.locale, settingsState.current.theme);
 
     const routeId = $derived(page.params.id);
 
@@ -285,7 +283,7 @@
                                 Clear
                             </button>
                         {:else}
-                            <div class="item-value">{display(manuscript.submittedAt)}</div>
+                            <div class="item-value">{display(formatDate(manuscript.submittedAt, settingsState.current.locale))}</div>
                         {/if}
                     </div>
 
@@ -304,7 +302,7 @@
                                 Clear
                             </button>
                         {:else}
-                            <div class="item-value">{display(manuscript.decisionAt)}</div>
+                            <div class="item-value">{display(formatDate(manuscript.decisionAt, settingsState.current.locale))}</div>
                         {/if}
                     </div>
 
@@ -323,7 +321,7 @@
                                 Clear
                             </button>
                         {:else}
-                            <div class="item-value">{display(manuscript.publishedAt)}</div>
+                            <div class="item-value">{display(formatDate(manuscript.publishedAt, settingsState.current.locale))}</div>
                         {/if}
                     </div>
                 </div>

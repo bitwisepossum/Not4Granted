@@ -1,8 +1,9 @@
 <script lang="ts">
     import "../styles/app.css";
     import "../styles/data-view.css";
-    import { convertCurrency } from "../components/format";
+    import { convertCurrency, formatDate } from "../components/format";
     import type { Grant, GrantStatus } from "../types";
+    import { settingsState } from "../state/settings.svelte";
 
     let {
         grants
@@ -72,17 +73,17 @@
 
                             <td class="data-main">{grant.name}</td>
                             <td class="data-main">{grant.funder}</td>
-                            <td class="data-main">{grant.deadline ?? "—"}</td>
+                            <td class="data-main">{formatDate(grant.deadline, settingsState.current.locale) ?? "—"}</td>
 
                             <td class="data-main">
                                 {grant.amountRequested !== undefined
-                                    ? `${convertCurrency(grant.amountRequested)}`
+                                    ? `${convertCurrency(grant.amountRequested)} ${grant.currency}`
                                     : "—"}
                             </td>
 
                             <td class="data-main">
                                 {grant.amountReceived !== undefined
-                                    ? `${convertCurrency(grant.amountReceived)}`
+                                    ? `${convertCurrency(grant.amountReceived)} ${grant.currency}`
                                     : "—"}
                             </td>
 

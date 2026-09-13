@@ -7,6 +7,7 @@
     import { onMount } from "svelte";
     import { updateGrant, deleteGrant, getGrantById } from "../../../components/api";
     import { convertCurrency, formatDate } from "../../../components/format";
+    import { settingsState } from "../../../state/settings.svelte";
 
     let grant = $state<Grant | undefined>(undefined);
     let draft = $state<Grant | undefined>(undefined);
@@ -159,7 +160,7 @@
                     >
                         Delete
                     </button>
-                    {#if showDeleteConfirm}
+                    {#if showDeleteConfirm}import { settingsState } from "../../../state/settings.svelte";
                         <div class="confirm-backdrop">
                             <div
                                 class="confirm-dialog"
@@ -303,7 +304,7 @@
                                 Clear
                             </button>
                         {:else}
-                            <div class="item-value">{display(formatDate(grant.deadline))}</div>
+                            <div class="item-value">{display(formatDate(grant.deadline, settingsState.current.locale))}</div>
                         {/if}
                     </div>
 
@@ -320,7 +321,7 @@
                                 Clear
                             </button>
                         {:else}
-                            <div class="item-value">{display(formatDate(grant.submittedAt, "fi-FI"))}</div>
+                            <div class="item-value">{display(formatDate(grant.submittedAt, settingsState.current.locale))}</div>
                         {/if}
                     </div>
 
@@ -339,7 +340,7 @@
                                 Clear
                             </button>
                         {:else}
-                            <div class="item-value">{display(grant.decisionAt)}</div>
+                            <div class="item-value">{display(formatDate(grant.decisionAt, settingsState.current.locale))}</div>
                         {/if}
                     </div>
                 </div>

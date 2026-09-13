@@ -2,6 +2,8 @@
     import "../styles/app.css";
     import "../styles/data-view.css";
     import type { Manuscript, ManuscriptStatus } from "../types";
+    import { formatDate } from "../components/format";
+    import { settingsState } from "../state/settings.svelte";
 
     let {
         manuscripts
@@ -26,14 +28,6 @@
 
     function statusClass(status: string): string {
         return status.toLowerCase();
-    }
-
-    function formatDate(date?: string): string {
-        if (!date) {
-            return "—";
-        }
-
-        return new Date(date).toLocaleDateString();
     }
 </script>
 
@@ -98,11 +92,11 @@
                             </td>
 
                             <td>
-                                {formatDate(manuscript.submittedAt)}
+                                {formatDate(manuscript.submittedAt, settingsState.current.locale) ?? "—"}
                             </td>
 
                             <td>
-                                {formatDate(manuscript.decisionAt)}
+                                {formatDate(manuscript.decisionAt, settingsState.current.locale) ?? "—"}
                             </td>
 
                             <td>
