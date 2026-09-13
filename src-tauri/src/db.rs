@@ -316,15 +316,16 @@ pub fn get_filtered_grants(database_url: &str, request: &GrantQuery) -> Result<V
     }
 
     // Funder filtering
-    if !request.funders.is_empty() {
-    let funders: Vec<&str> = request
-        .funders
-        .iter()
-        .map(String::as_str)
-        .collect();
+    if let Some(funder) = request
+        .funder
+        .as_deref()
+        .map(str::trim)
+        .filter(|funder| !funder.is_empty())
+    {
+        let like_pattern = format!("%{}%", funder);
 
         statement = statement.filter(
-            grant::funder.eq_any(funders)
+            grant::funder.like(like_pattern)
         );
     }
 
@@ -528,16 +529,17 @@ pub fn get_filtered_manuscripts(database_url: &str, request: &ManuscriptQuery) -
         );
     }
 
-        // Journal filtering
-    if !request.journals.is_empty() {
-        let journals: Vec<&str> = request
-            .journals
-            .iter()
-            .map(String::as_str)
-            .collect(); 
+    // Journal filtering
+    if let Some(journal) = request
+        .journal
+        .as_deref()
+        .map(str::trim)
+        .filter(|journal| !journal.is_empty())
+    {
+        let like_pattern = format!("%{}%", journal);
 
         statement = statement.filter(
-            manuscript::journal.eq_any(journals)
+            manuscript::journal.like(like_pattern)
         );
     }
 

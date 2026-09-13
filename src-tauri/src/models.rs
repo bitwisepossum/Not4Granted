@@ -57,7 +57,7 @@ pub struct Grant {
 pub struct GrantQuery {
     pub id: Option<i64>,
     pub statuses: Vec<GrantStatus>,
-    pub funders: Vec<String>,
+    pub funder: Option<String>,
     pub search: Option<String>,
     pub sort_by: GrantSort,
     pub sort_direction: SortDirection,
@@ -157,7 +157,7 @@ pub struct ManuscriptQuery {
     pub id: Option<i64>,
     pub statuses: Vec<ManuscriptStatus>,
     pub search: Option<String>,
-    pub journals: Vec<String>,
+    pub journal: Option<String>,
     pub sort_by: ManuscriptSort,
     pub sort_direction: SortDirection,
 }
