@@ -65,8 +65,8 @@ All [release binary builds](https://github.com/bitwisepossum/Not4Granted/release
 
 - [x] Add database migrations
 - [ ] Improve error handling and user feedback
-- [ ] Add confirmation for destructive actions
-- [ ] Add settings/preferences
+- [x] Add confirmation for destructive actions
+- [x] Add settings/preferences
 - [ ] Export functionality
 
 ## Stack
