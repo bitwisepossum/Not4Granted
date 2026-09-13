@@ -12,7 +12,7 @@ use models::{
     ManuscriptQuery, 
 };
 
-const DATABASE_URL: &str = "db-diesel.sqlite3";
+const DATABASE_URL: &str = "db.sqlite3";
 
 /**
  * Grant-related Tauri commands
