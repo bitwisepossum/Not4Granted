@@ -5,11 +5,15 @@
     let {
         grants,
         manuscripts,
+        active_grants,
+        active_manuscripts,
         isLoading,
         error
     }: {
         grants: Grant[];
         manuscripts: Manuscript[];
+        active_grants: Grant[];
+        active_manuscripts: Manuscript[];
         isLoading: boolean;
         error?: string;
     } = $props();
@@ -40,33 +44,6 @@
                 grant.status === "Accepted" ||
                 grant.status === "Rejected"
         )
-    );
-
-    const activeGrants = $derived(
-        grants
-            .filter(
-                (grant) =>
-                    grant.status === "Planning" ||
-                    grant.status === "Submitted"
-            )
-            .toSorted((a, b) => {
-                if (!a.deadline && !b.deadline) return 0;
-                if (!a.deadline) return 1;
-                if (!b.deadline) return -1;
-
-                return a.deadline.localeCompare(b.deadline);
-            })
-            .slice(0, 5)
-    );
-
-    const activeManuscripts = $derived(
-        manuscripts
-            .filter(
-                (manuscript) =>
-                    manuscript.status !== "Published" &&
-                    manuscript.status !== "Rejected"
-            )
-            .slice(0, 5)
     );
 
     const successRate = $derived(
@@ -233,13 +210,13 @@
                     </a>
                 </div>
 
-                {#if activeGrants.length === 0}
+                {#if active_grants.length === 0}
                     <div class="empty-state">
                         <h2>No active grants</h2>
                         <p>Nothing is currently awaiting either paperwork or judgment.</p>
                     </div>
                 {:else}
-                    {#each activeGrants as grant}
+                    {#each active_grants as grant}
                         <a
                             class="list-row dashboard-list-row"
                             href={`/grants/${grant.id}`}
@@ -272,13 +249,13 @@
                     </a>
                 </div>
 
-                {#if activeManuscripts.length === 0}
+                {#if active_manuscripts.length === 0}
                     <div class="empty-state">
                         <h2>No active manuscripts</h2>
                         <p>An unusual and potentially medically significant calm.</p>
                     </div>
                 {:else}
-                    {#each activeManuscripts as manuscript}
+                    {#each active_manuscripts as manuscript}
                         <a
                             class="list-row dashboard-list-row"
                             href={`/manuscripts/${manuscript.id}`}
