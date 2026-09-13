@@ -101,12 +101,6 @@
                 <strong>{rejectedGrants.length}</strong>
                 <small>Applications contributing to resilience</small>
             </article>
-
-            <article>
-                <span>Success rate</span>
-                <strong>{successRate}%</strong>
-                <small>{decidedGrants.length} decided applications</small>
-            </article>
         </div>
 
         <div class="dashboard-grid">
