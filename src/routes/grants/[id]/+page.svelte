@@ -24,7 +24,7 @@
         try {
             const id = Number(routeId);
             if (!Number.isInteger(id)) {
-                throw new Error("Invalid grant ID");
+                throw new Error("Invalid grant IDqqqqqqqqqqqqqqqqqqqqqqqq");
             }
 
             grant = await getGrantById(id);

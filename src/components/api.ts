@@ -4,12 +4,8 @@ import type { Grant, NewGrant, Manuscript, NewManuscript, GrantQuery, Settings }
 /*
     * API functions for Grants.
 */
-export async function addGrant(
-    newGrant: NewGrant
-): Promise<Grant> {
-    return await invoke<Grant>("add_grant", {
-        newGrant
-    });
+export async function addGrant(newGrant: NewGrant): Promise<Grant> {
+    return await invoke<Grant>("add_grant", {newGrant});
 }
 
 export async function getGrants(): Promise<Grant[]> {
@@ -35,16 +31,12 @@ export function getGrantById(id: number): Promise<Grant | undefined> {
 /*
     * API functions for Manuscripts.
 */
-export async function addManuscript(manuscript: NewManuscript): Promise<Manuscript> {
-    return await invoke<Manuscript>("add_manuscript", { manuscript });
+export async function addManuscript(newManuscript: NewManuscript): Promise<Manuscript> {
+    return await invoke<Manuscript>("add_manuscript", {newManuscript});
 }
 
 export async function getManuscripts(): Promise<Manuscript[]> {
     return await invoke<Manuscript[]>("get_manuscripts");
-}
-
-export async function getManuscriptById(id: number): Promise<Manuscript | undefined> {
-    return await invoke<Manuscript | undefined>("get_manuscript_by_id", { manuscriptId: id });
 }
 
 export async function updateManuscript(manuscript: Manuscript): Promise<void> {
@@ -53,6 +45,14 @@ export async function updateManuscript(manuscript: Manuscript): Promise<void> {
 
 export async function deleteManuscript(id: number): Promise<void> {
     return await invoke<void>("delete_manuscript", { manuscriptId: id });
+}
+
+export function getFilteredManuscripts(query: GrantQuery): Promise<Manuscript[]> {
+    return invoke<Manuscript[]>("get_filtered_manuscripts", {query});
+}
+
+export function getManuscriptById(id: number): Promise<Manuscript | undefined> {
+    return invoke<Manuscript | undefined>("get_manuscript_by_id", { manuscriptId: id });
 }
 
 /*

@@ -4,7 +4,14 @@ mod diesel_db;
 mod schema;
 mod settings;
 
-use models::{Grant, NewGrant, Manuscript, NewManuscript, GrantQuery};
+use models::{
+    Grant, 
+    NewGrant, 
+    GrantQuery, 
+    Manuscript, 
+    NewManuscript,
+    ManuscriptQuery, 
+};
 
 use crate::{diesel_db::GrantRow, schema::grant};
 
@@ -13,39 +20,6 @@ const DATABASE_URL: &str = "db-diesel.sqlite3";
 /**
  * Grant-related Tauri commands
  */
-/*
-#[tauri::command]
-fn add_grant(grant: NewGrant) -> Result<Grant, String> {
-        println!("TAURI: add_grant called with grant: {:?}", grant);
-    db::add_grant_to_database(grant)
-        .map_err(|e| e.to_string())
-}
-
-#[tauri::command]
-fn get_grants() -> Result<Vec<Grant>, String> {
-    db::get_grants_from_database()
-        .map_err(|e| e.to_string())
-}
-
-#[tauri::command]
-fn get_grant_by_id(grant_id: i64) -> Result<Grant, String> {
-    db::get_grant_by_id_from_database(grant_id)
-        .map_err(|e| e.to_string())
-}
-
-#[tauri::command]
-fn update_grant(grant: Grant) -> Result<(), String> {
-    db::update_grant_in_database(grant)
-        .map_err(|e| e.to_string())
-}
-
-#[tauri::command]
-fn delete_grant(grant_id: i64) -> Result<(), String> {
-    db::delete_grant_from_database(grant_id)
-        .map_err(|e| e.to_string())
-} */
-
-// Diesel database functions
 
 #[tauri::command]
 fn get_filtered_grants(query: GrantQuery) -> Result<Vec<Grant>, String> {
@@ -91,34 +65,46 @@ fn get_grants() -> Result<Vec<Grant>, String> {
 /**
  * Manuscript-related Tauri commands
  */
-#[tauri::command]
-fn add_manuscript(manuscript: NewManuscript) -> Result<Manuscript, String> {
-    db::add_manuscript_to_database(manuscript)
-        .map_err(|e| e.to_string())
-}
 
 #[tauri::command]
-fn get_manuscripts() -> Result<Vec<Manuscript>, String> {
-    db::get_manuscripts_from_database()
-        .map_err(|e| e.to_string())
+fn get_filtered_manuscripts(query: ManuscriptQuery) -> Result<Vec<Manuscript>, String> {
+    diesel_db::get_filtered_manuscripts(
+        DATABASE_URL,
+        &query,
+    )
 }
 
 #[tauri::command]
 fn get_manuscript_by_id(manuscript_id: i64) -> Result<Manuscript, String> {
-    db::get_manuscript_by_id_from_database(manuscript_id)
-        .map_err(|e| e.to_string())
+    diesel_db::get_manuscript_by_id(DATABASE_URL, manuscript_id)
+        .and_then(|manuscript| {
+            manuscript.ok_or_else(|| format!("Manuscript with id {} not found", manuscript_id))
+        })
+}
+
+#[tauri::command]
+fn get_all_manuscripts() -> Result<Vec<Manuscript>, String> {
+    diesel_db::get_all_manuscripts(DATABASE_URL)
 }
 
 #[tauri::command]
 fn update_manuscript(manuscript: Manuscript) -> Result<(), String> {
-    db::update_manuscript_in_database(manuscript)
-        .map_err(|e| e.to_string())
+    diesel_db::update_manuscript(DATABASE_URL, &manuscript)
 }
 
 #[tauri::command]
 fn delete_manuscript(manuscript_id: i64) -> Result<(), String> {
-    db::delete_manuscript_from_database(manuscript_id)
-        .map_err(|e| e.to_string())
+    diesel_db::delete_manuscript(DATABASE_URL, manuscript_id)
+}
+
+#[tauri::command]
+fn add_manuscript(new_manuscript: NewManuscript) -> Result<Manuscript, String> {
+    diesel_db::add_manuscript(DATABASE_URL, &new_manuscript)
+}
+
+#[tauri::command]
+fn get_manuscripts() -> Result<Vec<Manuscript>, String> {
+    diesel_db::get_all_manuscripts(DATABASE_URL)
 }
 
 /**

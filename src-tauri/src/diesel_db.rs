@@ -1,8 +1,32 @@
 use diesel::{connection, prelude::*};
 use diesel::sqlite::Sqlite;
-use num_bigint::BigUint;
 use crate::schema::grant;
-use crate::models::{Grant, GrantQuery, GrantSort, GrantStatus, NewGrant, SortDirection};
+use crate::schema::manuscript;
+use crate::models::{
+    Grant, 
+    GrantQuery, 
+    GrantSort, 
+    GrantStatus, 
+    NewGrant, 
+    SortDirection,
+    Manuscript,
+    ManuscriptQuery,
+    ManuscriptSort,
+    ManuscriptStatus,
+    NewManuscript
+};
+
+/*
+    Connection
+*/
+
+pub fn establish_connection(database_url: &str) -> Result<SqliteConnection, diesel::ConnectionError> {
+    SqliteConnection::establish(database_url)
+}
+
+/*
+    Database functions for Grants
+*/
 
 #[derive(Debug, Queryable, Selectable)]
 #[diesel(table_name = grant)]
@@ -41,10 +65,6 @@ impl TryFrom<GrantRow> for Grant {
             notes: row.notes,
         })
     }
-}
-
-pub fn establish_connection(database_url: &str) -> Result<SqliteConnection, diesel::ConnectionError> {
-    SqliteConnection::establish(database_url)
 }
 
 pub fn get_all_grants(database_url: &str) -> Result<Vec<Grant>, String> {
@@ -209,6 +229,192 @@ pub fn get_grant_by_id(database_url: &str, grant_id: i64) -> Result<Option<Grant
 
     match row {
         Some(grant_row) => Ok(Some(Grant::try_from(grant_row)?)),
+        None => Ok(None),
+    }
+}
+
+/*
+    Database functions for Manuscripts
+*/
+
+#[derive(Debug, Queryable, Selectable)]
+#[diesel(table_name = manuscript)]
+#[diesel(check_for_backend(diesel::sqlite::Sqlite))]
+pub struct ManuscriptRow {
+    pub id: Option<i64>,
+    pub title: String,
+    pub short_name: Option<String>,
+    pub journal: Option<String>,
+    pub status: String,
+    pub next_action: Option<String>,
+    pub submitted_at: Option<String>,
+    pub decision_at: Option<String>,
+    pub published_at: Option<String>,
+    pub doi: Option<String>,
+    pub notes: Option<String>,
+}
+
+impl TryFrom<ManuscriptRow> for Manuscript {
+    type Error = String;
+
+    fn try_from(row: ManuscriptRow) -> Result<Self, Self::Error> {
+        Ok(Manuscript {
+            id: row.id.ok_or("Missing id")? as i64,
+            title: row.title,
+            short_name: row.short_name,
+            journal: row.journal,
+            status: ManuscriptStatus::try_from(row.status)?,
+            next_action: row.next_action,
+            submitted_at: row.submitted_at,
+            decision_at: row.decision_at,
+            published_at: row.published_at,
+            doi: row.doi,
+            notes: row.notes,
+        })
+    }
+}
+
+pub fn get_all_manuscripts(database_url: &str) -> Result<Vec<Manuscript>, String> {
+    let mut connection = establish_connection(database_url).map_err(|e| e.to_string())?;
+
+    let rows = manuscript::table
+        .order(manuscript::title.asc())
+        .select(ManuscriptRow::as_select())
+        .load::<ManuscriptRow>(&mut connection)
+        .map_err(|e| e.to_string())?;
+
+    rows.into_iter()
+        .map(Manuscript::try_from)
+        .collect()
+}
+
+pub fn update_manuscript(database_url: &str, manuscript: &Manuscript) -> Result<(), String> {
+    let mut connection = establish_connection(database_url).map_err(|e| e.to_string())?;
+
+    diesel::update(manuscript::table.filter(manuscript::id.eq(Some(manuscript.id as i64))))
+        .set((
+            manuscript::title.eq(&manuscript.title),
+            manuscript::short_name.eq(&manuscript.short_name),
+            manuscript::journal.eq(&manuscript.journal),
+            manuscript::status.eq(manuscript.status.as_str()),
+            manuscript::next_action.eq(&manuscript.next_action),
+            manuscript::submitted_at.eq(&manuscript.submitted_at),
+            manuscript::decision_at.eq(&manuscript.decision_at),
+            manuscript::published_at.eq(&manuscript.published_at),
+            manuscript::doi.eq(&manuscript.doi),
+            manuscript::notes.eq(&manuscript.notes),
+        ))
+        .execute(&mut connection)
+        .map_err(|e| e.to_string())?;
+
+    Ok(())
+}
+
+pub fn delete_manuscript(database_url: &str, manuscript_id: i64) -> Result<(), String> {
+    let mut connection = establish_connection(database_url).map_err(|e| e.to_string())?;
+
+    diesel::delete(manuscript::table.filter(manuscript::id.eq(Some(manuscript_id))))
+        .execute(&mut connection)
+        .map_err(|e| e.to_string())?;
+
+    Ok(())
+}
+
+pub fn add_manuscript(database_url: &str, new_manuscript: &NewManuscript) -> Result<Manuscript, String> {
+    let mut connection = establish_connection(database_url).map_err(|e| e.to_string())?;
+
+    diesel::insert_into(manuscript::table)
+        .values((
+            manuscript::title.eq(&new_manuscript.title),
+            manuscript::short_name.eq(&new_manuscript.short_name),
+            manuscript::journal.eq(&new_manuscript.journal),
+            manuscript::status.eq(new_manuscript.status.as_str()),
+            manuscript::next_action.eq(&new_manuscript.next_action),
+            manuscript::submitted_at.eq(&new_manuscript.submitted_at),
+            manuscript::decision_at.eq(&new_manuscript.decision_at),
+            manuscript::published_at.eq(&new_manuscript.published_at),
+            manuscript::doi.eq(&new_manuscript.doi),
+            manuscript::notes.eq(&new_manuscript.notes),
+        ))
+        .execute(&mut connection)
+        .map_err(|e| e.to_string())?;
+
+    let inserted_id: i64 = diesel::select(
+        diesel::dsl::sql::<diesel::sql_types::BigInt>("last_insert_rowid()"),
+    )
+    .get_result(&mut connection)
+    .map_err(|e| e.to_string())?;
+    let inserted_manuscript: ManuscriptRow = manuscript::table
+        .filter(manuscript::id.eq(Some(inserted_id)))
+        .select(ManuscriptRow::as_select())
+        .first(&mut connection)
+        .map_err(|e| e.to_string())?;
+
+    Manuscript::try_from(inserted_manuscript)
+}
+
+pub fn get_filtered_manuscripts(database_url: &str, request: &ManuscriptQuery) -> Result<Vec<Manuscript>, String> {
+    let mut connection = establish_connection(database_url).map_err(|e| e.to_string())?;
+
+    let mut statement = manuscript::table.into_boxed::<Sqlite>();
+
+    // ID filtering
+    if let Some(id) = request.id {
+        statement = statement.filter(manuscript::id.eq(Some(id as i64)));
+    }
+
+    // Status filtering
+    if !request.statuses.is_empty() {
+        let statuses: Vec<&str> = request
+            .statuses
+            .iter()
+            .map(|s| s.as_str())
+            .collect();
+        statement = statement.filter(manuscript::status.eq_any(statuses));
+    }
+
+    // Search term filtering
+    if let Some(search_term) = request.search.as_deref().map(str::trim)
+        .filter(|search| !search.is_empty()) {
+        let like_pattern = format!("%{}%", search_term);
+        statement = statement.filter(
+            manuscript::title.like(like_pattern.clone())
+                .or(manuscript::short_name.like(like_pattern.clone()))
+                .or(manuscript::journal.like(like_pattern.clone()))
+                .or(manuscript::doi.like(like_pattern.clone()))
+        );
+    }
+
+    // Sorting
+    statement = match (&request.sort_by, &request.direction) {
+        (ManuscriptSort::Title,     SortDirection::Asc) =>  statement.order(manuscript::title.asc()),
+        (ManuscriptSort::Title,     SortDirection::Desc) => statement.order(manuscript::title.desc()),
+        (ManuscriptSort::Status,    SortDirection::Asc) =>  statement.order(manuscript::status.asc()),
+        (ManuscriptSort::Status,    SortDirection::Desc) => statement.order(manuscript::status.desc()),
+        (ManuscriptSort::Journal,   SortDirection::Asc) =>  statement.order(manuscript::journal.asc()),
+        (ManuscriptSort::Journal,   SortDirection::Desc) => statement.order(manuscript::journal.desc()),
+    };
+
+    let manuscripts: Vec<ManuscriptRow> = statement
+        .select(ManuscriptRow::as_select())
+        .load(&mut connection)
+        .map_err(|e| e.to_string())?;
+
+    manuscripts.into_iter().map(Manuscript::try_from).collect()
+}
+
+pub fn get_manuscript_by_id(database_url: &str, manuscript_id: i64) -> Result<Option<Manuscript>, String> {
+    let mut connection = establish_connection(database_url).map_err(|e| e.to_string())?;
+
+    let row = manuscript::table
+        .filter(manuscript::id.eq(Some(manuscript_id as i64)))
+        .select(ManuscriptRow::as_select())
+        .first::<ManuscriptRow>(&mut connection)
+        .optional()
+        .map_err(|e| e.to_string())?;
+
+    match row {
+        Some(manuscript_row) => Ok(Some(Manuscript::try_from(manuscript_row)?)),
         None => Ok(None),
     }
 }

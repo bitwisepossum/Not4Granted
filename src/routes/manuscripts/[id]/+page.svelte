@@ -66,6 +66,7 @@
 
         await updateManuscript(draft);
         manuscript = await getManuscriptById(id);
+        draft = $state.snapshot(manuscript);
         isEditing = false;
     }
 
