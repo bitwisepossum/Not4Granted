@@ -1,5 +1,5 @@
 import { getSettings, saveSettings } from "../components/api";
-import type { Settings } from "../types";
+import type { Settings, Theme } from "../types";
 
 const defaults: Settings = {
     locale: "en-US",
@@ -7,6 +7,10 @@ const defaults: Settings = {
     version: 1,
     currency: "USD"
 };
+
+function applyTheme(theme: Theme): void {
+    document.documentElement.dataset.theme = theme;
+}
 
 class SettingsState {
     current = $state<Settings>({ ...defaults });
@@ -24,6 +28,7 @@ class SettingsState {
 
         try {
             this.current = await getSettings();
+            applyTheme(this.current.theme);
             this.loaded = true;
         } catch (error) {
             this.error = error instanceof Error
@@ -40,6 +45,7 @@ class SettingsState {
         
         try {
             this.current = await saveSettings(settings);
+            applyTheme(this.current.theme);
         } catch (error) {
             this.error = error instanceof Error
                 ? error.message

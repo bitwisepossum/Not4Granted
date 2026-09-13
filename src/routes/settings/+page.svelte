@@ -60,7 +60,7 @@
     }
 
     .eyebrow {
-        color: var(--text-muted, #666);
+        color: var(--text-muted);
         font-size: 0.78rem;
         font-weight: 700;
         letter-spacing: 0.08em;
@@ -73,8 +73,8 @@
     }
 
     .error-message {
-        border: 1px solid var(--danger-border, #b94a48);
+        border: 1px solid var(--danger-border);
         border-radius: 0.5rem;
-        color: var(--danger-text, #8a2424);
+        color: var(--danger-text);
     }
 </style>

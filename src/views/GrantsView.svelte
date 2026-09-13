@@ -139,7 +139,7 @@ th,
 td {
     padding: 0.85rem 1rem;
     text-align: left;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid var(--border-subtle);
 }
 
 .disclosure-column,

@@ -77,7 +77,6 @@
                 </select>
             </div>
 
-            <!-- TODO actual theme function-->
         </fieldset>
     </section>
 
@@ -147,8 +146,8 @@
     }
 
     .settings-card {
-        background: var(--surface, #fff);
-        border: 1px solid var(--border-color, #d8d8d8);
+        background: var(--surface);
+        border: 1px solid var(--border);
         border-radius: 0.75rem;
         padding: 1.25rem;
     }
@@ -164,7 +163,7 @@
 
     .section-heading p,
     small {
-        color: var(--text-muted, #666);
+        color: var(--text-muted);
     }
 
     fieldset {
@@ -185,12 +184,6 @@
         gap: 0.75rem 1.25rem;
     }
 
-    .radio-options label {
-        align-items: center;
-        display: flex;
-        gap: 0.45rem;
-    }
-
     .field-grid {
         display: grid;
         gap: 1rem;
@@ -204,8 +197,8 @@
 
     select,
     input {
-        background: var(--input-background, #fff);
-        border: 1px solid var(--border-color, #aaa);
+        background: var(--surface);
+        border: 1px solid var(--border);
         border-radius: 0.4rem;
         color: inherit;
         font: inherit;
@@ -223,13 +216,13 @@
     }
 
     .feedback.error {
-        background: var(--danger-background, #fff1f1);
-        color: var(--danger-text, #8a2424);
+        background: var(--danger-bg);
+        color: var(--danger-text);
     }
 
     .feedback.success {
-        background: var(--success-background, #eef8f0);
-        color: var(--success-text, #236332);
+        background: var(--success-bg);
+        color: var(--success-text);
     }
 
     .form-actions {
@@ -254,13 +247,13 @@
 
     .secondary-button {
         background: transparent;
-        border: 1px solid var(--border-color, #aaa);
+        border: 1px solid var(--border);
         color: inherit;
     }
 
     .primary-button {
-        background: var(--accent-color, #3154a4);
+        background: var(--accent);
         border: 1px solid transparent;
-        color: #fff;
+        color: var(--accent-text);
     }
 </style>

@@ -11,7 +11,7 @@
 
 .dashboard .page-subheader {
   margin-bottom: 0;
-  color: #35393e;
+  color: var(--text);
   font-size: 15px;
 }
 
@@ -50,7 +50,7 @@
 }
 
 .dashboard-stats span {
-  color: #68717d;
+  color: var(--text-muted);
   font-size: 15px;
   font-weight: 650;
   text-transform: uppercase;
@@ -117,7 +117,7 @@
 }
 
 .funding-row > div:nth-of-type(3) strong {
-  color: #526b59;
+  color: var(--success-text);
 }
 
 .funding-arrow {
@@ -176,11 +176,11 @@
 }
 
 .judgment-counts .rejected-count strong {
-  color: #7b5555;
+  color: var(--danger-text);
 }
 
 .judgment-counts .accepted-count strong {
-  color: #526b59;
+  color: var(--success-text);
 }
 
 
@@ -206,7 +206,7 @@
 }
 
 .dashboard-bar-row > span {
-  color: #636d78;
+  color: var(--text-muted);
 }
 
 .dashboard-bar-row > strong {
@@ -218,26 +218,26 @@
   height: 12px;
   overflow: hidden;
   border-radius: 999px;
-  background: #edf0f3;
+  background: var(--chart-track);
 }
 
 .dashboard-bar-fill {
   height: 100%;
   min-width: 4px;
   border-radius: inherit;
-  background: #697584;
+  background: var(--chart-neutral);
 }
 
 .dashboard-bar-fill.accepted {
-  background: #5c8067;
+  background: var(--chart-success);
 }
 
 .dashboard-bar-fill.rejected {
-  background: #8b6363;
+  background: var(--chart-danger);
 }
 
 .dashboard-bar-fill.in-progress {
-  background: #7a718e;
+  background: var(--chart-progress);
 }
 
 
@@ -258,7 +258,7 @@
   align-self: center;
   margin: 18px 0 12px;
   border-radius: 50%;
-  background: conic-gradient(#5c8067 var(--value), #e8ecef 0deg);
+  background: conic-gradient(var(--chart-success) var(--value), var(--chart-track) 0deg);
 }
 
 .dashboard-donut::before {
@@ -267,7 +267,7 @@
   width: 94px;
   height: 94px;
   border-radius: 50%;
-  background: white;
+  background: var(--surface);
 }
 
 .dashboard-donut > div {
@@ -287,7 +287,7 @@
 
 .dashboard-donut span {
   margin-top: 2px;
-  color: #7a838e;
+  color: var(--text-muted);
   font-size: 13px;
 }
 
@@ -301,7 +301,7 @@
 }
 
 .dashboard-decision-breakdown strong {
-  color: #30363e;
+  color: var(--text);
 }
 
 
@@ -335,7 +335,7 @@
 
 .dashboard-list-meta > span:first-child {
   overflow: hidden;
-  color: #7d8590;
+  color: var(--text-muted);
   font-size: 15px;
   text-overflow: ellipsis;
 }

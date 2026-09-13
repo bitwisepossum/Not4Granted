@@ -7,7 +7,7 @@
     display: inline-block;
     width: 1rem;
 
-    color: #aaa;
+    color: var(--text-subtle);
     font-size: 1.1rem;
     line-height: 1;
 
@@ -19,17 +19,17 @@
 }
 
 .data-interactive:hover {
-    background: rgba(255, 255, 255, 0.035);
+    background: var(--surface-hover);
 }
 
 .data-interactive:hover .disclosure,
 .data-interactive.expanded .disclosure {
-    color: #060606;
+    color: var(--text);
     font-weight: 800;
 }
 
 .data-interactive.expanded {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--surface-muted);
 }
 
 .data-main {
@@ -37,7 +37,7 @@
 }
 
 .data-secondary {
-    color: #aaa;
+    color: var(--text-muted);
     font-size: 0.9rem;
 }
 
@@ -49,8 +49,8 @@
 
     padding: 1rem 1.25rem 1rem 3rem;
 
-    background: rgba(255, 255, 255, 0.02);
-    border-top: 1px solid #333;
+    background: var(--surface-muted);
+    border-top: 1px solid var(--border-subtle);
 }
 
 .data-details label,
@@ -61,7 +61,7 @@
 
 .data-details label > span,
 .data-details-field > span {
-    color: #aaa;
+    color: var(--text-muted);
     font-size: 0.8rem;
     font-weight: 600;
 }

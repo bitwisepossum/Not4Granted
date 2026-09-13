@@ -160,7 +160,7 @@
                     >
                         Delete
                     </button>
-                    {#if showDeleteConfirm}import { settingsState } from "../../../state/settings.svelte";
+                    {#if showDeleteConfirm}
                         <div class="confirm-backdrop">
                             <div
                                 class="confirm-dialog"

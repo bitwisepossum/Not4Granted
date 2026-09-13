@@ -193,18 +193,18 @@
     .data-table th {
         font-size: 0.8rem;
         font-weight: 600;
-        color: #999;
-        border-bottom: 1px solid #444;
+        color: var(--text-subtle);
+        border-bottom: 1px solid var(--border);
     }
 
     .data-row {
-        border-bottom: 1px solid #333;
+        border-bottom: 1px solid var(--border-subtle);
         cursor: pointer;
     }
 
     .data-row:hover,
     .data-row.expanded {
-        background: rgba(255, 255, 255, 0.03);
+        background: var(--surface-hover);
     }
 
     .manuscript-main {
@@ -218,7 +218,7 @@
 
     .manuscript-main span {
         font-size: 0.85rem;
-        color: #999;
+        color: var(--text-muted);
     }
 
     .data-table th:first-child,

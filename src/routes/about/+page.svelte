@@ -116,9 +116,9 @@
 
     .about-card {
         padding: 2rem;
-        border: 1px solid #333;
+        border: 1px solid var(--border);
         border-radius: 0.75rem;
-        background: white;
+        background: var(--surface);
     }
 
     .title-row {
@@ -133,7 +133,7 @@
 
     .version {
         font-size: 0.85rem;
-        color: #777;
+        color: var(--text-muted);
     }
 
     .intro p {
@@ -186,7 +186,7 @@
     .license {
         margin-top: 2rem;
         padding-top: 1rem;
-        border-top: 1px solid #ddd;
+        border-top: 1px solid var(--border);
         font-size: 0.9rem;
     }
 </style>
