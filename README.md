@@ -4,7 +4,7 @@ Not4Granted is a small desktop application for tracking research grant applicati
 
 The program is intended as a local, single-user tool for keeping track of grant deadlines, submission status, funding decisions, manuscript progress, and related notes.
 
-The project is also used as a learning project for Rust, Tauri, Svelte, and SQLite.
+The project is also used as a learning project for Rust, Tauri and Svelte.
 
 ## Instructions
 Source dev build can be run with instructions from [Tauri documentation](https://v2.tauri.app/start/prerequisites/). 
