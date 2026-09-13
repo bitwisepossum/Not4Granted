@@ -45,6 +45,7 @@ impl ManuscriptStatus {
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct NewGrant {
     pub name: String,
     pub funder: String,
@@ -109,6 +110,7 @@ pub struct Manuscript {
 #[derive(Debug, Deserialize, Default)]
 #[serde(rename_all = "camelCase", default)]
 pub struct GrantQuery {
+    pub id: Option<i64>,
     pub statuses: Vec<GrantStatus>,
     pub funders: Vec<String>,
     pub search: Option<String>,

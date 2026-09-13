@@ -76,6 +76,7 @@ export type GrantSort = "deadline" | "name" | "status" | "funder";
 export type sortDirection = "asc" | "desc";
 
 export interface GrantQuery {
+    id?: number;
     statuses?: GrantStatus[];
     funders?: string[];
     search?: string;

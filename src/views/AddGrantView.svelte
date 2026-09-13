@@ -67,6 +67,8 @@
             notes: notes.trim() || undefined
         };
 
+        console.log("Submitting grant:", grant);
+
         onSubmit(grant);
     }
 

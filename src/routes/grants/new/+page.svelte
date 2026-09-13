@@ -2,11 +2,15 @@
     import { goto } from "$app/navigation";
     import { addGrant } from "../../../components/api";
     import AddGrantView from "../../../views/AddGrantView.svelte";
-    import type { NewGrant, GrantStatus } from "../../../types";
+    import type { NewGrant } from "../../../types";
 
     async function handleSubmit(grant: NewGrant) {
-        await addGrant(grant);
-        await goto("/grants");
+        try {
+            await addGrant(grant);
+            goto("/grants");
+        } catch (err) {
+            console.error("Failed to add grant:", err);
+        }
     }
 
     function handleCancel() {

@@ -2,10 +2,10 @@
     import { page } from "$app/state";
     import { goto } from "$app/navigation";
     import "../../../styles/item.css";
-    import type { Grant, GrantStatus } from "../../../types";
+    import type { Grant, GrantQuery } from "../../../types";
     import { grantStatuses } from "../../../types";
     import { onMount } from "svelte";
-    import { getGrantById, updateGrant, deleteGrant } from "../../../components/api";
+    import { updateGrant, deleteGrant, getGrantById } from "../../../components/api";
     import { convertCurrency, formatDate } from "../../../components/format";
 
     let grant = $state<Grant | undefined>(undefined);
@@ -28,6 +28,7 @@
             }
 
             grant = await getGrantById(id);
+
             if (!grant) {
                 throw new Error("Grant not found");
             }
@@ -65,6 +66,7 @@
 
         await updateGrant(draft);
         grant = await getGrantById(id);
+        draft = $state.snapshot(grant);
         isEditing = false;
     }
 

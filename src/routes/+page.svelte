@@ -9,7 +9,7 @@
     let grants = $state<Grant[]>([]);
     let active_grants = $state<Grant[]>([]);
     let manuscripts = $state<Manuscript[]>([]);
-    let query = $state<GrantQuery>({
+    let active_grants_query = $state<GrantQuery>({
         statuses: ["Planning", "Submitted"],
         funders: [],
         search: undefined,
@@ -23,14 +23,12 @@
     onMount(async () => {
         try {
             grants = await getGrants();
-            active_grants = await getFilteredGrants(query);
+            active_grants = await getFilteredGrants(active_grants_query);
             manuscripts = await getManuscripts();
-            console.log("Grants:", grants); //debug
         } catch (err) {
             error = `Failed to load dashboard: ${err}`;
         } finally {
             isLoading = false;
-            console.log("Manuscripts:", manuscripts); //debug
         }
     });
 </script>

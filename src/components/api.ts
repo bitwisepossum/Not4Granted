@@ -4,16 +4,16 @@ import type { Grant, NewGrant, Manuscript, NewManuscript, GrantQuery, Settings }
 /*
     * API functions for Grants.
 */
-export async function addGrant(grant: NewGrant): Promise<Grant> {
-    return await invoke<Grant>("add_grant", { grant });
+export async function addGrant(
+    newGrant: NewGrant
+): Promise<Grant> {
+    return await invoke<Grant>("add_grant", {
+        newGrant
+    });
 }
 
 export async function getGrants(): Promise<Grant[]> {
     return await invoke<Grant[]>("get_grants");
-}
-
-export async function getGrantById(id: number): Promise<Grant | undefined> {
-    return await invoke<Grant | undefined>("get_grant_by_id", { grantId: id });
 }
 
 export async function updateGrant(grant: Grant): Promise<void> {
@@ -24,12 +24,12 @@ export async function deleteGrant(id: number): Promise<void> {
     return await invoke<void>("delete_grant", { grantId: id });
 }
 
-export async function getAcceptedGrants(): Promise<Grant[]> {
-    return await invoke<Grant[]>("get_accepted_grants");
-}
-
 export function getFilteredGrants(query: GrantQuery): Promise<Grant[]> {
     return invoke<Grant[]>("get_filtered_grants", {query});
+}
+
+export function getGrantById(id: number): Promise<Grant | undefined> {
+    return invoke<Grant | undefined>("get_grant_by_id", { grantId: id });
 }
 
 /*

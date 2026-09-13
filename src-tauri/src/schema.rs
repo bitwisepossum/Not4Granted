@@ -2,13 +2,13 @@
 
 diesel::table! {
     grant (id) {
-        id -> Nullable<Integer>,
+        id -> Nullable<BigInt>,
         name -> Text,
         funder -> Text,
         call_name -> Nullable<Text>,
         status -> Text,
-        amount_requested -> Nullable<Integer>,
-        amount_received -> Nullable<Integer>,
+        amount_requested -> Nullable<BigInt>,
+        amount_received -> Nullable<BigInt>,
         currency -> Text,
         deadline -> Nullable<Text>,
         submitted_at -> Nullable<Text>,
@@ -21,14 +21,14 @@ diesel::table! {
 
 diesel::table! {
     grant_manuscript (grant_id, manuscript_id) {
-        grant_id -> Integer,
-        manuscript_id -> Integer,
+        grant_id -> BigInt,
+        manuscript_id -> BigInt,
     }
 }
 
 diesel::table! {
     manuscript (id) {
-        id -> Nullable<Integer>,
+        id -> Nullable<BigInt>,
         title -> Text,
         short_name -> Nullable<Text>,
         journal -> Nullable<Text>,
