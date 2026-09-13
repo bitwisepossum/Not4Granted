@@ -323,10 +323,10 @@ pub fn get_filtered_grants(database_url: &str, request: &GrantQuery) -> Result<V
         .map(String::as_str)
         .collect();
 
-    statement = statement.filter(
-        grant::funder.eq_any(funders)
-    );
-}
+        statement = statement.filter(
+            grant::funder.eq_any(funders)
+        );
+    }
 
     // Search term filtering
     if let Some(search_term) = request.search.as_deref().map(str::trim).filter(|search|!search.is_empty()) {
@@ -525,6 +525,19 @@ pub fn get_filtered_manuscripts(database_url: &str, request: &ManuscriptQuery) -
                 .or(manuscript::short_name.like(like_pattern.clone()))
                 .or(manuscript::journal.like(like_pattern.clone()))
                 .or(manuscript::doi.like(like_pattern.clone()))
+        );
+    }
+
+        // Journal filtering
+    if !request.journals.is_empty() {
+        let journals: Vec<&str> = request
+            .journals
+            .iter()
+            .map(String::as_str)
+            .collect(); 
+
+        statement = statement.filter(
+            manuscript::journal.eq_any(journals)
         );
     }
 

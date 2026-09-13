@@ -157,6 +157,7 @@ pub struct ManuscriptQuery {
     pub id: Option<i64>,
     pub statuses: Vec<ManuscriptStatus>,
     pub search: Option<String>,
+    pub journals: Vec<String>,
     pub sort_by: ManuscriptSort,
     pub sort_direction: SortDirection,
 }
