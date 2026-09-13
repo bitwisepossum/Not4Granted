@@ -212,6 +212,12 @@
             </section>
         </div>
 
+        <header class="page-subheader">
+            <div>
+                <h2>Grant statistics</h2>
+            </div>
+        </header>
+
         <div class="dashboard-stats">
             <article>
                 <span>Applied</span>
@@ -340,11 +346,16 @@
             </section>
         </div>
 
+        <header class="page-subheader">
+            <div>
+                <h2>Manuscript outcomes</h2>
+            </div>
+        </header>
+
         <section class="panel dashboard-manuscript-outcomes">
             <div class="panel-heading">
                 <div>
-                    <h2>Manuscript outcomes</h2>
-                    <p>Current publication status across tracked manuscripts.</p>
+                    <h2>Current publication status across tracked manuscripts.</h2>
                 </div>
             </div>
 

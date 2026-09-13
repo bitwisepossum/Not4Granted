@@ -9,6 +9,12 @@
   margin-bottom: 0;
 }
 
+.dashboard .page-subheader {
+  margin-bottom: 0;
+  color: #35393e;
+  font-size: 15px;
+}
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.8fr);
