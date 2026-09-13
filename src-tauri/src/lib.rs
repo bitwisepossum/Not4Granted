@@ -1,6 +1,5 @@
 mod db;
 mod models;
-mod diesel_db;
 mod schema;
 mod settings;
 
@@ -13,8 +12,6 @@ use models::{
     ManuscriptQuery, 
 };
 
-use crate::{diesel_db::GrantRow, schema::grant};
-
 const DATABASE_URL: &str = "db-diesel.sqlite3";
 
 /**
@@ -23,7 +20,7 @@ const DATABASE_URL: &str = "db-diesel.sqlite3";
 
 #[tauri::command]
 fn get_filtered_grants(query: GrantQuery) -> Result<Vec<Grant>, String> {
-    diesel_db::get_filtered_grants(
+    db::get_filtered_grants(
         DATABASE_URL,
         &query,
     )
@@ -31,7 +28,7 @@ fn get_filtered_grants(query: GrantQuery) -> Result<Vec<Grant>, String> {
 
 #[tauri::command]
 fn get_grant_by_id(grant_id: i64) -> Result<Grant, String> {
-    diesel_db::get_grant_by_id(DATABASE_URL, grant_id)
+    db::get_grant_by_id(DATABASE_URL, grant_id)
         .and_then(|grant| {
             grant.ok_or_else(|| format!("Grant with id {} not found", grant_id))
         })
@@ -39,27 +36,27 @@ fn get_grant_by_id(grant_id: i64) -> Result<Grant, String> {
 
 #[tauri::command]
 fn get_all_grants() -> Result<Vec<Grant>, String> {
-    diesel_db::get_all_grants(DATABASE_URL)
+    db::get_all_grants(DATABASE_URL)
 }
 
 #[tauri::command]
 fn update_grant(grant: Grant) -> Result<(), String> {
-    diesel_db::update_grant(DATABASE_URL, &grant)
+    db::update_grant(DATABASE_URL, &grant)
 }
 
 #[tauri::command]
 fn delete_grant(grant_id: i64) -> Result<(), String> {
-    diesel_db::delete_grant(DATABASE_URL, grant_id)
+    db::delete_grant(DATABASE_URL, grant_id)
 }
 
 #[tauri::command]
 fn add_grant(new_grant: NewGrant) -> Result<Grant, String> {
-    diesel_db::add_grant(DATABASE_URL, &new_grant)
+    db::add_grant(DATABASE_URL, &new_grant)
 }
 
 #[tauri::command]
 fn get_grants() -> Result<Vec<Grant>, String> {
-    diesel_db::get_all_grants(DATABASE_URL)
+    db::get_all_grants(DATABASE_URL)
 }
 
 /**
@@ -68,7 +65,7 @@ fn get_grants() -> Result<Vec<Grant>, String> {
 
 #[tauri::command]
 fn get_filtered_manuscripts(query: ManuscriptQuery) -> Result<Vec<Manuscript>, String> {
-    diesel_db::get_filtered_manuscripts(
+    db::get_filtered_manuscripts(
         DATABASE_URL,
         &query,
     )
@@ -76,7 +73,7 @@ fn get_filtered_manuscripts(query: ManuscriptQuery) -> Result<Vec<Manuscript>, S
 
 #[tauri::command]
 fn get_manuscript_by_id(manuscript_id: i64) -> Result<Manuscript, String> {
-    diesel_db::get_manuscript_by_id(DATABASE_URL, manuscript_id)
+    db::get_manuscript_by_id(DATABASE_URL, manuscript_id)
         .and_then(|manuscript| {
             manuscript.ok_or_else(|| format!("Manuscript with id {} not found", manuscript_id))
         })
@@ -84,27 +81,27 @@ fn get_manuscript_by_id(manuscript_id: i64) -> Result<Manuscript, String> {
 
 #[tauri::command]
 fn get_all_manuscripts() -> Result<Vec<Manuscript>, String> {
-    diesel_db::get_all_manuscripts(DATABASE_URL)
+    db::get_all_manuscripts(DATABASE_URL)
 }
 
 #[tauri::command]
 fn update_manuscript(manuscript: Manuscript) -> Result<(), String> {
-    diesel_db::update_manuscript(DATABASE_URL, &manuscript)
+    db::update_manuscript(DATABASE_URL, &manuscript)
 }
 
 #[tauri::command]
 fn delete_manuscript(manuscript_id: i64) -> Result<(), String> {
-    diesel_db::delete_manuscript(DATABASE_URL, manuscript_id)
+    db::delete_manuscript(DATABASE_URL, manuscript_id)
 }
 
 #[tauri::command]
 fn add_manuscript(new_manuscript: NewManuscript) -> Result<Manuscript, String> {
-    diesel_db::add_manuscript(DATABASE_URL, &new_manuscript)
+    db::add_manuscript(DATABASE_URL, &new_manuscript)
 }
 
 #[tauri::command]
 fn get_manuscripts() -> Result<Vec<Manuscript>, String> {
-    diesel_db::get_all_manuscripts(DATABASE_URL)
+    db::get_all_manuscripts(DATABASE_URL)
 }
 
 /**
@@ -131,6 +128,14 @@ fn save_settings(
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .setup(|_app| {
+            db::initialize_database(DATABASE_URL)
+                .map_err(|e| {
+                    eprintln!("Failed to initialize database: {}", e);
+                    e
+                })?;
+            Ok(())
+        })
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             add_grant, 

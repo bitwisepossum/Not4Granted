@@ -26,6 +26,7 @@ rusqlite = { version = "0.40.2", features = ["bundled"] }
 diesel = { version = "2.3.13", default-features = false, features = ["sqlite"] }
 toml = "1.1.6"
 num-bigint = "0.5.1"
+diesel_migrations = { version = "2.3", features = ["sqlite"] }
 
 # Read the optimization guideline for more details: https://tauri.app/concept/size/#cargo-configuration
 [profile.release]

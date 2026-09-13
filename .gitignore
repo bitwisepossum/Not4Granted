@@ -69,3 +69,4 @@ TODO.md
 src-tauri/db.sqlite3
 src-tauri/perf.data
 src-tauri/db-diesel.sqlite3
+src-tauri/db_backup.sqlite3
