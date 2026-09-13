@@ -7,6 +7,7 @@
     import { onMount } from "svelte";
     import { getManuscriptById, updateManuscript, deleteManuscript } from "../../../components/api";
 
+    import { settingsState } from "../../../state/settings.svelte";
 
     let manuscript = $state<Manuscript | undefined>(undefined);
     let draft = $state<Manuscript | undefined>(undefined);
@@ -15,6 +16,8 @@
     let error = $state<string | undefined>(undefined);
     let showDeleteConfirm = $state(false);
     let isDeleting = $state(false);
+
+    console.log("Settings state:", settingsState.current.currency, settingsState.current.locale, settingsState.current.theme);
 
     const routeId = $derived(page.params.id);
 

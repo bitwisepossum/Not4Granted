@@ -1,47 +1,17 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-    import { getSettings, saveSettings } from "../../components/api";
+    import { settingsState } from "../../state/settings.svelte";
     import type { Settings } from "../../types";
     import SettingsView from "../../views/SettingsView.svelte";
 
-    let settings = $state<Settings | null>(null);
-    let loading = $state(true);
-    let saving = $state(false);
-    let error = $state<string | null>(null);
     let savedMessage = $state<string | null>(null);
 
-    onMount(async () => {
-        try {
-            settings = await getSettings();
-        } catch (caughtError) {
-            error = errorMessage(caughtError);
-        } finally {
-            loading = false;
-        }
-    });
-
     async function handleSave(updatedSettings: Settings): Promise<boolean> {
-        saving = true;
-        error = null;
         savedMessage = null;
 
-        try {
-            settings = await saveSettings(updatedSettings);
-            savedMessage = "Settings saved.";
+        await settingsState.save(updatedSettings);
+        savedMessage = "Settings saved.";
 
-            // TODO: Apply application-wide settings here, or update a shared
-            // settings store/context that +layout.svelte owns.
-            return true;
-        } catch (caughtError) {
-            error = errorMessage(caughtError);
-            return false;
-        } finally {
-            saving = false;
-        }
-    }
-
-    function errorMessage(error: unknown): string {
-        return error instanceof Error ? error.message : String(error);
+        return true;
     }
 </script>
 
@@ -57,19 +27,19 @@
         </div>
     </header>
 
-    {#if loading}
+    {#if !settingsState.loaded && !settingsState.error}
         <p class="status-message">Loading settings…</p>
-    {:else if settings}
+    {:else if settingsState.loaded}
         <SettingsView
-            {settings}
-            {saving}
-            {error}
+            settings={settingsState.current}
+            saving={settingsState.saving}
+            error={settingsState.error}
             {savedMessage}
             onsave={handleSave}
         />
     {:else}
         <div class="error-message" role="alert">
-            <p>{error ?? "Settings could not be loaded."}</p>
+            <p>{settingsState.error ?? "Settings could not be loaded."}</p>
             <!-- TODO: Add a retry button that runs the loading function again. -->
         </div>
     {/if}

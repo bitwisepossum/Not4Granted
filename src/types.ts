@@ -162,6 +162,6 @@ export type Theme = keyof typeof ThemeName;
 export type Settings = {
     locale: Locale;
     theme: Theme;
-    version: string;
+    version: number;
     currency: string;
 };
