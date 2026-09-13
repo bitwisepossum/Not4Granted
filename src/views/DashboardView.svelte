@@ -54,6 +54,53 @@
               )
     );
 
+    const fundingTotals = $derived.by(() => {
+        const totals = new Map<
+            string,
+            { requested: number; granted: number }
+        >();
+
+        for (const grant of grants) {
+            const currency = grant.currency || "EUR";
+            const current = totals.get(currency) ?? {
+                requested: 0,
+                granted: 0
+            };
+
+            current.requested += grant.amountRequested ?? 0;
+            current.granted += grant.amountReceived ?? 0;
+            totals.set(currency, current);
+        }
+
+        return [...totals.entries()]
+            .map(([currency, amounts]) => ({ currency, ...amounts }))
+            .sort((a, b) => a.currency.localeCompare(b.currency));
+    });
+
+    const submittedManuscripts = $derived(
+        manuscripts.filter((manuscript) => manuscript.status === "Submitted")
+    );
+
+    const rejectedManuscripts = $derived(
+        manuscripts.filter((manuscript) => manuscript.status === "Rejected")
+    );
+
+    const acceptedOrPublishedManuscripts = $derived(
+        manuscripts.filter(
+            (manuscript) =>
+                manuscript.status === "Accepted" ||
+                manuscript.status === "Published"
+        )
+    );
+
+    function formatAmount(amount: number, currency: string): string {
+        return new Intl.NumberFormat(undefined, {
+            style: "currency",
+            currency,
+            maximumFractionDigits: 0
+        }).format(amount / 100);
+    }
+
     function statusClass(status: string): string {
         return status.toLowerCase();
     }
@@ -83,6 +130,88 @@
             <p>{error}</p>
         </div>
     {:else}
+        <div class="dashboard-lists">
+            <section class="panel dashboard-list-panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Active grants</h2>
+                        <p>Currently {active_grants.length} grant applications are pending.</p>
+                    </div>
+
+                    <a class="button-link" href="/grants">
+                        View all
+                    </a>
+                </div>
+
+                {#if active_grants.length === 0}
+                    <div class="empty-state">
+                        <h2>No active grants</h2>
+                        <p>Nothing is currently awaiting either paperwork or judgment.</p>
+                    </div>
+                {:else}
+                    {#each active_grants as grant}
+                        <a
+                            class="list-row dashboard-list-row"
+                            href={`/grants/${grant.id}`}
+                        >
+                            <div class="dashboard-list-primary">
+                                <strong>{grant.name}</strong>
+                                <span>{grant.funder}</span>
+                            </div>
+
+                            <div class="dashboard-list-meta">
+                                <span>{grant.deadline ?? "No deadline"}</span>
+                                <span class={`status ${statusClass(grant.status)}`}>
+                                    {grant.status}
+                                </span>
+                            </div>
+                        </a>
+                    {/each}
+                {/if}
+            </section>
+
+            <section class="panel dashboard-list-panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Active manuscripts</h2>
+                        <p>Currently {active_manuscripts.length} manuscripts are in progress.</p>
+                    </div>
+
+                    <a class="button-link" href="/manuscripts">
+                        View all
+                    </a>
+                </div>
+
+                {#if active_manuscripts.length === 0}
+                    <div class="empty-state">
+                        <h2>No active manuscripts</h2>
+                        <p>An unusual and potentially medically significant calm.</p>
+                    </div>
+                {:else}
+                    {#each active_manuscripts as manuscript}
+                        <a
+                            class="list-row dashboard-list-row"
+                            href={`/manuscripts/${manuscript.id}`}
+                        >
+                            <div class="dashboard-list-primary">
+                                <strong class="dashboard-manuscript-title">
+                                    {manuscript.title}
+                                </strong>
+                                <span>{manuscript.journal ?? "No journal selected"}</span>
+                            </div>
+
+                            <div class="dashboard-list-meta">
+                                <span>{manuscript.nextAction ?? "No next action"}</span>
+                                <span class={`status ${statusClass(manuscript.status)}`}>
+                                    {manuscript.status}
+                                </span>
+                            </div>
+                        </a>
+                    {/each}
+                {/if}
+            </section>
+        </div>
+
         <div class="dashboard-stats">
             <article>
                 <span>Applied</span>
@@ -157,6 +286,26 @@
                         <strong>{rejectedGrants.length}</strong>
                     </div>
                 </div>
+
+                <div class="funding-ledger">
+                    {#if fundingTotals.length === 0}
+                        <p class="outcome-empty">No funding amounts recorded.</p>
+                    {:else}
+                        {#each fundingTotals as total}
+                            <div class="funding-row">
+                                <div>
+                                    <span>Requested</span>
+                                    <strong>{formatAmount(total.requested, total.currency)}</strong>
+                                </div>
+
+                                <div>
+                                    <span>Awarded</span>
+                                    <strong>{formatAmount(total.granted, total.currency)}</strong>
+                                </div>
+                            </div>
+                        {/each}
+                    {/if}
+                </div>
             </section>
 
             <section class="panel dashboard-success-panel">
@@ -191,86 +340,36 @@
             </section>
         </div>
 
-        <div class="dashboard-lists">
-            <section class="panel dashboard-list-panel">
-                <div class="panel-heading">
-                    <div>
-                        <h2>Active grants</h2>
-                        <p>Planning and submitted applications.</p>
-                    </div>
-
-                    <a class="button-link" href="/grants">
-                        View all
-                    </a>
+        <section class="panel dashboard-manuscript-outcomes">
+            <div class="panel-heading">
+                <div>
+                    <h2>Manuscript outcomes</h2>
+                    <p>Current publication status across tracked manuscripts.</p>
                 </div>
+            </div>
 
-                {#if active_grants.length === 0}
-                    <div class="empty-state">
-                        <h2>No active grants</h2>
-                        <p>Nothing is currently awaiting either paperwork or judgment.</p>
-                    </div>
-                {:else}
-                    {#each active_grants as grant}
-                        <a
-                            class="list-row dashboard-list-row"
-                            href={`/grants/${grant.id}`}
-                        >
-                            <div class="dashboard-list-primary">
-                                <strong>{grant.name}</strong>
-                                <span>{grant.funder}</span>
-                            </div>
-
-                            <div class="dashboard-list-meta">
-                                <span>{grant.deadline ?? "No deadline"}</span>
-                                <span class={`status ${statusClass(grant.status)}`}>
-                                    {grant.status}
-                                </span>
-                            </div>
-                        </a>
-                    {/each}
-                {/if}
-            </section>
-
-            <section class="panel dashboard-list-panel">
-                <div class="panel-heading">
+            <div class="manuscript-judgment">
+                <div class="judgment-counts">
                     <div>
-                        <h2>Manuscripts</h2>
-                        <p>Current writing and publication pipeline.</p>
+                        <strong>{submittedManuscripts.length}</strong>
+                        <span>Submitted</span>
+                        <small>Pending external assessment</small>
                     </div>
 
-                    <a class="button-link" href="/manuscripts">
-                        View all
-                    </a>
+                    <div class="rejected-count">
+                        <strong>{rejectedManuscripts.length}</strong>
+                        <span>Rejected</span>
+                        <small>Professional development</small>
+                    </div>
+
+                    <div class="accepted-count">
+                        <strong>{acceptedOrPublishedManuscripts.length}</strong>
+                        <span>Accepted + published</span>
+                        <small>Converted to research output</small>
+                    </div>
                 </div>
+            </div>
+        </section>
 
-                {#if active_manuscripts.length === 0}
-                    <div class="empty-state">
-                        <h2>No active manuscripts</h2>
-                        <p>An unusual and potentially medically significant calm.</p>
-                    </div>
-                {:else}
-                    {#each active_manuscripts as manuscript}
-                        <a
-                            class="list-row dashboard-list-row"
-                            href={`/manuscripts/${manuscript.id}`}
-                        >
-                            <div class="dashboard-list-primary">
-                                <strong class="dashboard-manuscript-title">
-                                    {manuscript.title}
-                                </strong>
-                                <span>{manuscript.journal ?? "No journal selected"}</span>
-                            </div>
-
-                            <div class="dashboard-list-meta">
-                                <span>{manuscript.nextAction ?? "No next action"}</span>
-                                <span class={`status ${statusClass(manuscript.status)}`}>
-                                    {manuscript.status}
-                                </span>
-                            </div>
-                        </a>
-                    {/each}
-                {/if}
-            </section>
-        </div>
     {/if}
 </section>

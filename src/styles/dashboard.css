@@ -62,17 +62,133 @@
 }
 
 
+/* ===== Funding and manuscript outcomes ===== */
+
+.funding-ledger,
+.manuscript-judgment {
+  padding: 20px;
+}
+
+.dashboard-chart-panel .funding-ledger {
+  padding: 14px 20px 16px;
+  border-top: 1px solid var(--border-soft);
+  background: var(--surface-muted);
+}
+
+.funding-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: end;
+  padding: 12px 0;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.funding-row:first-of-type {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.funding-row span,
+.funding-row strong {
+  display: block;
+}
+
+.funding-row span,
+.funding-row small {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.funding-row strong {
+  margin-top: 4px;
+  font-size: clamp(20px, 2vw, 29px);
+  font-variant-numeric: tabular-nums;
+}
+
+.dashboard-chart-panel .funding-row strong {
+  font-size: 18px;
+}
+
+.funding-row > div:nth-of-type(3) strong {
+  color: #526b59;
+}
+
+.funding-arrow {
+  padding-bottom: 5px;
+  color: var(--text-subtle);
+}
+
+.funding-row > small {
+  padding-bottom: 6px;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+
+.outcome-empty {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.judgment-counts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.judgment-counts > div {
+  min-width: 0;
+  padding: 3px 16px;
+  border-left: 1px solid var(--border-soft);
+}
+
+.judgment-counts > div:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.judgment-counts strong,
+.judgment-counts span,
+.judgment-counts small {
+  display: block;
+}
+
+.judgment-counts strong {
+  margin-bottom: 6px;
+  font-size: 31px;
+  font-variant-numeric: tabular-nums;
+}
+
+.judgment-counts span {
+  min-height: 34px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.judgment-counts small {
+  margin-top: 5px;
+  color: var(--text-subtle);
+  font-size: 11px;
+}
+
+.judgment-counts .rejected-count strong {
+  color: #7b5555;
+}
+
+.judgment-counts .accepted-count strong {
+  color: #526b59;
+}
+
+
 /* ===== Grant status chart ===== */
 
 .dashboard-chart-panel,
 .dashboard-success-panel {
-  min-height: 280px;
+  min-height: 0;
 }
 
 .dashboard-bar-chart {
   display: grid;
-  gap: 17px;
-  padding: 24px 20px 26px;
+  gap: 13px;
+  padding: 18px 20px;
 }
 
 .dashboard-bar-row {
@@ -130,11 +246,11 @@
   --value: 0deg;
 
   display: grid;
-  width: 150px;
-  height: 150px;
+  width: 132px;
+  height: 132px;
   place-items: center;
   align-self: center;
-  margin: 24px 0 16px;
+  margin: 18px 0 12px;
   border-radius: 50%;
   background: conic-gradient(#5c8067 var(--value), #e8ecef 0deg);
 }
@@ -142,8 +258,8 @@
 .dashboard-donut::before {
   content: "";
   grid-area: 1 / 1;
-  width: 108px;
-  height: 108px;
+  width: 94px;
+  height: 94px;
   border-radius: 50%;
   background: white;
 }
@@ -173,7 +289,7 @@
   display: flex;
   justify-content: center;
   gap: 18px;
-  padding: 0 18px 22px;
+  padding: 0 18px 16px;
   color: var(--text-muted);
   font-size: 13px;
 }
@@ -263,5 +379,34 @@
     min-width: 0;
     max-width: none;
     text-align: left;
+  }
+
+  .funding-row {
+    grid-template-columns: 1fr 1fr auto;
+  }
+
+  .funding-arrow {
+    display: none;
+  }
+
+  .judgment-counts {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .judgment-counts > div,
+  .judgment-counts > div:first-child {
+    padding: 12px 0 0;
+    border-top: 1px solid var(--border-soft);
+    border-left: 0;
+  }
+
+  .judgment-counts > div:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .judgment-counts span {
+    min-height: 0;
   }
 }

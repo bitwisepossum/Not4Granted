@@ -20,7 +20,7 @@
     });
 
     let active_manuscripts_query = $state<ManuscriptQuery>({
-        statuses: ["Idea", "Drafting", "Submitted", "Revision"],
+        statuses: ["Idea", "Drafting", "Submitted", "Revision", "Accepted"],
         search: undefined,
         sortBy: undefined,
         sortDirection: undefined
