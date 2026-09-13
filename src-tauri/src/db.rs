@@ -2,6 +2,7 @@ use diesel::connection::SimpleConnection;
 use diesel::{prelude::*};
 use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use diesel::sqlite::Sqlite;
+use diesel::sql_types::Integer;
 use std::path::Path;
 use crate::schema::grant;
 use crate::schema::manuscript;
@@ -47,21 +48,125 @@ pub fn initialize_database(database_url: &str) -> Result<(), String> {
         {
             std::fs::create_dir_all(parent)
                 .map_err(|e| {
-    format!("Failed to create database directory '{}': {e}",
-        parent.display())
-                })?;
+                format!("Failed to create database directory '{}': {e}", parent.display())
+            })?;
         }
 
     let mut connection = establish_connection(database_url)
         .map_err(|e| {
-            format!("Failed to open database ' {}': {e}", database_path.display())
+            format!(
+                "Failed to open database '{}': {e}",
+                database_path.display()
+            )
         })?;
+
+    let legacy_version =
+        get_legacy_database_version(&mut connection)?;
+
+    match legacy_version {
+        0 => {
+            // Fresh database or already managed by Diesel.
+        }
+
+        1 => {
+            // Database created by the old Rusqlite initializer.
+            verify_legacy_schema(&mut connection)?;
+        }
+
+        version => {
+            return Err(format!(
+                "Unsupported legacy database version: {version}"
+            ));
+        }
+    }
 
     connection
         .run_pending_migrations(MIGRATIONS)
-        .map_err(|e| format!("Failed to run migrations: {e}"))?;
+        .map_err(|e| {
+            format!("Failed to run migrations: {e}")
+        })?;
 
-    Ok(())            
+    if legacy_version == 1 {
+        connection
+            .batch_execute("PRAGMA user_version = 0;")
+            .map_err(|e| {
+                format!(
+                    "Failed to clear the legacy database version: {e}"
+                )
+            })?;
+    }
+
+    Ok(())
+}         
+
+/*
+    Legacy SQLite database conversion
+*/
+#[derive(QueryableByName)]
+struct UserVersion {
+    #[diesel(sql_type = Integer)]
+    user_version: i32,
+}
+
+fn get_legacy_database_version(connection: &mut SqliteConnection,) -> Result<i32, String> {
+    diesel::sql_query("PRAGMA user_version")
+        .get_result::<UserVersion>(connection)
+        .map(|result| result.user_version)
+        .map_err(|e| e.to_string())
+}
+
+fn verify_legacy_schema(connection: &mut SqliteConnection,) -> Result<(), String> {
+    connection
+        .batch_execute(
+            r#"
+            SELECT
+                id,
+                name,
+                funder,
+                call_name,
+                status,
+                amount_requested,
+                amount_received,
+                currency,
+                deadline,
+                submitted_at,
+                decision_at,
+                notes,
+                created_at,
+                updated_at
+            FROM grant
+            LIMIT 0;
+
+            SELECT
+                id,
+                title,
+                short_name,
+                journal,
+                status,
+                next_action,
+                submitted_at,
+                decision_at,
+                published_at,
+                doi,
+                notes,
+                created_at,
+                updated_at
+            FROM manuscript
+            LIMIT 0;
+
+            SELECT
+                grant_id,
+                manuscript_id
+            FROM grant_manuscript
+            LIMIT 0;
+            "#,
+        )
+        .map_err(|e| {
+            format!(
+                "The existing database claims to be N4G schema version 1, \
+                 but its structure does not match that version: {e}"
+            )
+        })
 }
 
 /*
