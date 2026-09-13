@@ -60,7 +60,7 @@ pub struct GrantQuery {
     pub funders: Vec<String>,
     pub search: Option<String>,
     pub sort_by: GrantSort,
-    pub direction: SortDirection,
+    pub sort_direction: SortDirection,
 }
 
 #[derive(Debug, Deserialize, Default)]
@@ -158,7 +158,7 @@ pub struct ManuscriptQuery {
     pub statuses: Vec<ManuscriptStatus>,
     pub search: Option<String>,
     pub sort_by: ManuscriptSort,
-    pub direction: SortDirection,
+    pub sort_direction: SortDirection,
 }
 
 #[derive(Debug, Deserialize, Default)]

@@ -24,7 +24,7 @@
         try {
             const id = Number(routeId);
             if (!Number.isInteger(id)) {
-                throw new Error("Invalid grant IDqqqqqqqqqqqqqqqqqqqqqqqq");
+                throw new Error("Invalid grant ID");
             }
 
             grant = await getGrantById(id);
@@ -64,8 +64,19 @@
             throw new Error("Invalid grant ID");
         }
 
+        draft.amountReceived = draft?.amountReceived === undefined ? undefined : convertCurrency(draft.amountReceived, true);
+        draft.amountRequested = draft?.amountRequested === undefined ? undefined : convertCurrency(draft.amountRequested, true);
+
         await updateGrant(draft);
-        grant = await getGrantById(id);
+        const refreshedGrant = await getGrantById(id);
+        if (!refreshedGrant) {
+            throw new Error(`Grant ${id} not found after saving`);
+        }
+        grant = refreshedGrant;
+
+        grant.amountReceived = grant.amountReceived === undefined ? undefined : convertCurrency(grant.amountReceived, false);
+        grant.amountRequested = grant.amountRequested === undefined ? undefined : convertCurrency(grant.amountRequested, false);
+
         draft = $state.snapshot(grant);
         isEditing = false;
     }

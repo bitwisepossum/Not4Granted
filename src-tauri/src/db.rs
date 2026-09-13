@@ -97,7 +97,7 @@ pub fn initialize_database(database_url: &str) -> Result<(), String> {
     }
 
     Ok(())
-}         
+}
 
 /*
     Legacy SQLite database conversion
@@ -216,7 +216,6 @@ pub fn get_all_grants(database_url: &str) -> Result<Vec<Grant>, String> {
     let mut connection = establish_connection(database_url).map_err(|e| e.to_string())?;
 
     let rows = grant::table
-        .order(grant::name.asc())
         .select(GrantRow::as_select())
         .load::<GrantRow>(&mut connection)
         .map_err(|e| e.to_string())?;
@@ -340,7 +339,7 @@ pub fn get_filtered_grants(database_url: &str, request: &GrantQuery) -> Result<V
     }
 
     // Sorting
-    statement = match (&request.sort_by, &request.direction,) {
+    statement = match (&request.sort_by, &request.sort_direction,) {
         (GrantSort::Deadline,   SortDirection::Asc) =>  {statement.order(grant::deadline.asc())}
         (GrantSort::Deadline,   SortDirection::Desc) => {statement.order(grant::deadline.desc())}
         (GrantSort::Name,       SortDirection::Asc) =>  {statement.order(grant::name.asc())}
@@ -352,7 +351,6 @@ pub fn get_filtered_grants(database_url: &str, request: &GrantQuery) -> Result<V
     };
 
     let rows = statement
-        .order(grant::name.asc())
         .select(GrantRow::as_select())
         .load::<GrantRow>(&mut connection)
         .map_err(|e| e.to_string())?;
@@ -531,7 +529,7 @@ pub fn get_filtered_manuscripts(database_url: &str, request: &ManuscriptQuery) -
     }
 
     // Sorting
-    statement = match (&request.sort_by, &request.direction) {
+    statement = match (&request.sort_by, &request.sort_direction) {
         (ManuscriptSort::Title,     SortDirection::Asc) =>  statement.order(manuscript::title.asc()),
         (ManuscriptSort::Title,     SortDirection::Desc) => statement.order(manuscript::title.desc()),
         (ManuscriptSort::Status,    SortDirection::Asc) =>  statement.order(manuscript::status.asc()),
