@@ -12,6 +12,11 @@ const SETTINGS_DIR: &str = "not4granted";
 pub enum Theme {
     Light,
     Dark,
+    Gruvbox,
+    Catppuccin,
+    Tokyonight,
+    Terminal3270,
+    VoidGirl,
     System,
 }
 
