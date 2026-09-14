@@ -8,10 +8,28 @@
     async function handleSave(updatedSettings: Settings): Promise<boolean> {
         savedMessage = null;
 
-        await settingsState.save(updatedSettings);
-        savedMessage = "Settings saved.";
+        try {
+            await settingsState.save(updatedSettings);
+            savedMessage = "Settings saved.";
+            return true;
+        } catch (error) {
+            return false; // settingState already sets error
+        } finally {
+            settingsState.saving = false;
+        }
+    }
 
-        return true;
+    async function handleRestoreDefaults(): Promise<void> {
+        const saved = await handleSave({
+            version: 1,
+            theme: "system",
+            currency: "USD",
+            locale: "en-US"
+        });
+
+        if (saved) {
+            savedMessage = "Settings restored to defaults.";
+        }
     }
 </script>
 
@@ -27,9 +45,7 @@
         </div>
     </header>
 
-    {#if !settingsState.loaded && !settingsState.error}
-        <p class="status-message">Loading settings…</p>
-    {:else if settingsState.loaded}
+    {#if settingsState.loaded}
         <SettingsView
             settings={settingsState.current}
             saving={settingsState.saving}
@@ -37,10 +53,24 @@
             {savedMessage}
             onsave={handleSave}
         />
+    {:else if settingsState.loading}
+        <p class="status-message">Loading settings…</p>
     {:else}
         <div class="error-message" role="alert">
             <p>{settingsState.error ?? "Settings could not be loaded."}</p>
-            <!-- TODO: Add a retry button that runs the loading function again. -->
+            <p>
+                Restore defaults to replace the existing configuration
+                and reopen settings.
+            </p>
+
+            <button
+                class="secondary-button"
+                type="button"
+                disabled={settingsState.saving}
+                onclick={handleRestoreDefaults}
+            >
+                {settingsState.saving ? "Restoring…" : "Restore default settings"}
+            </button>
         </div>
     {/if}
 </section>
