@@ -1,9 +1,10 @@
 <script lang="ts">
     import "../styles/app.css";
     import "../styles/data-view.css";
-    import type { Manuscript, ManuscriptStatus } from "../types";
+    import { manuscriptStatuses, type Manuscript, type ManuscriptStatus} from "../types";
     import { formatDate } from "../components/format";
     import { settingsState } from "../state/settings.svelte";
+    import { getFilteredManuscripts, getManuscripts } from "../components/api";
 
     let {
         manuscripts
@@ -12,7 +13,14 @@
     } = $props();
 
     let expandedManuscriptId = $state<number | undefined>(undefined);
-    let selectedStatus = $state<ManuscriptStatus>("Idea");
+
+    let filterQuery = $state({
+        search: "",
+        statuses: [] as ManuscriptStatus[],
+        journal: "",
+        sortBy: "title" as const,
+        sortDirection: "asc" as const
+    });
 
     function toggleManuscript(
         id: number,
@@ -22,12 +30,38 @@
             expandedManuscriptId = undefined;
         } else {
             expandedManuscriptId = id;
-            selectedStatus = status;
         }
     }
 
     function statusClass(status: string): string {
         return status.toLowerCase();
+    }
+
+    async function handleFilterSubmit(event: SubmitEvent) {      
+        event.preventDefault();
+    
+        const query = {
+            statuses: filterQuery.statuses,
+            journal: filterQuery.journal,
+            search: filterQuery.search,
+            sortBy: filterQuery.sortBy,
+            sortDirection: filterQuery.sortDirection
+        };
+
+        manuscripts = await getFilteredManuscripts(query);
+
+        console.log("Filter applied:", query);
+    }
+
+    async function handleFilterReset() {
+        filterQuery = {
+            search: "",
+            statuses: [] as ManuscriptStatus[],
+            journal: "",
+            sortBy: "title" as const,
+            sortDirection: "asc" as const
+        };
+        manuscripts = await getManuscripts();
     }
 </script>
 
@@ -42,6 +76,69 @@
             Add manuscript
         </a>
     </header>
+
+    <form class="filter-bar" onsubmit={handleFilterSubmit} onreset={handleFilterReset}>
+        <label class="filter-search">
+            <span class="visually-hidden">Search manuscripts</span>
+            <input
+                type="search"
+                bind:value={filterQuery.search}
+                placeholder="Search manuscripts"
+            />
+        </label>
+
+        <details class="filter-menu">
+            <summary>Filters</summary>
+
+            <div class="filter-menu-content">
+                <fieldset>
+                    <legend>Status</legend>
+
+                    <div class="filter-options">
+                        {#each manuscriptStatuses as status}
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    bind:group={filterQuery.statuses}
+                                    value={status}
+                                />
+                                {status}
+                            </label>
+                        {/each}
+                    </div>
+                </fieldset>
+
+                <label class="filter-field">
+                    <span>Journal</span>
+                    <input
+                        type="text"
+                        bind:value={filterQuery.journal}
+                        placeholder="Any journal"
+                    />
+                </label>
+            </div>
+        </details>
+
+        <label class="filter-sort">
+            <span class="visually-hidden">Sort manuscripts by</span>
+            <select bind:value={filterQuery.sortBy} aria-label="Sort manuscripts by">
+                <option value="title">Title</option>
+                <option value="status">Status</option>
+                <option value="journal">Journal</option>
+            </select>
+        </label>
+
+        <label class="filter-direction">
+            <span class="visually-hidden">Sort direction</span>
+            <select bind:value={filterQuery.sortDirection} aria-label="Sort direction">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+        </label>
+
+        <button class="secondary" type="submit">Apply</button>
+        <button class="link-button" type="reset">Reset</button>
+    </form>
 
     {#if manuscripts.length === 0}
         <div class="empty-state">

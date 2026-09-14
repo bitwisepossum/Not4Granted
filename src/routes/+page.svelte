@@ -13,7 +13,7 @@
 
     let active_grants_query = $state<GrantQuery>({
         statuses: ["Planning", "Submitted"],
-        funders: [],
+        funder: undefined,
         search: undefined,
         sortBy: undefined,
         sortDirection: undefined
