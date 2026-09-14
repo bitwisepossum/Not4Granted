@@ -34,6 +34,8 @@ class SettingsState {
             this.error = error instanceof Error
                 ? error.message
                 : String(error);
+
+            throw error;
         } finally {
             this.loading = false;
         }
@@ -46,12 +48,13 @@ class SettingsState {
         try {
             this.current = await saveSettings(settings);
             applyTheme(this.current.theme);
+            this.loaded = true;
         } catch (error) {
             this.error = error instanceof Error
                 ? error.message
                 : String(error);
 
-                return Promise.reject(error);
+                throw error;
         } finally {
             this.saving = false;
         }
