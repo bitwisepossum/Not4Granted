@@ -200,17 +200,13 @@
 }
 
 .data-interactive:hover {
-    background: var(--surface-hover);
+    background: var(--surface);
 }
 
 .data-interactive:hover .disclosure,
 .data-interactive.expanded .disclosure {
     color: var(--text);
     font-weight: 800;
-}
-
-.data-interactive.expanded {
-    background: var(--surface-muted);
 }
 
 .data-main {

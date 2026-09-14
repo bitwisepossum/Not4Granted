@@ -9,7 +9,7 @@
 
   --surface: light-dark(#ffffff, #20242a);
   --surface-muted: light-dark(#fafbfc, #252a31);
-  --surface-hover: light-dark(#f5f7f9, #2b3139);
+  --surface-hover: light-dark(#e3e6e8, #2b3139);
   --surface-app: light-dark(#f5f6f8, #181b20);
 
   --border: light-dark(#dde1e6, #3d444d);
