@@ -170,16 +170,16 @@
                             </td>
 
                             <td class="data-main">{grant.name}</td>
-                            <td class="data-main">{grant.funder}</td>
-                            <td class="data-main">{formatDate(grant.deadline, settingsState.current.locale) ?? "—"}</td>
+                            <td>{grant.funder}</td>
+                            <td>{formatDate(grant.deadline, settingsState.current.locale) ?? "—"}</td>
 
-                            <td class="data-main">
+                            <td>
                                 {grant.amountRequested !== undefined
                                     ? `${convertCurrency(grant.amountRequested)} ${grant.currency}`
                                     : "—"}
                             </td>
 
-                            <td class="data-main">
+                            <td>
                                 {grant.amountReceived !== undefined
                                     ? `${convertCurrency(grant.amountReceived)} ${grant.currency}`
                                     : "—"}
@@ -222,31 +222,3 @@
         </div>
     {/if}
 </section>
-
-<style>
-    .table-wrapper {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th,
-td {
-    padding: 0.85rem 1rem;
-    text-align: left;
-    border-bottom: 1px solid var(--border-subtle);
-}
-
-.disclosure-column,
-.disclosure-cell {
-    width: 2rem;
-    padding-right: 0;
-}
-
-.expanded-row td {
-    padding: 0;
-}
-</style>

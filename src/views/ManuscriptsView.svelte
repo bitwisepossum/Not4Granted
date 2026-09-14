@@ -72,9 +72,7 @@
             <p>Publication progress and next actions</p>
         </div>
 
-        <a class="primary" href="/manuscripts/new">
-            Add manuscript
-        </a>
+        <a class="button-link" href="/manuscripts/new">Add manuscript</a>
     </header>
 
     <form class="filter-bar" onsubmit={handleFilterSubmit} onreset={handleFilterReset}>
@@ -146,10 +144,11 @@
             <p>Add the first manuscript to start tracking it.</p>
         </div>
     {:else}
-        <div class="table-wrapper">
-            <table class="data-table">
+        <div class="data-table table-wrapper">
+            <table>
                 <thead>
                     <tr>
+                        <th class="disclosure-column"></th>
                         <th>Manuscript</th>
                         <th>Next action</th>
                         <th>Submitted</th>
@@ -161,7 +160,7 @@
                 <tbody>
                     {#each manuscripts as manuscript}
                         <tr
-                            class="data-row"
+                            class="data-interactive"
                             class:expanded={
                                 expandedManuscriptId === manuscript.id
                             }
@@ -171,6 +170,14 @@
                                     manuscript.status
                                 )}
                         >
+                            <td class="disclosure-cell">
+                                <span class="disclosure">
+                                    {expandedManuscriptId === manuscript.id
+                                        ? "⌄"
+                                        : "›"}
+                                </span>
+                            </td>
+
                             <td>
                                 <div class="manuscript-main">
                                     <strong>
@@ -209,8 +216,8 @@
 
                         {#if expandedManuscriptId === manuscript.id}
                             <tr class="expanded-row">
-                                <td colspan="5">
-                                    <div class="quick-actions">
+                                <td colspan="6">
+                                    <div class="data-details">
                                         <!--TODO <div class="quick-status">
                                             <label
                                                 for={`status-${manuscript.id}`}
@@ -271,39 +278,6 @@
 </section>
 
 <style>
-    .table-wrapper {
-        overflow-x: auto;
-    }
-
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .data-table th,
-    .data-table td {
-        padding: 0.9rem 1rem;
-        text-align: left;
-        vertical-align: middle;
-    }
-
-    .data-table th {
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: var(--text-subtle);
-        border-bottom: 1px solid var(--border);
-    }
-
-    .data-row {
-        border-bottom: 1px solid var(--border-subtle);
-        cursor: pointer;
-    }
-
-    .data-row:hover,
-    .data-row.expanded {
-        background: var(--surface-hover);
-    }
-
     .manuscript-main {
         display: grid;
         gap: 0.2rem;

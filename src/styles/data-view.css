@@ -3,6 +3,45 @@
     overflow: hidden;
 }
 
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.data-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    padding: 0.85rem 1rem;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.data-table th {
+    color: var(--text-subtle);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.data-table th:last-child,
+.data-table td:last-child {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.disclosure-column,
+.disclosure-cell {
+    width: 2rem !important;
+    padding-right: 0;
+}
+
+.expanded-row td {
+    padding: 0;
+}
+
 .filter-bar {
     position: relative;
     display: flex;
