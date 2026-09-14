@@ -67,6 +67,297 @@
   color-scheme: light dark;
 }
 
+/* ===== Gruvbox Dark Medium ===== */
+
+:root[data-theme="gruvbox"] {
+  color-scheme: dark;
+
+  --text: #ebdbb2;
+  --text-muted: #bdae93;
+  --text-subtle: #928374;
+
+  --surface: #282828;
+  --surface-muted: #32302f;
+  --surface-hover: #3c3836;
+  --surface-app: #1d2021;
+
+  --border: #504945;
+  --border-soft: #3c3836;
+  --border-subtle: #32302f;
+  --border-strong: #665c54;
+
+  --accent: #458588;
+  --accent-hover: #83a598;
+  --accent-text: #fbf1c7;
+  --focus: #83a598;
+
+  --sidebar: #1d2021;
+  --sidebar-hover: #32302f;
+  --sidebar-active: #504945;
+  --sidebar-text: #bdae93;
+  --sidebar-text-active: #fbf1c7;
+  --sidebar-brand: #ebdbb2;
+  --sidebar-muted: #928374;
+  --sidebar-subtle: #7c6f64;
+
+  --success-text: #b8bb26;
+  --success-bg: rgb(184 187 38 / 12%);
+
+  --danger-text: #fb4934;
+  --danger-bg: rgb(251 73 52 / 12%);
+  --danger-border: #cc241d;
+  --danger-solid: #cc241d;
+  --danger-solid-hover: #fb4934;
+
+  --warning-text: #fabd2f;
+  --warning-bg: rgb(250 189 47 / 12%);
+
+  --neutral-status-text: #d5c4a1;
+  --neutral-status-bg: #3c3836;
+
+  --chart-neutral: #a89984;
+  --chart-success: #98971a;
+  --chart-danger: #cc241d;
+  --chart-progress: #b16286;
+  --chart-track: #3c3836;
+
+  --overlay: rgb(29 32 33 / 70%);
+  --shadow: rgb(0 0 0 / 38%);
+}
+
+
+/* ===== Tokyo Night Dark ===== */
+
+:root[data-theme="tokyonight"] {
+  color-scheme: dark;
+
+  --text: #c0caf5;
+  --text-muted: #a9b1d6;
+  --text-subtle: #737aa2;
+
+  --surface: #1a1b26;
+  --surface-muted: #1f2335;
+  --surface-hover: #292e42;
+  --surface-app: #16161e;
+
+  --border: #3b4261;
+  --border-soft: #292e42;
+  --border-subtle: #24283b;
+  --border-strong: #545c7e;
+
+  --accent: #3d59a1;
+  --accent-hover: #7aa2f7;
+  --accent-text: #ffffff;
+  --focus: #7dcfff;
+
+  --sidebar: #16161e;
+  --sidebar-hover: #24283b;
+  --sidebar-active: #292e42;
+  --sidebar-text: #a9b1d6;
+  --sidebar-text-active: #c0caf5;
+  --sidebar-brand: #7aa2f7;
+  --sidebar-muted: #737aa2;
+  --sidebar-subtle: #565f89;
+
+  --success-text: #9ece6a;
+  --success-bg: rgb(158 206 106 / 12%);
+
+  --danger-text: #f7768e;
+  --danger-bg: rgb(247 118 142 / 12%);
+  --danger-border: #db4b4b;
+  --danger-solid: #db4b4b;
+  --danger-solid-hover: #f7768e;
+
+  --warning-text: #e0af68;
+  --warning-bg: rgb(224 175 104 / 12%);
+
+  --neutral-status-text: #a9b1d6;
+  --neutral-status-bg: #292e42;
+
+  --chart-neutral: #7dcfff;
+  --chart-success: #9ece6a;
+  --chart-danger: #f7768e;
+  --chart-progress: #7aa2f7;
+  --chart-track: #24283b;
+
+  --overlay: rgb(22 22 30 / 70%);
+  --shadow: rgb(0 0 0 / 40%);
+}
+
+
+/* ===== Catppuccin Mocha ===== */
+
+:root[data-theme="catppuccin"] {
+  color-scheme: dark;
+
+  --text: #cdd6f4;
+  --text-muted: #bac2de;
+  --text-subtle: #9399b2;
+
+  --surface: #1e1e2e;
+  --surface-muted: #181825;
+  --surface-hover: #313244;
+  --surface-app: #11111b;
+
+  --border: #45475a;
+  --border-soft: #313244;
+  --border-subtle: #181825;
+  --border-strong: #585b70;
+
+  --accent: #cba6f7;
+  --accent-hover: #b4befe;
+  --accent-text: #11111b;
+  --focus: #f5c2e7;
+
+  --sidebar: #11111b;
+  --sidebar-hover: #1e1e2e;
+  --sidebar-active: #313244;
+  --sidebar-text: #bac2de;
+  --sidebar-text-active: #cdd6f4;
+  --sidebar-brand: #cba6f7;
+  --sidebar-muted: #9399b2;
+  --sidebar-subtle: #7f849c;
+
+  --success-text: #a6e3a1;
+  --success-bg: rgb(166 227 161 / 12%);
+
+  --danger-text: #f38ba8;
+  --danger-bg: rgb(243 139 168 / 12%);
+  --danger-border: #eba0ac;
+  --danger-solid: #f38ba8;
+  --danger-solid-hover: #eba0ac;
+
+  --warning-text: #f9e2af;
+  --warning-bg: rgb(249 226 175 / 12%);
+
+  --neutral-status-text: #bac2de;
+  --neutral-status-bg: #313244;
+
+  --chart-neutral: #89b4fa;
+  --chart-success: #a6e3a1;
+  --chart-danger: #f38ba8;
+  --chart-progress: #cba6f7;
+  --chart-track: #313244;
+
+  --overlay: rgb(17 17 27 / 70%);
+  --shadow: rgb(0 0 0 / 42%);
+}
+
+/* ===== IBM 3270 Green Screen ===== */
+
+:root[data-theme="terminal3270"] {
+  color-scheme: dark;
+
+  --text: #7ccc7c;
+  --text-muted: #55a955;
+  --text-subtle: #397839;
+
+  --surface: #061006;
+  --surface-muted: #091709;
+  --surface-hover: #102710;
+  --surface-app: #020702;
+
+  --border: #285d28;
+  --border-soft: #1c441c;
+  --border-subtle: #123012;
+  --border-strong: #438943;
+
+  --accent: #66c266;
+  --accent-hover: #91e691;
+  --accent-text: #020702;
+  --focus: #a5f2a5;
+
+  --sidebar: #020702;
+  --sidebar-hover: #0a1b0a;
+  --sidebar-active: #173817;
+  --sidebar-text: #55a955;
+  --sidebar-text-active: #a5f2a5;
+  --sidebar-brand: #91e691;
+  --sidebar-muted: #397839;
+  --sidebar-subtle: #285d28;
+
+  --success-text: #91e691;
+  --success-bg: rgb(102 194 102 / 12%);
+
+  --danger-text: #ff6b5f;
+  --danger-bg: rgb(255 107 95 / 12%);
+  --danger-border: #b84b43;
+  --danger-solid: #b84b43;
+  --danger-solid-hover: #ff6b5f;
+
+  --warning-text: #d8c65c;
+  --warning-bg: rgb(216 198 92 / 12%);
+
+  --neutral-status-text: #66c266;
+  --neutral-status-bg: #102710;
+
+  --chart-neutral: #397839;
+  --chart-success: #91e691;
+  --chart-danger: #ff6b5f;
+  --chart-progress: #66c266;
+  --chart-track: #123012;
+
+  --overlay: rgb(2 7 2 / 82%);
+  --shadow: rgb(0 0 0 / 60%);
+}
+
+/* ===== VoidGirl ===== */
+
+:root[data-theme="voidgirl"] {
+  color-scheme: dark;
+
+  --text: #eee9f5;
+  --text-muted: #b8adca;
+  --text-subtle: #81758f;
+
+  --surface: #17131d;
+  --surface-muted: #1d1725;
+  --surface-hover: #2b2135;
+  --surface-app: #0c0910;
+
+  --border: #44364f;
+  --border-soft: #352a40;
+  --border-subtle: #291f32;
+  --border-strong: #665274;
+
+  --accent: #d16ba5;
+  --accent-hover: #f5a9d0;
+  --accent-text: #160d14;
+  --focus: #72c7e8;
+
+  --sidebar: #08060b;
+  --sidebar-hover: #1d1725;
+  --sidebar-active: #3c2944;
+  --sidebar-text: #b8adca;
+  --sidebar-text-active: #ffffff;
+  --sidebar-brand: #f5a9d0;
+  --sidebar-muted: #81758f;
+  --sidebar-subtle: #62566f;
+
+  --success-text: #8bd5a1;
+  --success-bg: rgb(139 213 161 / 12%);
+
+  --danger-text: #ef7188;
+  --danger-bg: rgb(239 113 136 / 12%);
+  --danger-border: #b94f68;
+  --danger-solid: #b94f68;
+  --danger-solid-hover: #ef7188;
+
+  --warning-text: #e5c07b;
+  --warning-bg: rgb(229 192 123 / 12%);
+
+  --neutral-status-text: #c7b9d5;
+  --neutral-status-bg: #2b2135;
+
+  --chart-neutral: #72c7e8;
+  --chart-success: #8bd5a1;
+  --chart-danger: #ef7188;
+  --chart-progress: #d16ba5;
+  --chart-track: #291f32;
+
+  --overlay: rgb(8 6 11 / 78%);
+  --shadow: rgb(0 0 0 / 52%);
+}
 
 /* ===== Base ===== */
 

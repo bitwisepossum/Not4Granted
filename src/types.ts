@@ -154,6 +154,11 @@ export type Locale = keyof typeof LocaleNames;
 export const ThemeName = {
     light: "Light",
     dark: "Dark",
+    gruvbox: "Gruvbox",
+    catppuccin: "Catppuccin",
+    tokyonight: "Tokyonight",
+    terminal3270: "Terminal 3270",
+    voidgirl: "Void Girl",
     system: "Use system setting"
 } as const;
 
