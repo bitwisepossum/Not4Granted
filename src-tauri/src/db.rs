@@ -101,6 +101,13 @@ pub fn initialize_database(database_url: &str) -> Result<(), String> {
 
 /*
     Legacy SQLite database conversion
+
+    These are 99,999% reduntant and only exist to support my fellow doctorate student peers
+    who helped me to test and brainstorm the initial version of this amalgamation of
+    bad design choices, both in software, PhD studies, and in life.
+    This is my way of saying "thank you" with supporting function that none of them
+    will need after running the migration once, and then never again. 
+    I hope you all go on to do great things, you magnificent bastards.
 */
 #[derive(QueryableByName)]
 struct UserVersion {
