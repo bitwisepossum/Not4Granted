@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     import "../styles/app.css";
     import "../styles/data-view.css";
     import { convertCurrency, formatDate } from "../components/format";
@@ -34,6 +35,10 @@
 
     function statusClass(status: string): string {
         return status.toLowerCase();
+    }
+
+    function gotoGrant(id: number) {
+        goto(`/grants/${id}`);
     }
 
     async function handleFilterSubmit(event: SubmitEvent) {
@@ -161,7 +166,7 @@
                          <tr
                             class="data-interactive"
                             class:expanded={expandedGrantId === grant.id}
-                            onclick={() => toggleGrant(grant.id, grant.status)}
+                            onclick={() => gotoGrant(grant.id)}
                         >
                             <td class="disclosure-cell">
                                 <span class="disclosure">
@@ -189,33 +194,6 @@
                                 <span class={`status ${statusClass(grant.status)}`}>{grant.status}</span>
                             </td>
                         </tr>
-
-                        {#if expandedGrantId === grant.id}
-                            <tr class="expanded-row">
-                                <td colspan="7">
-                                    <div class="data-details">
-                                        <!-- TODO: Add status selection -->
-                                        <!--<label>
-                                            <span>Status</span>
-
-                                            <select bind:value={selectedStatus}>
-                                                <option value="Planning">Planning</option>
-                                                <option value="Submitted">Submitted</option>
-                                                <option value="Accepted">Accepted</option>
-                                                <option value="Rejected">Rejected</option>
-                                            </select>
-                                        </label>-->
-
-                                        <a
-                                            class="button-link"
-                                            href={`/grants/${grant.id}`}
-                                        >
-                                            View details
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        {/if}
                     {/each}
                 </tbody>
             </table>

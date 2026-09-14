@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { goto } from "$app/navigation";
     import "../styles/app.css";
     import "../styles/data-view.css";
     import { manuscriptStatuses, type Manuscript, type ManuscriptStatus} from "../types";
@@ -35,6 +36,10 @@
 
     function statusClass(status: string): string {
         return status.toLowerCase();
+    }
+    
+    function gotoManuscript(id: number) {
+        goto(`/manuscripts/${id}`);
     }
 
     async function handleFilterSubmit(event: SubmitEvent) {      
@@ -164,11 +169,7 @@
                             class:expanded={
                                 expandedManuscriptId === manuscript.id
                             }
-                            onclick={() =>
-                                toggleManuscript(
-                                    manuscript.id,
-                                    manuscript.status
-                                )}
+                            onclick={() => gotoManuscript(manuscript.id)}
                         >
                             <td class="disclosure-cell">
                                 <span class="disclosure">
@@ -213,63 +214,6 @@
                                 </span>
                             </td>
                         </tr>
-
-                        {#if expandedManuscriptId === manuscript.id}
-                            <tr class="expanded-row">
-                                <td colspan="6">
-                                    <div class="data-details">
-                                        <!--TODO <div class="quick-status">
-                                            <label
-                                                for={`status-${manuscript.id}`}
-                                            >
-                                                Status
-                                            </label>
-
-                                            <select
-                                                id={`status-${manuscript.id}`}
-                                                value={selectedStatus}
-                                                onchange={(event) =>
-                                                    handleStatusChange(
-                                                        manuscript.id,
-                                                        event
-                                                    )}
-                                                onclick={(event) =>
-                                                    event.stopPropagation()}
-                                            >
-                                                <option value="Idea">
-                                                    Idea
-                                                </option>
-                                                <option value="Drafting">
-                                                    Drafting
-                                                </option>
-                                                <option value="Submitted">
-                                                    Submitted
-                                                </option>
-                                                <option value="Revision">
-                                                    Revision
-                                                </option>
-                                                <option value="Accepted">
-                                                    Accepted
-                                                </option>
-                                                <option value="Published">
-                                                    Published
-                                                </option>
-                                                <option value="Rejected">
-                                                    Rejected
-                                                </option>
-                                            </select>
-                                        </div>-->
-
-                                        <a
-                                            class="button-link"
-                                            href={`/manuscripts/${manuscript.id}`}
-                                        >
-                                            View details
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        {/if}
                     {/each}
                 </tbody>
             </table>
