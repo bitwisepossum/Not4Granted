@@ -187,7 +187,7 @@
 
 /* ===== Catppuccin Mocha ===== */
 
-:root[data-theme="catppuccin"] {
+:root[data-theme="catppuccinmocca"] {
   color-scheme: dark;
 
   --text: #cdd6f4;
@@ -241,6 +241,64 @@
 
   --overlay: rgb(17 17 27 / 70%);
   --shadow: rgb(0 0 0 / 42%);
+}
+
+/* ===== Catppuccin Latte ===== */
+
+:root[data-theme="catppuccinlatte"] {
+  color-scheme: light;
+
+  --text: #4c4f69;
+  --text-muted: #5c5f77;
+  --text-subtle: #7c7f93;
+
+  --surface: #eff1f5;
+  --surface-muted: #e6e9ef;
+  --surface-hover: #dce0e8;
+  --surface-app: #dce0e8;
+
+  --border: #bcc0cc;
+  --border-soft: #ccd0da;
+  --border-subtle: #dce0e8;
+  --border-strong: #9ca0b0;
+
+  --accent: #8839ef;
+  --accent-hover: #7287fd;
+  --accent-text: #ffffff;
+  --focus: #1e66f5;
+
+  --sidebar: #4c4f69;
+  --sidebar-hover: #5c5f77;
+  --sidebar-active: #8839ef;
+  --sidebar-text: #ccd0da;
+  --sidebar-text-active: #ffffff;
+  --sidebar-brand: #f5e0dc;
+  --sidebar-muted: #bcc0cc;
+  --sidebar-subtle: #acb0be;
+
+  --success-text: #287a1d;
+  --success-bg: rgb(64 160 43 / 12%);
+
+  --danger-text: #d20f39;
+  --danger-bg: rgb(210 15 57 / 10%);
+  --danger-border: #e64553;
+  --danger-solid: #d20f39;
+  --danger-solid-hover: #e64553;
+
+  --warning-text: #9a6100;
+  --warning-bg: rgb(223 142 29 / 13%);
+
+  --neutral-status-text: #5c5f77;
+  --neutral-status-bg: #ccd0da;
+
+  --chart-neutral: #1e66f5;
+  --chart-success: #40a02b;
+  --chart-danger: #d20f39;
+  --chart-progress: #8839ef;
+  --chart-track: #ccd0da;
+
+  --overlay: rgb(76 79 105 / 38%);
+  --shadow: rgb(76 79 105 / 22%);
 }
 
 /* ===== IBM 3270 Green Screen ===== */
